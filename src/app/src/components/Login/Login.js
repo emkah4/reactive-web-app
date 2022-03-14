@@ -1,8 +1,8 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
-    return { value: action.value, isValid: null };
+    return { value: action.value, isValid: action.value.includes("@") };
   }
 
   if (action.type === "INPUT_LOST_FOCUS") {
@@ -17,7 +17,7 @@ function emailReducer(prevState, action) {
 
 function passwordReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
-    return { value: action.value, isValid: null };
+    return { value: action.value, isValid: action.value.trim().length > 6 };
   }
 
   if (action.type === "INPUT_LOST_FOCUS") {
@@ -43,18 +43,25 @@ function Login() {
     isValid: null,
   });
 
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      setFormValid(emailIsValid && passwordIsValid);
+    }, 300);
+
+    return () => {
+      clearTimeout(identifier);
+    };
+  }, [emailIsValid, passwordIsValid]);
+
   function emailOnChangeHandler(event) {
     dispatchEmail({ value: event.target.value, type: "USER_INPUT" });
-
-    setFormValid(
-      event.target.value.trim().includes("@") && passwordState.isValid
-    );
   }
 
   function passwordOnChangeHandler(event) {
     dispatchPassword({ value: event.target.value, type: "USER_INPUT" });
-
-    setFormValid(event.target.value.trim().length > 6 && emailState.isValid);
   }
 
   function checkEmailValidity(event) {
