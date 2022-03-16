@@ -1,0 +1,14 @@
+.ul {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ul li {
+  list-style: none;
+  margin-right: 2em;
+}
+
+.ul li a {
+  text-decoration: none;
+  color: white;
+}
