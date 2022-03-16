@@ -35,3 +35,8 @@
 .navigation {
   margin-right: 2em;
 }
+
+.ul {
+  display: flex;
+  align-items: flex-start;
+}
