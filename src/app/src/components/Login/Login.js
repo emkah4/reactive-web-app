@@ -1,4 +1,6 @@
 import React, { useState, useReducer, useEffect } from "react";
+import Button from "../UI/Button/Button";
+import Card from "../UI/Card";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -78,11 +80,8 @@ function Login() {
    @todo: Implement form submition logic
 	**/
   }
-  /**
-   @todo: Remove button and card placeholders
-	**/
   return (
-    <div>
+    <Card>
       <form onSubmit={onFormSubmitHandler}>
         <div className="">
           <label htmlFor="email">Enter your email</label>
@@ -105,12 +104,12 @@ function Login() {
           ></input>
         </div>
         <div className="">
-          <button type="submit" disabled={!formIsValid}>
+          <Button type="submit" disabled={!formIsValid}>
             Login
-          </button>
+          </Button>
         </div>
       </form>
-    </div> // Card placeholder
+    </Card> // Card placeholder
   );
 }
 
