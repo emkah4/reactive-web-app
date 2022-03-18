@@ -8,6 +8,7 @@ function Button(props) {
       className={`${styles.button} ${props.className}`}
       type={props.type || "button"}
       onClick={props.onClick}
+      disabled={props.disabled || false}
     >
       {props.children}
     </button>

@@ -32,7 +32,7 @@ function passwordReducer(prevState, action) {
   return { value: "", isValid: false };
 }
 
-function Login() {
+function Login(props) {
   const [formIsValid, setFormValid] = useState();
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -76,10 +76,9 @@ function Login() {
 
   function onFormSubmitHandler(event) {
     event.preventDefault();
-    /**
-   @todo: Implement form submition logic
-	**/
+    props.onLogin(emailState.value, passwordState.value);
   }
+
   return (
     <Card>
       <form onSubmit={onFormSubmitHandler}>
