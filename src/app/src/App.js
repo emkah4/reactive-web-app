@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // Components
 import Header from "./components/Layout/Header";
@@ -7,13 +7,45 @@ import BuildScreen from "./components/BuildScreen/BuildScreen";
 import Login from "./components/Login/Login";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  function loginHandler(email, password) {
+    localStorage.setItem("isLoggedIn", "1");
+    setIsLoggedIn(true);
+  }
+
+  function logoutHandler() {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  }
+
+  useEffect(() => {
+    const sessionToken = localStorage.getItem("isLoggedIn");
+    if (sessionToken === "1") {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <React.Fragment>
-      <Header></Header>
-      <BuildScreen></BuildScreen>
-      <Footer></Footer>
+      <main>
+        {!isLoggedIn && <Login onLogin={loginHandler} />}
+        {isLoggedIn && (
+          <div>
+            <Header onLogout={logoutHandler} />
+            <Footer></Footer>
+          </div>
+        )}
+      </main>
     </React.Fragment>
   );
 }
 
 export default App;
+
+{
+  /* <main>
+  {!isLoggedIn && <Login onLogin={loginHandler} />}
+  {isLoggedIn && <Header onLogout={logoutHandler} />}
+</main>; */
+}

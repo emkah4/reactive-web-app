@@ -34,8 +34,10 @@ const Header = (props) => {
           <Navigation className={style.ul} navigationList={navList} />
         </div>
         <div>
-          <Button className={style.button}>Login</Button>
-          <Button className={style.button}>Hello</Button>
+          <Button className={style.button}>Profile</Button>
+          <Button className={style.button} onClick={props.onLogout}>
+            Sign out
+          </Button>
         </div>
       </div>
     </header>
