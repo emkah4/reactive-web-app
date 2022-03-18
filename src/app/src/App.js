@@ -28,15 +28,12 @@ function App() {
 
   return (
     <React.Fragment>
+      <Header onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && (
-          <div>
-            <Header onLogout={logoutHandler} />
-            <Footer></Footer>
-          </div>
-        )}
+        {isLoggedIn && <BuildScreen />}
       </main>
+      <Footer></Footer>
     </React.Fragment>
   );
 }

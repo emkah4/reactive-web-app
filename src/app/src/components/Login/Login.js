@@ -2,6 +2,8 @@ import React, { useState, useReducer, useEffect } from "react";
 import Button from "../UI/Button/Button";
 import Card from "../UI/Card";
 
+import styles from "./Login.module.css";
+
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
     return { value: action.value, isValid: action.value.includes("@") };
@@ -80,9 +82,9 @@ function Login(props) {
   }
 
   return (
-    <Card>
+    <Card className={styles.login}>
       <form onSubmit={onFormSubmitHandler}>
-        <div className="">
+        <div className={styles.control}>
           <label htmlFor="email">Enter your email</label>
           <input
             type="email"
@@ -92,7 +94,7 @@ function Login(props) {
             onBlur={checkEmailValidity}
           ></input>
         </div>
-        <div className="">
+        <div className={styles.control}>
           <label htmlFor="password">Enter your password</label>
           <input
             type="password"
@@ -102,7 +104,7 @@ function Login(props) {
             onBlur={checkPasswordValidity}
           ></input>
         </div>
-        <div className="">
+        <div className={styles.actions}>
           <Button type="submit" disabled={!formIsValid}>
             Login
           </Button>
