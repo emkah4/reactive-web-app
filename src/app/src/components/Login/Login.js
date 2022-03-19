@@ -1,8 +1,12 @@
 import React, { useState, useReducer, useEffect } from "react";
-import Button from "../UI/Button/Button";
-import Card from "../UI/Card";
 
+// Bootstrap
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+// Our own
+import Card from "../UI/Card";
 import styles from "./Login.module.css";
+// import Button from "../UI/Button/Button";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -82,36 +86,59 @@ function Login(props) {
   }
 
   return (
-    <Card className={styles.login}>
-      <form onSubmit={onFormSubmitHandler}>
-        <div className={styles.control}>
-          <label htmlFor="email">Enter your email</label>
-          <input
-            type="email"
-            id="email"
-            value={emailState.value}
-            onChange={emailOnChangeHandler}
-            onBlur={checkEmailValidity}
-          ></input>
-        </div>
-        <div className={styles.control}>
-          <label htmlFor="password">Enter your password</label>
-          <input
-            type="password"
-            id="password"
-            value={passwordState.value}
-            onChange={passwordOnChangeHandler}
-            onBlur={checkPasswordValidity}
-          ></input>
-        </div>
-        <div className={styles.actions}>
-          <Button type="submit" disabled={!formIsValid}>
-            Login
-          </Button>
-        </div>
-      </form>
-    </Card> // Card placeholder
+    <Form>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Text className="text-muted">
+          We'll never share your email with anyone else.
+        </Form.Text>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" placeholder="Password" />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Check type="checkbox" label="Check me out" />
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Submit
+      </Button>
+    </Form>
   );
+
+  // return (
+  //   <Card className={styles.login}>
+  //     <form onSubmit={onFormSubmitHandler}>
+  //       <div className={styles.control}>
+  //         <label htmlFor="email">Enter your email</label>
+  //         <input
+  //           type="email"
+  //           id="email"
+  //           value={emailState.value}
+  //           onChange={emailOnChangeHandler}
+  //           onBlur={checkEmailValidity}
+  //         ></input>
+  //       </div>
+  //       <div className={styles.control}>
+  //         <label htmlFor="password">Enter your password</label>
+  //         <input
+  //           type="password"
+  //           id="password"
+  //           value={passwordState.value}
+  //           onChange={passwordOnChangeHandler}
+  //           onBlur={checkPasswordValidity}
+  //         ></input>
+  //       </div>
+  //       <div className={styles.actions}>
+  //         <Button type="submit" disabled={!formIsValid}>
+  //           Login
+  //         </Button>
+  //       </div>
+  //     </form>
+  //   </Card>
+  // );
 }
 
 export default Login;
