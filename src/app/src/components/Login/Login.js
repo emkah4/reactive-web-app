@@ -110,7 +110,7 @@ function Login(props) {
           </Button>
         </div>
       </form>
-    </Card> // Card placeholder
+    </Card>
   );
 }
 

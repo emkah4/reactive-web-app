@@ -5,6 +5,7 @@ import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import BuildScreen from "./components/BuildScreen/BuildScreen";
 import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,10 +40,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /* <main>
-  {!isLoggedIn && <Login onLogin={loginHandler} />}
-  {isLoggedIn && <Header onLogout={logoutHandler} />}
-</main>; */
-}
