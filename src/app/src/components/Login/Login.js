@@ -1,7 +1,14 @@
+// React
 import React, { useState, useReducer, useEffect } from "react";
-import Button from "../UI/Button/Button";
-import Card from "../UI/Card";
 
+// Bootstrap
+import Form from "react-bootstrap/Form";
+
+// Team Reactive
+import Card from "../UI/Card";
+import Button from "../UI/Button/Button";
+
+// Styles
 import styles from "./Login.module.css";
 
 function emailReducer(prevState, action) {
@@ -83,34 +90,46 @@ function Login(props) {
 
   return (
     <Card className={styles.login}>
-      <form onSubmit={onFormSubmitHandler}>
-        <div className={styles.control}>
-          <label htmlFor="email">Enter your email</label>
-          <input
-            type="email"
-            id="email"
-            value={emailState.value}
-            onChange={emailOnChangeHandler}
-            onBlur={checkEmailValidity}
-          ></input>
-        </div>
-        <div className={styles.control}>
-          <label htmlFor="password">Enter your password</label>
-          <input
-            type="password"
-            id="password"
-            value={passwordState.value}
-            onChange={passwordOnChangeHandler}
-            onBlur={checkPasswordValidity}
-          ></input>
-        </div>
-        <div className={styles.actions}>
-          <Button type="submit" disabled={!formIsValid}>
-            Login
-          </Button>
-        </div>
-      </form>
-    </Card> // Card placeholder
+      <Form className={styles.form} onSubmit={onFormSubmitHandler}>
+        <Form.Group className="mb-3 $" controlId="email">
+          <Form.FloatingLabel label="Email address">
+            <Form.Control
+              required
+              value={emailState.value}
+              onChange={emailOnChangeHandler}
+              onBlur={checkEmailValidity}
+              type="email"
+              placeholder="Enter email"
+            />
+          </Form.FloatingLabel>
+          <Form.Text>Your email information will not be shared.</Form.Text>
+        </Form.Group>
+
+        <Form.Group className={`mb-3 ${styles.form}`} controlId="password">
+          <Form.FloatingLabel label="Enter password">
+            <Form.Control
+              required
+              value={passwordState.value}
+              onChange={passwordOnChangeHandler}
+              onBlur={checkPasswordValidity}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.FloatingLabel>
+
+          <Form.Text>
+            Your password must be 6-20 characters long, may contain letters and
+            numbers, and must not contain spaces, special characters, or emojis.
+          </Form.Text>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Check type="checkbox" label="Remember me" />
+        </Form.Group>
+        <Button type="submit" disabled={!formIsValid}>
+          Login
+        </Button>
+      </Form>
+    </Card>
   );
 }
 
