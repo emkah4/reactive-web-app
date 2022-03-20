@@ -6,26 +6,24 @@
   background-color: #3d405b;
 }
 
-.control {
-  margin: 1rem 0;
-  display: flex;
+.form {
+  display: block;
   align-items: stretch;
   flex-direction: column;
 }
 
-.control label,
-.control input {
+.form label,
+.form input {
   display: block;
 }
 
-.control label {
-  font-weight: bold;
-  flex: 1;
-  color: white;
+.form label {
+  color: black;
   margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
 }
 
-.control input {
+.form input {
   flex: 3;
   font: inherit;
   padding: 0.35rem 0.35rem;
@@ -33,15 +31,18 @@
   border: 1px solid #ccc;
 }
 
-.control input:focus {
+.form input:focus {
   outline: none;
   border-color: #4f005f;
   background: #f6dbfc;
 }
 
-.control.invalid input {
-  border-color: red;
-  background: #fbdada;
+.form input[type="checkbox"]:checked {
+  background-color: #69ac8b;
+}
+
+.form label.form-check-label {
+  color: white;
 }
 
 .actions {
