@@ -125,7 +125,7 @@ function Login(props) {
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Remember me" />
         </Form.Group>
-        <Button type="submit" disabled={formIsValid}>
+        <Button type="submit" disabled={!formIsValid}>
           Login
         </Button>
       </Form>
