@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 // Components
 import Navigation from "./Navigation";
@@ -9,33 +10,27 @@ import Button from "../UI/Button/Button";
 import style from "./Header.module.css";
 
 const Header = (props) => {
-  const navList = [
-    {
-      id: "footer-nav-1",
-      title: "Create a script",
-      link: "#",
-    },
-    {
-      id: "footer-nav-2",
-      title: "My scripts",
-      link: "#",
-    },
-    {
-      id: "footer-nav-3",
-      title: "About",
-      link: "#",
-    },
-  ];
   return (
     <header className={style.header}>
-      <NavigationLogo />
+      <NavLink to='/home'>
+        <NavigationLogo />
+      </NavLink>
       <div className={style.container}>
         <div className={style.navigation}>
-          <Navigation className={style.ul} navigationList={navList} />
+          <Navigation className={style.ul} />
         </div>
         <div>
           <Button>Profile</Button>
-          <Button onClick={props.onLogout}>Sign out</Button>
+          <NavLink to='/login'>
+
+            {/* <Button onClick={props.onLogout}>
+              Sign out
+            </Button> */}
+            <Button onClick={props.onLogout}>
+              Sign out
+            </Button>
+
+          </NavLink>
         </div>
       </div>
     </header>
