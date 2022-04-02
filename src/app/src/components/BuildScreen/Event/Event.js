@@ -8,39 +8,21 @@ import EventIcon from "./EventIcon";
 import EventGroup from "./EventGroups";
 
 const Event = (props) => {
-  const eventGroups = [
-    {
-      id: "g1",
-      gropup_name: "Managers",
-      group_color: "#f5a911",
-      is_included: false,
-    },
-    {
-      id: "g2",
-      gropup_name: "Developers",
-      group_color: "#e60ba4",
-      is_included: true,
-    },
-    {
-      id: "g3",
-      gropup_name: "Managers",
-      group_color: "#1fe61c",
-      is_included: true,
-    },
-  ];
-
   return (
     <div className={style.container} onClick={props.onClick}>
-      <div className={style.event}>
+      <div
+        className={style.event}
+        style={{ background: props.event_data.event_color }}
+      >
         <div className={style.text_container}>
-          <h6>SMS Notification</h6>
-          <span>0+30m</span>
+          <h6>{props.event_data.event_title}</h6>
+          <span>{props.event_data.event_time}</span>
         </div>
         <div className={style.edit}>
           <EventIcon fill="ffffff" />
         </div>
         <div className={style.groups}>
-          <EventGroup groups={eventGroups}></EventGroup>
+          <EventGroup groups={props.event_data.event_groups}></EventGroup>
         </div>
       </div>
     </div>
