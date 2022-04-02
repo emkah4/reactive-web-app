@@ -3,6 +3,11 @@
   margin-right: 2em;
 }
 
+ul.ul {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .ul li a {
   text-decoration: none;
   color: white;
