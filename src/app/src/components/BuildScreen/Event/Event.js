@@ -31,8 +31,8 @@ const Event = (props) => {
           <h3>{props.event_data.event_title}</h3>
           <span>{props.event_data.event_time}</span>
         </div>
-        <div className={style.edit} onClick={handleShow}>
-          <EventIcon fill="ffffff" />
+        <div className={style.edit}>
+          <EventIcon onClick={handleShow} fill="ffffff" />
         </div>
         {show && (
           <EventEditPopup
