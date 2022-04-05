@@ -5,37 +5,60 @@ import ReactDOM from "react-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
-import styles from "./EventEditPopup.module.css";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
 
 const EventEditPopup = (props) => {
   return ReactDOM.createPortal(
-    <div className={styles.modal}>
-      <Modal show={props.show} onHide={props.onClose}>
+    <React.Fragment>
+      <Modal show={props.show} onHide={props.onClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>{props.title}</Modal.Title>
-          <p>Length: {props.length}</p>
         </Modal.Header>
+
         <Modal.Body>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Enter text</Form.Label>
-            <Form.Control as="textarea" rows={3} />
+          <Form.Group className="mb-3" controlId="textareaForm">
+            <Form.Label>Enter custom text</Form.Label>
+            <Form.Control as="textarea" rows={5} />
           </Form.Group>
-          <Form.Group controlId="formFile" className="mb-3">
+
+          <Form.Group className="mb-3" controlId="imageForm">
             <Form.Label>Attatch an image</Form.Label>
             <Form.Control type="file" />
           </Form.Group>
+
+          <Form.Group className="mb-3" controlId="groupSelectForm">
+            <Form.Label>Select groups participating</Form.Label>
+            {props.groups.map((group) => (
+              <Form key={group.id}>
+                <Form.Check
+                  label={`${group.group_name}`}
+                  type="switch"
+                  id={group.group_id}
+                />
+              </Form>
+            ))}
+          </Form.Group>
+
+          <Form.Label>Set length of the task</Form.Label>
+          <InputGroup className="mb-3" controlId="lengthInput">
+            <FormControl />
+            <InputGroup.Text>hours</InputGroup.Text>
+            <FormControl />
+            <InputGroup.Text>minutes</InputGroup.Text>
+          </InputGroup>
         </Modal.Body>
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={props.onClose}>
-            Close
+          <Button variant="outline-danger" onClick={props.onClose}>
+            Discard
           </Button>
-          <Button variant="success" onClick={props.onClose}>
+          <Button variant="outline-success" onClick={props.onClose}>
             Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>,
+    </React.Fragment>,
     document.getElementById("overlay-root")
   );
 };

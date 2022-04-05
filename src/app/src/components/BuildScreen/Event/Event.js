@@ -40,6 +40,7 @@ const Event = (props) => {
             show={show}
             onClose={handleClose}
             length={props.event_data.event_time}
+            groups={props.event_data.event_groups}
           />
         )}
         <div className={style.groups}>
