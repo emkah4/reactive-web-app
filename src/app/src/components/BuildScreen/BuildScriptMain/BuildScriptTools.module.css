@@ -1,0 +1,6 @@
+.toolbox {
+    width: 100%;
+    border: 2px solid #C70039;
+    grid-column: 3;
+    grid-row: 2 / 3;
+}

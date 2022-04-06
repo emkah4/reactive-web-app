@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // Styles
 
 import styles from "./BuildScreen.module.css";
+import BuildScriptMain from "./BuildScriptMain/BuildScriptMain";
 
 // Components
 import Event from "./Event/Event";
@@ -35,12 +36,17 @@ const BuildScreen = (props) => {
         is_included: true,
       },
     ],
-  };
+  }; 
+
 
   return (
-    <div className={styles.container}>
-      <Event event_data={EVENT_MOCK}></Event>
-    </div>
+    <React.Fragment>
+      {/* <Event event_data={EVENT_MOCK}></Event> */}
+      <div className={styles.container}>
+        <BuildScriptMain />
+      </div>
+    </React.Fragment>
+    
   );
 };
 
