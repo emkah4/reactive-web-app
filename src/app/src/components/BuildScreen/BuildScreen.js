@@ -14,7 +14,6 @@ const BuildScreen = (props) => {
   const EVENT_MOCK = {
     event_type: "spam_sms",
     event_title: "Spam SMS",
-    event_time: "0+30 min",
     event_color: "rgb(61, 64, 91)",
     event_groups: [
       {

@@ -19,25 +19,20 @@ const BuildScriptMain = (props) => {
       dept_people: ["Lat", "Kat", "Sat"],
     },
     {
-      id: "dept3",
-      dept_name: "DevOps",
-      dept_people: ["Rat", "Fat", "Nat"],
-    },
-    {
-      id: "dept4",
-      dept_name: "Board",
-      dept_people: ["Kurtt", "Hurt", "Skeet"],
+      id: "dept2",
+      dept_name: "Managers",
+      dept_people: ["Lat", "Kat", "Sat", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan"],
     },
   ];
 
-//   const timeline = 
+  const timeline = 4
 
   return (
     <React.Fragment>
       <div className={styles.container}>
         <div className={styles.title}>Groups</div>
         <BuildScriptDepartments dept_data={LIST_OF_DEPARTMENTS_MOCK}></BuildScriptDepartments>
-        <BuildScriptTimeline></BuildScriptTimeline>
+        <BuildScriptTimeline timeline={timeline}></BuildScriptTimeline>
         <BuildScriptWindow></BuildScriptWindow>
         <div className={styles.title}>Add event</div>
         <BuildScriptTools></BuildScriptTools>

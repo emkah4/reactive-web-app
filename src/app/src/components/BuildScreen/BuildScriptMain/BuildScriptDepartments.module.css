@@ -19,4 +19,16 @@
     font-weight: 600;
     background-color: #0075FF;
     padding: 5px;
+    font-size: 1.2em;
+}
+
+p.person {
+    font-size: 0.7em;
+    display: inline-block;
+    margin: 2px;
+    border: 2px solid silver;
+    border-radius: 5px;
+    /* clear:both;
+    float:left; */
+    padding: 3px;
 }
