@@ -19,13 +19,17 @@ const BuildScriptMain = (props) => {
       dept_people: ["Lat", "Kat", "Sat"],
     },
     {
-      id: "dept2",
+      id: "dept3",
       dept_name: "Managers",
       dept_people: ["Lat", "Kat", "Sat", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan"],
     },
   ];
 
-  const timeline = 4
+  const timeline = 4;
+  const timeInMinutes = props.timeline * 60;
+  const elementNo = 240 / 10;
+  const deptNo = 3;
+  console.log(elementNo)
 
   return (
     <React.Fragment>
@@ -33,7 +37,7 @@ const BuildScriptMain = (props) => {
         <div className={styles.title}>Groups</div>
         <BuildScriptDepartments dept_data={LIST_OF_DEPARTMENTS_MOCK}></BuildScriptDepartments>
         <BuildScriptTimeline timeline={timeline}></BuildScriptTimeline>
-        <BuildScriptWindow></BuildScriptWindow>
+        <BuildScriptWindow numberOfElements={elementNo} numberOfDepartments={deptNo}></BuildScriptWindow>
         <div className={styles.title}>Add event</div>
         <BuildScriptTools></BuildScriptTools>
       </div>

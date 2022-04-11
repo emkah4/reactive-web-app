@@ -4,12 +4,8 @@ import styles from "./BuildScriptTimeline.module.css"
 
 const BuildScriptTimeline = (props) => {
 
-  const timeInMinutes = props.timeline * 60;
-  
-
-
   return (
-    <div className={styles.timeline}>BuildScriptTimeline</div>
+    <div className={styles.timeline}>0h + {props.timeline}h</div>
   )
 }
 
