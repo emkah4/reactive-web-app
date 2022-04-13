@@ -1,9 +1,31 @@
-var express = require("express");
-var app = express();
-app.get("/url", (req, res, next) => {
- res.json(["Tony","Lisa","Michael","Ginger","Food"]);
+const express = require("express");
+const bodyParser = require("body-parser");
+
+// Importing modules
+const usersRoutes = require("./routes/users-routes");
+
+// Importing models
+const HttpError = require("./models/http-error");
+
+// -------------------------------- Main app.js part --------------------------------
+const app = express();
+
+app.use(bodyParser.json());
+
+// Registering /api/users route, for interaction with users
+app.use("/api/users", usersRoutes);
+
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
 });
 
-app.listen(3000, () => {
- console.log("Server running on port 3000");
+app.use((error, req, res, next) => {
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occcured!" });
 });
+
+app.listen(5000);
