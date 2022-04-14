@@ -3,6 +3,7 @@ import BuildScriptDepartments from "./BuildScriptDepartments";
 import BuildScriptTimeline from "./BuildScriptTimeline";
 import BuildScriptTools from "./BuildScriptTools";
 import BuildScriptWindow from "./BuildScriptWindow";
+import BuildScreenInitial from "../BuildScriptInitial/BuildScriptInitial";
 
 import styles from "./BuildScriptMain.module.css";
 
@@ -21,12 +22,44 @@ const BuildScriptMain = (props) => {
     {
       id: "dept3",
       dept_name: "Managers",
-      dept_people: ["Lat", "Kat", "Sat", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan"],
+      dept_people: [
+        "Lat",
+        "Kat",
+        "Sat",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+      ],
     },
     {
       id: "dept3",
       dept_name: "Managers",
-      dept_people: ["Lat", "Kat", "Sat", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan", "Todd", "Matthew", "Stephan"],
+      dept_people: [
+        "Lat",
+        "Kat",
+        "Sat",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+        "Todd",
+        "Matthew",
+        "Stephan",
+      ],
     },
   ];
 
@@ -34,18 +67,19 @@ const BuildScriptMain = (props) => {
   const timeInMinutes = props.timeline * 60;
   const elementNo = 360 / 10;
   const deptNo = 4;
-  console.log(elementNo)
+  console.log(elementNo);
 
   return (
     <React.Fragment>
-      <div className={styles.container}>
+      <BuildScreenInitial></BuildScreenInitial>
+      {/* <div className={styles.container}>
         <div className={styles.title}>Groups</div>
         <BuildScriptDepartments dept_data={LIST_OF_DEPARTMENTS_MOCK}></BuildScriptDepartments>
         
         <BuildScriptWindow numberOfElements={elementNo} numberOfDepartments={deptNo}></BuildScriptWindow>
         <div className={styles.title}>Add event</div>
         <BuildScriptTools></BuildScriptTools>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 };
