@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DEPLOY_SERVER=$DEPLOY_BACKEND_SERVER
+
+echo "Deploying to ${DEPLOY_BACKEND_SERVER}:${DEPLOY_BACKEND_SERVER_PORT}"
+ssh -p ${DEPLOY_BACKEND_SERVER_PORT} root@${DEPLOY_BACKEND_SERVER} 'bash' < ./deploy/server.sh
