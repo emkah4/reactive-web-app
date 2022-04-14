@@ -1,5 +1,5 @@
 .container {
-    width: 80%;
+    width: 86%;
     height: 100%;
     display: grid;
     grid-template-columns: 0.3fr 1.5fr 0.3fr;
@@ -15,4 +15,5 @@
     color: white;
     background-color: #0075FF;
     font-weight: 600;
+    height: 4vh;
 }
