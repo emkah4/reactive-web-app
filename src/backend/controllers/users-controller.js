@@ -6,6 +6,7 @@ const user_tools = require("../util/user");
 
 const getUsers = async (req, res, next) => {
   let users;
+
   try {
     users = await user_tools.getUsersFromDb();
   } catch (error) {

@@ -25,8 +25,6 @@ async function addUserToDb(f_name, l_name, email, password) {
 
   await pool.end;
 
-  console.log("lol");
-
   const data = response.rows;
 
   if (!data) {

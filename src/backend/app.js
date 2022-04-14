@@ -6,6 +6,7 @@ const usersRoutes = require("./routes/users-routes");
 
 // Importing models
 const HttpError = require("./models/http-error");
+const { body } = require("express-validator");
 
 // -------------------------------- Main app.js part --------------------------------
 const app = express();
