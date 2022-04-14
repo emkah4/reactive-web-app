@@ -10,7 +10,7 @@ const BuildScriptTimeline = (props) => {
   return (
     <div className={styles.timeline_container}>
       {sections.map((x) => (
-        <div className={styles.section}>15min</div>
+        <div className={styles.section}>10min</div>
       ))}
     </div>
   );
