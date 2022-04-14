@@ -21,4 +21,17 @@ router.post(
   usersController.registerUser
 );
 
+// Login a user
+router.post(
+  "/login_user",
+  [check("email").isEmail(), check("password").isLength({ min: 5 })],
+  usersController.loginUser
+);
+
+router.delete(
+  "/logout_user",
+  [check("user_id").not().isEmpty()],
+  usersController.logoutUser
+);
+
 module.exports = router;
