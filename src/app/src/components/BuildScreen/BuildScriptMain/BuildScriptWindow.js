@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BuildScriptTimeline from "./BuildScriptTimeline";
 
 import styles from "./BuildScriptWindow.module.css";
+import Event from "../Event/Event";
 
 const BuildScriptWindow = (props) => {
 
@@ -25,6 +26,32 @@ const BuildScriptWindow = (props) => {
   console.log(list);
   console.log(dept);
 
+  const EVENT_MOCK = {
+    event_type: "spam_sms",
+    event_title: "Spam SMS",
+    event_color: "rgb(61, 64, 91)",
+    event_groups: [
+      {
+        id: "g1",
+        group_name: "Managers",
+        group_color: "#f5a911",
+        is_included: false,
+      },
+      {
+        id: "g2",
+        group_name: "Developers",
+        group_color: "#e60ba4",
+        is_included: true,
+      },
+      {
+        id: "g3",
+        group_name: "Managers",
+        group_color: "#1fe61c",
+        is_included: true,
+      },
+    ],
+  }; 
+
   return (
     <div className={styles.window}>
       <BuildScriptTimeline deptArray={dept}></BuildScriptTimeline>
@@ -33,7 +60,7 @@ const BuildScriptWindow = (props) => {
           <div className={styles.row}>
             {depts.map((events) => (
               <div className={styles.event_container}>
-                <div className={styles.event}></div>
+                <div className={styles.event}> <Event event_data={EVENT_MOCK}></Event> </div>
               </div>
             ))}
           </div>

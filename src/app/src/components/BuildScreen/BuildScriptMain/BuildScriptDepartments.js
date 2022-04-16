@@ -7,7 +7,7 @@ const BuildScriptDepartments = (props) => {
   return (
     <div className={styles.departments}>
       {props.dept_data.map((dept) => (
-        <div className={styles.department} key={dept.id}>{dept.dept_name}<br/> {
+        <div className={styles.department} key={dept.dept_id}>{dept.dept_name}<br/> {
           dept.dept_people.map((person) => (
             <p className={styles.person}>{person}</p>
           ))

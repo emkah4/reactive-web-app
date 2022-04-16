@@ -16,36 +16,64 @@ import RangeSlider from "react-bootstrap-range-slider";
 import SliderWithInputFormControl from "../../UI/SliderWithInputFormControl";
 // Styles
 import styles from "./BuildScriptInitial.module.css";
+import AddPeoplePopup from "./AddPeoplePopup/AddPeoplePopup";
 
-const BuildScriptInitial = () => {
-  const LIST_OF_DEPARTMENTS_MOCK = [
-    { id: "dept1", dept_name: "Developers" },
-    { id: "dept2", dept_name: "Managers" },
-    { id: "dept3", dept_name: "Cyber security department" },
-  ];
+const BuildScriptInitial = (props) => {
+
+  const [exerciseTitle, setExerciseTitle] = useState("");
 
   const [durationValue, setDurationValue] = useState(60);
   const [durationFinalvalue, setDurationFinalvalue] = useState(null);
+
   const [newTeam, setNewTeam] = useState("");
+  const [listOfDepartments, setListOfDepartments] = useState([]) //object with departments and people
+
+  const [showModal, setShowModal] = useState(false);
 
   function onDurationChange(event) {
     setDurationValue(event.target.value);
-    console.log(event.target.value);
   }
 
   function onFinalDurationChange(event) {
     setDurationFinalvalue(event.target.value);
-    console.log(event.target.value);
   }
 
-  function onSetNewTeamName(event) {
+  const onSetNewTeamName = (event) => {
     setNewTeam(event.target.value);
   }
 
+  const onSetExerciseTitle = (event) => {
+    setExerciseTitle(event.target.value);
+  }
+
   function onAddNewTeam(event) {
-    LIST_OF_DEPARTMENTS_MOCK.push({ id: "dept4", dept_name: newTeam });
+
+    setListOfDepartments((prevListOfDepartments) => {
+      return [
+        ...prevListOfDepartments,
+        {
+          dept_id: "dept" + Math.random().toString(),  
+          dept_name: newTeam,
+          dept_people: [],
+        },
+      ];
+    });
+    
     setNewTeam("");
-    console.log(LIST_OF_DEPARTMENTS_MOCK);
+  }
+
+  const handleModalShow = (event) => {
+    setShowModal(true);
+    console.log("Show " + showModal);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    console.log("Close");
+  };
+
+  const nextButtonHandler = () => {
+    props.onNext(exerciseTitle, listOfDepartments, durationFinalvalue);
   }
 
   return (
@@ -63,7 +91,9 @@ const BuildScriptInitial = () => {
               <Form.Label style={{ textAlign: "left" }} as="h6">
                 Enter the exercise title:
               </Form.Label>
-              <Form.Control placeholder="DDoS attack"></Form.Control>
+              <Form.Control placeholder="DDoS attack"
+                onChange={onSetExerciseTitle}
+              />
             </Form.Group>
 
             <SliderWithInputFormControl
@@ -78,11 +108,14 @@ const BuildScriptInitial = () => {
           <ListGroup style={{ width: "50%" }}>
             <Form.Label as="h6">Participating groups</Form.Label>
 
-            {LIST_OF_DEPARTMENTS_MOCK.map((departments) => (
-              <ListGroup.Item key={departments.id}>
+            {listOfDepartments.map((departments) => (
+              <ListGroup.Item key={departments.dept_id} onClick={handleModalShow}>
                 {departments.dept_name}
               </ListGroup.Item>
             ))}
+            {showModal && (
+              <AddPeoplePopup show={showModal} onClose={handleModalClose}></AddPeoplePopup>
+            )}
             <InputGroup className="mb-3">
               <Form.Control
                 placeholder="Group's name"
@@ -100,8 +133,8 @@ const BuildScriptInitial = () => {
           </ListGroup>
 
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <Button variant="danger">Cancel</Button>
-            <Button variant="primary">Next</Button>
+            {/* <Button variant="danger">Cancel</Button> */}
+            <Button variant="primary" onClick={nextButtonHandler}>Next</Button>
           </div>
         </Card.Body>
       </Card>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // Styles
 
 import styles from "./BuildScreen.module.css";
+import BuildScriptInitial from "./BuildScriptInitial/BuildScriptInitial";
 import BuildScriptMain from "./BuildScriptMain/BuildScriptMain";
 
 // Components
@@ -11,6 +12,10 @@ import EventEditPopup from "./Event/EventEditPopup/EventEditPopup";
 import EventEditPopupHeader from "./Event/EventEditPopup/EventEditPopup";
 
 const BuildScreen = (props) => {
+
+  const [initialInfoPassed, setInitialInfoPassed] = useState(false);
+  const [initialInfo, setInitialInfo] = useState({})
+
   const EVENT_MOCK = {
     event_type: "spam_sms",
     event_title: "Spam SMS",
@@ -35,14 +40,31 @@ const BuildScreen = (props) => {
         is_included: true,
       },
     ],
-  }; 
+  };
+  
+  const passInitialInfo = (
+    exerciseTitle,
+    listOfDepartments,
+    durationFinalvalue
+  ) => {
+    setInitialInfo(() => {
+      return {
+        exercise_title: exerciseTitle,
+        list_of_departments: listOfDepartments,
+        duration: durationFinalvalue,
+      };
+    });
+    setInitialInfoPassed(true);
+  };
+
+  console.log(initialInfo)
 
 
   return (
     <React.Fragment>
-      {/* <Event event_data={EVENT_MOCK}></Event> */}
       <div className={styles.container}>
-        <BuildScriptMain />
+        {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}
+        {initialInfoPassed && <BuildScriptMain {...initialInfo} />}
       </div>
     </React.Fragment>
     

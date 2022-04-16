@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BuildScriptDepartments from "./BuildScriptDepartments";
 import BuildScriptTimeline from "./BuildScriptTimeline";
 import BuildScriptTools from "./BuildScriptTools";
@@ -6,8 +6,10 @@ import BuildScriptWindow from "./BuildScriptWindow";
 import BuildScreenInitial from "../BuildScriptInitial/BuildScriptInitial";
 
 import styles from "./BuildScriptMain.module.css";
+import { parsePath } from "react-router-dom";
 
 const BuildScriptMain = (props) => {
+
   const LIST_OF_DEPARTMENTS_MOCK = [
     {
       id: "dept1",
@@ -62,24 +64,20 @@ const BuildScriptMain = (props) => {
       ],
     },
   ];
-
-  const timeline = 4;
-  const timeInMinutes = props.timeline * 60;
-  const elementNo = 360 / 10;
-  const deptNo = 4;
-  console.log(elementNo);
+  const listOfDepartments = props.list_of_departments
+  const elementNo = parseInt(props.duration) / 10;
+  const deptNo = parseInt(props.list_of_departments.length);
+  
 
   return (
     <React.Fragment>
-      <BuildScreenInitial></BuildScreenInitial>
-      {/* <div className={styles.container}>
+      <div className={styles.container}>
         <div className={styles.title}>Groups</div>
-        <BuildScriptDepartments dept_data={LIST_OF_DEPARTMENTS_MOCK}></BuildScriptDepartments>
-        
-        <BuildScriptWindow numberOfElements={elementNo} numberOfDepartments={deptNo}></BuildScriptWindow>
+        <BuildScriptDepartments dept_data={listOfDepartments}></BuildScriptDepartments>
+        <BuildScriptWindow numberOfElements={elementNo} numberOfDepartments={deptNo} ></BuildScriptWindow>
         <div className={styles.title}>Add event</div>
         <BuildScriptTools></BuildScriptTools>
-      </div> */}
+      </div>
     </React.Fragment>
   );
 };
