@@ -2,9 +2,12 @@ const axios = require("axios");
 const HttpError = require("../models/http-error");
 const { Pool, Client } = require("pg");
 const pool = new Pool();
+const auth_tools = require("./auth");
 
-async function getUsersFromDb() {
-  const response = await pool.query("SELECT * FROM users");
+async function getUserFromDb(user_id) {
+  const response = await pool.query("SELECT * FROM users WHERE id = $1", [
+    user_id,
+  ]);
   await pool.end;
 
   const data = response;
@@ -14,7 +17,7 @@ async function getUsersFromDb() {
     throw error;
   }
 
-  return data;
+  return data.rows;
 }
 
 async function addUserToDb(f_name, l_name, email, password) {
@@ -58,44 +61,22 @@ async function logInUser(email, password) {
 
   const user_id = user.id;
 
-  // Updating is_logged_in in database
-  const response = await pool.query(
-    "UPDATE users SET is_logged_in = true WHERE id = $1",
-    [user_id]
-  );
-  await pool.end;
-
-  const logged_in = response;
-
-  // Checking if updating is_logged_in was successful
-  if (!logged_in) {
-    const error = new HttpError("Could not log in. Server error", 503);
-    throw error;
-  }
-
   // Returning user_id if everything is ok
   return user_id;
 }
 
 async function logOutUser(user_id) {
-  const response = await pool.query(
-    "UPDATE users SET is_logged_in = false WHERE id = $1",
-    [user_id]
-  );
-  await pool.end;
-
-  const data = response;
-
-  if (!data) {
-    const error = new HttpError("Something went wrong", 500);
+  let is_logged_out;
+  try {
+    is_logged_out = await auth_tools.delete_refresh_token(user_id);
+  } catch (error) {
     throw error;
-  } else {
-    return true;
   }
+  return is_logged_out;
 }
 
 module.exports = {
-  getUsersFromDb,
+  getUserFromDb,
   addUserToDb,
   logInUser,
   logOutUser,

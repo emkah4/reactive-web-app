@@ -5,9 +5,10 @@ const router = express.Router();
 
 // Importing controllers
 const usersController = require("../controllers/users-controller");
+const auth_tools = require("../util/auth");
 
 // Get list of all users
-router.get("/get_users", usersController.getUsers);
+router.get("/get_user", auth_tools.authenticateToken, usersController.getUser);
 
 // Register a user
 router.post(
@@ -28,9 +29,15 @@ router.post(
   usersController.loginUser
 );
 
+router.post(
+  "/token",
+  [check("refreshToken").not().isEmpty()],
+  usersController.tokenRefresh
+);
+
 router.delete(
   "/logout_user",
-  [check("user_id").not().isEmpty()],
+  auth_tools.authenticateToken,
   usersController.logoutUser
 );
 
