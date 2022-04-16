@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 
 // Importing modules
 const usersRoutes = require("./routes/users-routes");
+const projectsRoutes = require("./routes/projects-routes");
 
 // Importing models
 const HttpError = require("./models/http-error");
@@ -15,6 +16,9 @@ app.use(bodyParser.json());
 
 // Registering /api/users route, for interaction with users
 app.use("/api/users", usersRoutes);
+
+// Registering /api/projects route, for interaction with projects
+app.use("/api/projects", projectsRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
