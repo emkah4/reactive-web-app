@@ -9,26 +9,22 @@ import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputGroup from "react-bootstrap/InputGroup";
 
-//Bootstrap additions
-import RangeSlider from "react-bootstrap-range-slider";
-
 // Custom components
 import SliderWithInputFormControl from "../../UI/SliderWithInputFormControl";
 // Styles
 import styles from "./BuildScriptInitial.module.css";
-import AddPeoplePopup from "./AddPeoplePopup/AddPeoplePopup";
+import AddPeoplePopup from "./Departments/AddPeoplePopup/AddPeoplePopup";
+import Department from "./Departments/Department";
 
 const BuildScriptInitial = (props) => {
 
   const [exerciseTitle, setExerciseTitle] = useState("");
 
-  const [durationValue, setDurationValue] = useState(60);
+  const [durationValue, setDurationValue] = useState(120);
   const [durationFinalvalue, setDurationFinalvalue] = useState(null);
 
   const [newTeam, setNewTeam] = useState("");
   const [listOfDepartments, setListOfDepartments] = useState([]) //object with departments and people
-
-  const [showModal, setShowModal] = useState(false);
 
   function onDurationChange(event) {
     setDurationValue(event.target.value);
@@ -36,14 +32,6 @@ const BuildScriptInitial = (props) => {
 
   function onFinalDurationChange(event) {
     setDurationFinalvalue(event.target.value);
-  }
-
-  const onSetNewTeamName = (event) => {
-    setNewTeam(event.target.value);
-  }
-
-  const onSetExerciseTitle = (event) => {
-    setExerciseTitle(event.target.value);
   }
 
   function onAddNewTeam(event) {
@@ -61,16 +49,6 @@ const BuildScriptInitial = (props) => {
     
     setNewTeam("");
   }
-
-  const handleModalShow = (event) => {
-    setShowModal(true);
-    console.log("Show " + showModal);
-  };
-
-  const handleModalClose = () => {
-    setShowModal(false);
-    console.log("Close");
-  };
 
   const nextButtonHandler = () => {
     props.onNext(exerciseTitle, listOfDepartments, durationFinalvalue);
@@ -92,7 +70,7 @@ const BuildScriptInitial = (props) => {
                 Enter the exercise title:
               </Form.Label>
               <Form.Control placeholder="DDoS attack"
-                onChange={onSetExerciseTitle}
+                onChange={e => setExerciseTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -108,19 +86,16 @@ const BuildScriptInitial = (props) => {
           <ListGroup style={{ width: "50%" }}>
             <Form.Label as="h6">Participating groups</Form.Label>
 
-            {listOfDepartments.map((departments) => (
-              <ListGroup.Item key={departments.dept_id} onClick={handleModalShow}>
-                {departments.dept_name}
+            {listOfDepartments.map((department) => (
+              <ListGroup.Item>
+                <Department data={department}></Department>
               </ListGroup.Item>
             ))}
-            {showModal && (
-              <AddPeoplePopup show={showModal} onClose={handleModalClose}></AddPeoplePopup>
-            )}
             <InputGroup className="mb-3">
               <Form.Control
                 placeholder="Group's name"
                 value={newTeam}
-                onChange={onSetNewTeamName}
+                onChange={e => setNewTeam(e.target.value)}
               />
               <Button
                 variant="outline-success"

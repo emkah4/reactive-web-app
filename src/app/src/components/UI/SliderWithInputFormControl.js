@@ -20,7 +20,7 @@ const SliderWithInputFormControl = (props) => {
       </Col>
       <Col sm="8">
         <RangeSlider
-          min={0}
+          min={120}
           max={720}
           step={10}
           value={props.durationValue}
