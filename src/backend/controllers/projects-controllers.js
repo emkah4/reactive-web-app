@@ -19,15 +19,15 @@ const newProject = async (req, res, next) => {
 
   let { project } = req.body;
 
-  let project_id;
+  let project_data;
 
   try {
-    project_id = await project_tools.addProject(project, req.user_id);
+    project_data = await project_tools.addProject(project, req.user_id);
   } catch (error) {
     return next(error);
   }
 
-  res.status(201).json({ project_id: project_id });
+  res.status(201).json({ project: project_data });
 };
 
 exports.newProject = newProject;
