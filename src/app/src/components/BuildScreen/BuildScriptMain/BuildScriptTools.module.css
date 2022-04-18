@@ -4,3 +4,23 @@
     grid-column: 3;
     grid-row: 2 / 3;
 }
+
+.tools_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    margin-top: 10px;
+    height: 60vh;
+}
+
+.tool_container {
+    width: 5vw;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tool {
+    height: 20vh;
+}

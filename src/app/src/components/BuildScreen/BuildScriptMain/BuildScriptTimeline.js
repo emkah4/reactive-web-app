@@ -5,7 +5,6 @@ import styles from "./BuildScriptTimeline.module.css"
 const BuildScriptTimeline = (props) => {  
 
   const sections = props.deptArray[0];
-  console.log(sections)
 
   return (
     <div className={styles.timeline_container}>

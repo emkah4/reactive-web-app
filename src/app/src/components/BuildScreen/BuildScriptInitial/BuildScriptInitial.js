@@ -17,14 +17,13 @@ import AddPeoplePopup from "./Departments/AddPeoplePopup/AddPeoplePopup";
 import Department from "./Departments/Department";
 
 const BuildScriptInitial = (props) => {
-
   const [exerciseTitle, setExerciseTitle] = useState("");
 
   const [durationValue, setDurationValue] = useState(120);
-  const [durationFinalvalue, setDurationFinalvalue] = useState(null);
+  const [durationFinalvalue, setDurationFinalvalue] = useState(120);
 
   const [newTeam, setNewTeam] = useState("");
-  const [listOfDepartments, setListOfDepartments] = useState([]) //object with departments and people
+  const [listOfDepartments, setListOfDepartments] = useState([]); //object with departments and people
 
   function onDurationChange(event) {
     setDurationValue(event.target.value);
@@ -35,24 +34,23 @@ const BuildScriptInitial = (props) => {
   }
 
   function onAddNewTeam(event) {
-
     setListOfDepartments((prevListOfDepartments) => {
       return [
         ...prevListOfDepartments,
         {
-          dept_id: "dept" + Math.random().toString(),  
+          dept_id: "dept" + Math.random().toString(),
           dept_name: newTeam,
           dept_people: [],
         },
       ];
     });
-    
+
     setNewTeam("");
   }
 
   const nextButtonHandler = () => {
     props.onNext(exerciseTitle, listOfDepartments, durationFinalvalue);
-  }
+  };
 
   return (
     <React.Fragment>
@@ -69,8 +67,9 @@ const BuildScriptInitial = (props) => {
               <Form.Label style={{ textAlign: "left" }} as="h6">
                 Enter the exercise title:
               </Form.Label>
-              <Form.Control placeholder="DDoS attack"
-                onChange={e => setExerciseTitle(e.target.value)}
+              <Form.Control
+                placeholder="DDoS attack"
+                onChange={(e) => setExerciseTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -85,17 +84,11 @@ const BuildScriptInitial = (props) => {
           <br></br>
           <ListGroup style={{ width: "50%" }}>
             <Form.Label as="h6">Participating groups</Form.Label>
-
-            {listOfDepartments.map((department) => (
-              <ListGroup.Item>
-                <Department data={department}></Department>
-              </ListGroup.Item>
-            ))}
             <InputGroup className="mb-3">
               <Form.Control
                 placeholder="Group's name"
                 value={newTeam}
-                onChange={e => setNewTeam(e.target.value)}
+                onChange={(e) => setNewTeam(e.target.value)}
               />
               <Button
                 variant="outline-success"
@@ -105,11 +98,18 @@ const BuildScriptInitial = (props) => {
                 Add a new group
               </Button>
             </InputGroup>
+            {listOfDepartments.map((department) => (
+              <ListGroup.Item>
+                <Department data={department}></Department>
+              </ListGroup.Item>
+            ))}
           </ListGroup>
 
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             {/* <Button variant="danger">Cancel</Button> */}
-            <Button variant="primary" onClick={nextButtonHandler}>Next</Button>
+            <Button variant="primary" onClick={nextButtonHandler}>
+              Next
+            </Button>
           </div>
         </Card.Body>
       </Card>
