@@ -17,3 +17,20 @@
     font-weight: 600;
     height: 4vh;
 }
+
+.structure {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+div.script_title {
+  margin-top: 50px;
+  font-size: 2rem;
+}
+
+span.script_name {
+  font-weight: 800;
+  color: #3d405b;
+}

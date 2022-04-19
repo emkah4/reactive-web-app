@@ -59,7 +59,7 @@ const BuildScriptInitial = (props) => {
         <Card.Body>
           <Card.Title>
             Please fill out these initial settings before proceeding to the
-            script builder.
+            script builder
           </Card.Title>
 
           <Form>
@@ -78,7 +78,7 @@ const BuildScriptInitial = (props) => {
               onDurationChange={onDurationChange}
               onFinalDurationChange={onFinalDurationChange}
             >
-              In minutes, select the duration of the exercise
+              In minutes, select the duration of the exercise (slider):
             </SliderWithInputFormControl>
           </Form>
           <br></br>

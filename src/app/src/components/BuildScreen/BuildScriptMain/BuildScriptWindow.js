@@ -60,7 +60,7 @@ const BuildScriptWindow = (props) => {
           <div className={styles.row}>
             {depts.map((events) => (
               <div className={styles.event_container}>
-                <div className={styles.event}>  </div>
+                <div className={styles.event}>+</div>
               </div>
             ))}
           </div>
