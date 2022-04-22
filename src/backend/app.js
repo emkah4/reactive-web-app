@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 // Importing modules
 const usersRoutes = require("./routes/users-routes");
 const projectsRoutes = require("./routes/projects-routes");
+const eventsRoutes = require("./routes/events-routes");
 
 // Importing models
 const HttpError = require("./models/http-error");
@@ -19,6 +20,9 @@ app.use("/api/users", usersRoutes);
 
 // Registering /api/projects route, for interaction with projects
 app.use("/api/projects", projectsRoutes);
+
+// Registering /api/events route, for interaction with events
+app.use("/api/events", eventsRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);

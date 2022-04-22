@@ -17,6 +17,10 @@ class Project {
       });
     });
   }
+
+  addEvents(events_data) {
+    this.events = events_data;
+  }
 }
 
 module.exports = Project;

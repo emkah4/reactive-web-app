@@ -7,6 +7,9 @@ const pool = new Pool();
 const HttpError = require("../models/http-error");
 const Project = require("../models/project");
 
+// Importing tools
+const event_tools = require("./event");
+
 // Function that inserts new project to database, and initiates insertion of project groups and project groups members. Also returns whole project object with id's from database
 async function addProject(project, user_id) {
   const response = await pool.query(
@@ -119,6 +122,120 @@ async function addGroupMemeber(group_id, member) {
   return data.rows[0];
 }
 
+async function getProjects(user_id) {
+  const response = await pool.query(
+    "SELECT * FROM projects WHERE user_id = $1",
+    [user_id]
+  );
+
+  await pool.end;
+
+  const data = response.rows;
+
+  if (!data) {
+    const error = new HttpError("No projects found.", 404);
+    throw error;
+  }
+
+  return data;
+}
+
+async function getProject(project_id) {
+  // Getting general information about project
+  const response = await pool.query("SELECT * FROM projects WHERE id = $1", [
+    project_id,
+  ]);
+
+  await pool.end;
+
+  const data = response.rows[0];
+
+  if (!data) {
+    const error = new HttpError("No project with that id. Not found.", 404);
+    throw error;
+  }
+
+  const project_data = new Project(
+    data.id,
+    data.project_title,
+    data.project_creation_date,
+    data.project_status
+  );
+
+  // Getting groups data
+  let groups;
+  try {
+    groups = await getProjectGroups(project_id);
+  } catch (error) {
+    throw error;
+  }
+
+  project_data.addGroups(groups);
+
+  // Getting events for this project
+  let events;
+  try {
+    events = await event_tools.getEvents(project_id);
+  } catch (error) {
+    throw error;
+  }
+
+  if (events) {
+    project_data.addEvents(events);
+  }
+
+  return project_data;
+}
+
+async function getProjectGroups(project_id) {
+  const response = await pool.query(
+    "SELECT * FROM project_groups WHERE project_id = $1",
+    [project_id]
+  );
+
+  await pool.end;
+
+  const groups = response.rows;
+
+  let groups_data = await Promise.all(
+    groups.map(async (group) => {
+      let group_data;
+
+      try {
+        group_data = await getGroupMembers(group.id);
+      } catch (error) {
+        throw error;
+      }
+
+      group.group_members = group_data;
+      return group;
+    })
+  );
+
+  console.log(groups_data);
+
+  return groups_data;
+}
+
+async function getGroupMembers(group_id) {
+  const response = await pool.query(
+    "SELECT * FROM project_group_members WHERE group_id = $1",
+    [group_id]
+  );
+
+  await pool.end;
+
+  const members = response.rows;
+
+  if (!members) {
+    return [];
+  } else {
+    return members;
+  }
+}
+
 module.exports = {
   addProject,
+  getProjects,
+  getProject,
 };

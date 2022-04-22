@@ -3,33 +3,32 @@ const { check } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 
-// Importing models
+// Importing modules
 const HttpError = require("../models/http-error");
 
 // Importing utils
 const auth_tools = require("../util/auth");
 
 // Importing controllers
-const projectsController = require("../controllers/projects-controllers");
+const eventsController = require("../controllers/events-controller");
 
-// Add new project
 router.post(
-  "/new_project",
+  "/add_event",
+  [
+    check("project_id").not().isEmpty(),
+    check("event_type").not().isEmpty(),
+    check("event_time").not().isEmpty(),
+    check("event_text").not().isEmpty(),
+    check("event_groups").not().isEmpty(),
+  ],
   auth_tools.authenticateToken,
-  projectsController.newProject
+  eventsController.addEvent
 );
 
-// Get all user projects
 router.get(
-  "/get_projects",
+  "/get_events/:pid",
   auth_tools.authenticateToken,
-  projectsController.getProjects
-);
-
-router.get(
-  "/get_project/:pid",
-  auth_tools.authenticateToken,
-  projectsController.getProject
+  eventsController.getEvents
 );
 
 module.exports = router;

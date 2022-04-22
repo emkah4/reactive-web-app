@@ -30,4 +30,37 @@ const newProject = async (req, res, next) => {
   res.status(201).json({ project: project_data });
 };
 
+const getProjects = async (req, res, next) => {
+  let user_id = req.user_id;
+
+  let projects;
+
+  try {
+    projects = await project_tools.getProjects(user_id);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ projects: projects });
+};
+
+const getProject = async (req, res, next) => {
+  let project_id = req.params.pid;
+
+  if (!project_id) {
+    return next(new HttpError("No project id provided. Forbidden.", 403));
+  }
+
+  let project;
+  try {
+    project = await project_tools.getProject(project_id);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ project: project });
+};
+
 exports.newProject = newProject;
+exports.getProjects = getProjects;
+exports.getProject = getProject;
