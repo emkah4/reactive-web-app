@@ -212,8 +212,6 @@ async function getProjectGroups(project_id) {
     })
   );
 
-  console.log(groups_data);
-
   return groups_data;
 }
 
