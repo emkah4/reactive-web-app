@@ -3,13 +3,16 @@
   max-width: 40rem;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #3d405b;
+  background-color: #0f67f5;
+  color: white;
+  border-radius: 0;
 }
 
 .form {
   display: block;
   align-items: stretch;
   flex-direction: column;
+  color: white;
 }
 
 .form label,
@@ -27,14 +30,12 @@
   flex: 3;
   font: inherit;
   padding: 0.35rem 0.35rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 0;
+  color: #262626;
 }
 
 .form input:focus {
   outline: none;
-  border-color: #4f005f;
-  background: #f6dbfc;
 }
 
 .form input[type="checkbox"]:checked {
@@ -42,11 +43,21 @@
 }
 
 .form label.form-check-label {
-  color: white;
+  color: white !important;
 }
 
 .actions {
   text-align: center;
+}
+
+.small {
+  color: white;
+  font-size: 0.7em;
+  opacity: 0.5;
+}
+
+.checkbox label {
+  color: white;
 }
 
 @media (min-width: 768px) {

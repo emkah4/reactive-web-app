@@ -1,5 +1,5 @@
 // React
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
 
 // Bootstrap
 import Form from "react-bootstrap/Form";
@@ -7,6 +7,12 @@ import Form from "react-bootstrap/Form";
 // Team Reactive
 import Card from "../UI/Card";
 import Button from "../UI/Button/Button";
+
+// Context
+import { UserContext } from "../../context/UserContext";
+
+// Hooks
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Styles
 import styles from "./Login.module.css";
@@ -42,6 +48,8 @@ function passwordReducer(prevState, action) {
 }
 
 function Login(props) {
+  const { user, setUser } = useContext(UserContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formIsValid, setFormValid] = useState();
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -83,10 +91,33 @@ function Login(props) {
     dispatchPassword({ type: "INPUT_LOST_FOCUS" });
   }
 
-  function onFormSubmitHandler(event) {
+  const onFormSubmitHandler = async (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
-  }
+    const body = {
+      email: emailState.value,
+      password: passwordState.value,
+    };
+
+    let user_data;
+
+    try {
+      const responseData = await sendRequest(
+        "http://193.219.91.103:15411/api/users/login_user",
+        "POST",
+        body
+      );
+
+      user_data = await responseData.data;
+    } catch (error) {
+      throw error;
+    }
+
+    setUser(user_data);
+
+    props.onLoggingIn();
+
+    // props.onLogin(emailState.value, passwordState.value);
+  };
 
   return (
     <Card className={styles.login}>
@@ -102,7 +133,9 @@ function Login(props) {
               placeholder="Enter email"
             />
           </Form.FloatingLabel>
-          <Form.Text>Your email information will not be shared.</Form.Text>
+          <Form.Text className={styles.small}>
+            Your email information will not be shared.
+          </Form.Text>
         </Form.Group>
 
         <Form.Group className={`mb-3 ${styles.form}`} controlId="password">
@@ -117,13 +150,17 @@ function Login(props) {
             />
           </Form.FloatingLabel>
 
-          <Form.Text>
+          <Form.Text className={styles.small}>
             Your password must be 6-20 characters long, may contain letters and
             numbers, and must not contain spaces, special characters, or emojis.
           </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Remember me" />
+          <Form.Check
+            className={styles.checkbox}
+            type="checkbox"
+            label="Remember me"
+          />
         </Form.Group>
         <Button type="submit" disabled={!formIsValid}>
           Login
