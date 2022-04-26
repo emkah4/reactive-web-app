@@ -20,19 +20,24 @@ const Header = (props) => {
           <Navigation className={style.ul} />
         </div>
         <div>
-          <Button>Profile</Button>
           {!props.isLoggedIn ? (
-            <NavLink to="/login">
-              {/* <Button onClick={props.onLogout}>
+            <div>
+              <NavLink to="/login">
+                {/* <Button onClick={props.onLogout}>
               Sign out
             </Button> */}
-              <Button>Sign In</Button>
-            </NavLink>
+                <Button>Sign In</Button>
+              </NavLink>
+              <NavLink to="/register">
+                <Button>Register</Button>
+              </NavLink>
+            </div>
           ) : (
             <NavLink to="/login">
               {/* <Button onClick={props.onLogout}>
               Sign out
             </Button> */}
+              <Button>Profile</Button>
               <Button onClick={props.onLogout}>Log Out</Button>
             </NavLink>
           )}

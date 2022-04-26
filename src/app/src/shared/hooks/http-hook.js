@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import axios from "axios";
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,26 +7,31 @@ export const useHttpClient = () => {
   const activeHttpRequests = useRef([]);
 
   const sendRequest = useCallback(
-    async (url, method = "GET", body = null, headers = {}) => {
+    async (
+      url,
+      method = "GET",
+      body = null,
+      headers = { "Content-type": "application/json; charset=utf-8" }
+    ) => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
       activeHttpRequests.current.push(httpAbortCtrl);
 
       try {
-        const response = await axios.post(url, body, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
+        const response = await fetch(url, {
+          method,
+          body,
+          headers,
+          signal: httpAbortCtrl.signal,
         });
 
-        const responseData = await response;
+        const responseData = await response.json();
 
         activeHttpRequests.current = activeHttpRequests.current.filter(
           (reqCtrl) => reqCtrl !== httpAbortCtrl
         );
 
-        if (response.status !== 200) {
+        if (!response.ok) {
           throw new Error(responseData.message);
         }
 

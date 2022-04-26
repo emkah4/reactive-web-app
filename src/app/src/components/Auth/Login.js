@@ -1,5 +1,6 @@
 // React
 import React, { useState, useReducer, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Bootstrap
 import Form from "react-bootstrap/Form";
@@ -16,6 +17,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Styles
 import styles from "../Auth/Login.module.css";
+import { Navigate } from "react-router-dom";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -48,6 +50,7 @@ function passwordReducer(prevState, action) {
 }
 
 function Login(props) {
+  let navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formIsValid, setFormValid] = useState();
@@ -98,25 +101,24 @@ function Login(props) {
       password: passwordState.value,
     };
 
-    let user_data;
-
     try {
       const responseData = await sendRequest(
         "http://193.219.91.103:15411/api/users/login_user",
         "POST",
-        body
+        JSON.stringify(body)
       );
-
-      user_data = await responseData.data;
+      localStorage.setItem("access_token", responseData.access_token);
+      localStorage.setItem("refresh_token", responseData.refresh_token);
+      setUser(responseData);
+      navigate("/about");
     } catch (error) {
-      throw error;
+      console.log(error);
+      if (error.code === "ERR_NETWORK") {
+        console.log("Ups, server down");
+      }
     }
 
-    setUser(user_data);
-
     props.onLoggingIn();
-
-    // props.onLogin(emailState.value, passwordState.value);
   };
 
   return (

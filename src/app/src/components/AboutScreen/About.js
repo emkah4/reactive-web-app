@@ -17,7 +17,7 @@ const About = () => {
         consectetur cillum fugiat enim sit culpa nisi. Duis sit laboris
         incididunt tempor culpa dolore aute in ea reprehenderit ullamco.
       </p>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <pre>{localStorage.getItem("access_token")}</pre>
     </div>
   );
 };

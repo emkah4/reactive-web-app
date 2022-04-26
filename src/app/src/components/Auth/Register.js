@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import Form from "react-bootstrap/Form";
@@ -6,7 +7,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
+// Hooks
 import { useHttpClient } from "../../shared/hooks/http-hook";
+
+// Context
+import { UserContext } from "../../context/UserContext";
 
 import Card from "../UI/Card";
 import Button from "react-bootstrap/Button";
@@ -30,7 +35,8 @@ function Register() {
   });
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
+  const { user, setUser } = useContext(UserContext);
+  let navigate = useNavigate();
   const name = watch("f_name");
   const regexEmail =
     "/^[a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1}([a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1})*[a-z0-9]@[a-z0-9][-.]{0,1}([a-z][-.]{0,1})*[a-z0-9].[a-z0-9]{1,}([.-]{0,1}[a-z]){0,}[a-z0-9]{0,}$/";
@@ -41,22 +47,17 @@ function Register() {
         <Form
           className={styles.form}
           onSubmit={handleSubmit(async (data) => {
-            console.log(data);
-
-            let user_data;
             try {
               const responseData = await sendRequest(
                 "http://193.219.91.103:15411/api/users/register_user",
                 "POST",
-                data
+                JSON.stringify(data)
               );
-
-              user_data = await responseData.data;
+              setUser(responseData);
+              navigate("/about");
             } catch (error) {
               throw error;
             }
-            console.log(user_data);
-            // props.onLogin(emailState.value, passwordState.value);
           })}
         >
           <Form.Group className="mb-3" controlId="formGroupFname">
@@ -123,6 +124,7 @@ function Register() {
             Register
           </Button>
         </Form>
+        <div>{isLoading}</div>
       </Card>
     </>
   );
