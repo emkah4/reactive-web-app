@@ -63,6 +63,11 @@
   align-items: center;
 }
 
+.title {
+  margin-top: 1rem;
+  text-align: center;
+}
+
 @media (min-width: 768px) {
   .control {
     align-items: center;
