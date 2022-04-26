@@ -8,7 +8,8 @@ import { UserContext } from "./context/UserContext";
 // Components
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
-import Login from "./components/Login/Login";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 
 import { MyScripts, BuildScreen, About, Home } from "./components";
 
@@ -46,20 +47,12 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </UserContext.Provider>
-
-      {/* {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && <BuildScreen />} */}
-
       <Footer />
     </Router>
   );
 }
 
 export default App;
-
-/* <main>
-  {!isLoggedIn && <Login onLogin={loginHandler} />}
-  {isLoggedIn && <Header onLogout={logoutHandler} />}
-</main>; */

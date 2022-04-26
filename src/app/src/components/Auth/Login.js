@@ -15,7 +15,7 @@ import { UserContext } from "../../context/UserContext";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Styles
-import styles from "./Login.module.css";
+import styles from "../Auth/Login.module.css";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
