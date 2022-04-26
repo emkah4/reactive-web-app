@@ -8,6 +8,7 @@ import Form from "react-bootstrap/Form";
 // Team Reactive
 import Card from "../UI/Card";
 import Button from "../UI/Button/Button";
+import LoginError from "./LoginError";
 
 // Context
 import { UserContext } from "../../context/UserContext";
@@ -123,6 +124,7 @@ function Login(props) {
 
   return (
     <Card className={styles.login}>
+      <LoginError error={error} onClear={clearError} />
       <Form className={styles.form} onSubmit={onFormSubmitHandler}>
         <Form.Group className="mb-3 $" controlId="email">
           <Form.FloatingLabel label="Email address">
