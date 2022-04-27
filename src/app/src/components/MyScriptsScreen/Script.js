@@ -30,7 +30,9 @@ const Script = (props) => {
             <Button variant="primary" className={styles.button_first}>
               Edit
             </Button>
-            <Button variant="primary">Export</Button>
+            <Button variant="primary" onClick={props.export} value={project.id}>
+              Export
+            </Button>
           </div>
         </ListGroup.Item>
       ))}

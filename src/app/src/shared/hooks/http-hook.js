@@ -18,12 +18,16 @@ export const useHttpClient = () => {
       activeHttpRequests.current.push(httpAbortCtrl);
 
       try {
+        console.log(url);
+        console.log(headers);
+        console.log(method);
         const response = await fetch(url, {
           method,
           body,
           headers,
           signal: httpAbortCtrl.signal,
         });
+        console.log(response);
 
         const responseData = await response.json();
 
@@ -36,6 +40,7 @@ export const useHttpClient = () => {
         }
 
         setIsLoading(false);
+        console.log(responseData);
         return responseData;
       } catch (err) {
         setError(err.message);
