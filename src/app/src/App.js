@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+// Styles
+import styles from "./App.module.css";
+
 // Context
 
 import { UserContext } from "./context/UserContext";
@@ -59,16 +62,18 @@ function App() {
     <Router>
       <UserContext.Provider value={value}>
         <Header onLogout={logoutHandler} isLoggedIn={isLoggedIn} />
-        <Routes>
-          <Route path="/create_a_script" element={<BuildScreen />} />
-          <Route path="/my_scripts" element={<MyScripts />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <div className={styles.main}>
+          <Routes>
+            <Route path="/create_a_script" element={<BuildScreen />} />
+            <Route path="/my_scripts" element={<MyScripts />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </div>
+        <Footer />
       </UserContext.Provider>
-      <Footer />
     </Router>
   );
 }
