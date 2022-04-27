@@ -1,5 +1,6 @@
 // React
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Bootstrap
 import Form from "react-bootstrap/Form";
@@ -7,9 +8,16 @@ import Form from "react-bootstrap/Form";
 // Team Reactive
 import Card from "../UI/Card";
 import Button from "../UI/Button/Button";
+import LoginError from "./LoginError";
+
+// Context
+import { UserContext } from "../../context/UserContext";
+
+// Hooks
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Styles
-import styles from "./Login.module.css";
+import styles from "../Auth/Login.module.css";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -42,6 +50,9 @@ function passwordReducer(prevState, action) {
 }
 
 function Login(props) {
+  let navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formIsValid, setFormValid] = useState();
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -83,13 +94,40 @@ function Login(props) {
     dispatchPassword({ type: "INPUT_LOST_FOCUS" });
   }
 
-  function onFormSubmitHandler(event) {
+  const onFormSubmitHandler = async (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
-  }
+    const body = {
+      email: emailState.value,
+      password: passwordState.value,
+    };
+
+    try {
+      const responseData = await sendRequest(
+        "http://193.219.91.103:15411/api/users/login_user",
+        "POST",
+        JSON.stringify(body)
+      );
+      console.log(responseData);
+      localStorage.setItem("access_token", responseData.access_token);
+      localStorage.setItem("refresh_token", responseData.refreshToken);
+      setUser(responseData);
+      navigate("/about");
+      props.onLoggingIn();
+    } catch (error) {
+      console.log(error);
+      if (error.code === "ERR_NETWORK") {
+        console.log("The servers are down, please check back later");
+      }
+    }
+  };
 
   return (
     <Card className={styles.login}>
+      {error ? (
+        <LoginError error={error} onClear={clearError} />
+      ) : (
+        <h1 style={{ color: "white" }}>Welcome back!</h1>
+      )}
       <Form className={styles.form} onSubmit={onFormSubmitHandler}>
         <Form.Group className="mb-3 $" controlId="email">
           <Form.FloatingLabel label="Email address">
@@ -102,7 +140,9 @@ function Login(props) {
               placeholder="Enter email"
             />
           </Form.FloatingLabel>
-          <Form.Text>Your email information will not be shared.</Form.Text>
+          <Form.Text className={styles.small}>
+            Your email information will not be shared.
+          </Form.Text>
         </Form.Group>
 
         <Form.Group className={`mb-3 ${styles.form}`} controlId="password">
@@ -117,13 +157,17 @@ function Login(props) {
             />
           </Form.FloatingLabel>
 
-          <Form.Text>
+          <Form.Text className={styles.small}>
             Your password must be 6-20 characters long, may contain letters and
             numbers, and must not contain spaces, special characters, or emojis.
           </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Remember me" />
+          <Form.Check
+            className={styles.checkbox}
+            type="checkbox"
+            label="Remember me"
+          />
         </Form.Group>
         <Button type="submit" disabled={!formIsValid}>
           Login
