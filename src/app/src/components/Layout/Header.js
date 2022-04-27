@@ -12,7 +12,7 @@ import style from "./Header.module.css";
 const Header = (props) => {
   return (
     <header className={style.header}>
-      <NavLink to='/home'>
+      <NavLink to="/home">
         <NavigationLogo />
       </NavLink>
       <div className={style.container}>
@@ -20,17 +20,24 @@ const Header = (props) => {
           <Navigation className={style.ul} />
         </div>
         <div>
-          <Button>Profile</Button>
-          <NavLink to='/login'>
-
-            {/* <Button onClick={props.onLogout}>
+          {!props.isLoggedIn ? (
+            <div>
+              <NavLink to="/login">
+                <Button>Sign In</Button>
+              </NavLink>
+              <NavLink to="/register">
+                <Button>Register</Button>
+              </NavLink>
+            </div>
+          ) : (
+            <NavLink to="/login">
+              {/* <Button onClick={props.onLogout}>
               Sign out
             </Button> */}
-            <Button onClick={props.onLogout}>
-              Sign out
-            </Button>
-
-          </NavLink>
+              <Button>Profile</Button>
+              <Button onClick={props.onLogout}>Log Out</Button>
+            </NavLink>
+          )}
         </div>
       </div>
     </header>
