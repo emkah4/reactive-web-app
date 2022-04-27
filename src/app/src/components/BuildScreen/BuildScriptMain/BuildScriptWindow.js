@@ -1,10 +1,27 @@
 import React, { useEffect, useState } from "react";
+import { useDrop } from "react-dnd";
 import BuildScriptTimeline from "./BuildScriptTimeline";
 
 import styles from "./BuildScriptWindow.module.css";
+
 import Event from "../Event/Event";
+import EventContainer from "./EventContainer";
 
 const BuildScriptWindow = (props) => {
+
+  // //react dnd drop
+  // const [event, setEvent] = useState([])
+  // const [{isOver}, drop] = useDrop(() => ({
+  //   accept: "event",
+  //   drop: (item) => addEvent(item.id),
+  //   collect: (monitor) => ({
+  //     isOver: !!monitor.isOver(), 
+  //   })
+  // }))
+
+  // const addEvent = (id) => {
+  //   console.log(id)
+  // }
 
   let list = [];
   let dept = [];
@@ -57,10 +74,10 @@ const BuildScriptWindow = (props) => {
       <BuildScriptTimeline deptArray={dept}></BuildScriptTimeline>
       <div className={styles.table}>
         {dept.reverse().map((depts) => (
-          <div className={styles.row}>
+          <div className={styles.row} >
             {depts.map((events) => (
               <div className={styles.event_container}>
-                <div className={styles.event}>+</div>
+                <EventContainer></EventContainer>
               </div>
             ))}
           </div>

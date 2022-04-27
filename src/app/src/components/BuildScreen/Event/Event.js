@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDrag } from "react-dnd";
 
 // Styles
 import style from "./Event.module.css";
@@ -9,6 +10,12 @@ import EventGroup from "./EventGroups";
 import EventEditPopup from "./EventEditPopup/EventEditPopup";
 
 const Event = (props) => {
+
+  //react drag and drop
+  const [{isDragging}, drag] = useDrag(() => ({
+    type: "event",
+    item: {data: props.event_data},
+  }))
   // Popup states
   const [show, setShow] = useState(false);
 
@@ -22,7 +29,7 @@ const Event = (props) => {
   };
 
   return (
-    <div className={style.container}>
+    <div className={style.container} ref={drag}>
       <div
         className={style.event}
         style={{ background: props.event_data.event_color }}

@@ -41,6 +41,22 @@ const BuildScreen = (props) => {
       },
     ],
   };
+
+  const init_mock = {
+    exercise_title: "test",
+    list_of_departments: [
+      {
+        dept_id: 'dept0.0749763453453', dept_name: 'Devs', dept_people: ['tadas', 'letas']
+      },
+      {
+        dept_id: 'dept0.0751134519763', dept_name: 'Managers', dept_people: ['tadas', 'letas']
+      },
+      {
+        dept_id: 'dept0.074976573219763', dept_name: '1XDXDXDXD', dept_people: ['tadas', 'letas']
+      }
+    ],
+    duration: "240"
+  }
   
   const passInitialInfo = (
     exerciseTitle,
@@ -63,8 +79,9 @@ const BuildScreen = (props) => {
   return (
     <React.Fragment>
       <div className={styles.container}>
-        {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}
-        {initialInfoPassed && <BuildScriptMain {...initialInfo} />}
+        {/* {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}          //uncomment later
+        {initialInfoPassed && <BuildScriptMain {...initialInfo} />} */}
+        <BuildScriptMain {...init_mock}/>
       </div>
     </React.Fragment>
     
