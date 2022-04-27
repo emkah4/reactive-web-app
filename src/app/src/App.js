@@ -11,7 +11,10 @@ import Footer from "./components/Layout/Footer";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 
+// Other
+
 import { MyScripts, BuildScreen, About, Home } from "./components";
+import { useHttpClient } from "./shared/hooks/http-hook";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,17 +23,30 @@ function App() {
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   function loggedIn() {
     localStorage.setItem("isLoggedIn", "1");
     setIsLoggedIn(true);
   }
 
-  function logoutHandler() {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setIsLoggedIn(false);
-  }
+  const logoutHandler = async () => {
+    const access_token = localStorage.getItem("access_token");
+    try {
+      const responseData = await sendRequest(
+        "http://193.219.91.103:15411/api/users/logout_user",
+        "DELETE",
+        "",
+        { Authorization: "Bearer " + access_token }
+      );
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("isLoggedIn");
+      setIsLoggedIn(false);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("isLoggedIn");

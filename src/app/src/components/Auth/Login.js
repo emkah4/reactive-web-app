@@ -112,14 +112,13 @@ function Login(props) {
       localStorage.setItem("refresh_token", responseData.refreshToken);
       setUser(responseData);
       navigate("/about");
+      props.onLoggingIn();
     } catch (error) {
       console.log(error);
       if (error.code === "ERR_NETWORK") {
         console.log("The servers are down, please check back later");
       }
     }
-
-    props.onLoggingIn();
   };
 
   return (
