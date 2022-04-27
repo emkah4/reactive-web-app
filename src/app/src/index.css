@@ -10,4 +10,11 @@ html {
 body {
   margin: 0;
   background: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.root {
+  height: 100vh;
 }

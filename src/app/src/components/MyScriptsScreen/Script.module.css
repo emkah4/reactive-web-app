@@ -1,0 +1,10 @@
+.buttons_container {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-left: 1em;
+}
+
+.button_first,
+.badge {
+  margin-bottom: 0.5em;
+}
