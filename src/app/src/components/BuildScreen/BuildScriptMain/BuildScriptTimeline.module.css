@@ -1,0 +1,20 @@
+.timeline_container {
+    width: auto;
+    height: 4vh;
+    margin-bottom: 15px;
+    color: white;
+    background-color: rgb(52, 52, 52);
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+}
+
+.section {
+    height: 100%;
+    width: 5vw;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

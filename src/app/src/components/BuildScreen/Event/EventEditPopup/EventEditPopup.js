@@ -40,13 +40,13 @@ const EventEditPopup = (props) => {
             ))}
           </Form.Group>
 
-          <Form.Label>Set length of the task</Form.Label>
+          {/* <Form.Label>Set length of the task</Form.Label>
           <InputGroup className="mb-3" controlId="lengthInput">
             <FormControl />
             <InputGroup.Text>hours</InputGroup.Text>
             <FormControl />
             <InputGroup.Text>minutes</InputGroup.Text>
-          </InputGroup>
+          </InputGroup> */}
         </Modal.Body>
 
         <Modal.Footer>

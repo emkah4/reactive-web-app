@@ -1,0 +1,38 @@
+.window {
+    min-width: 60vw;
+    grid-column: 2;
+    grid-row:  1 / span 2;
+    overflow: auto;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.row {
+    height: 20vh;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.event_container {
+    width: 5vw;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(148, 148, 148, 0.5);
+    color:rgba(148, 148, 148, 0.5);
+    font-size: 2rem;
+}

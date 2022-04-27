@@ -1,0 +1,35 @@
+.departments {
+    width: 100%;
+    grid-column: 1;
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.departments div:last-child {
+    margin: 10px;
+}
+
+.department {
+    margin: 10px 10px 0 10px;
+    width: 10vw;
+    height: 20vh;
+    color: white;
+    font-weight: 600;
+    background-color: #0075FF;
+    padding: 5px;
+    font-size: 1.2em;
+    overflow: hidden;
+}
+
+p.person {
+    font-size: 0.7em;
+    display: inline-block;
+    margin: 2px;
+    border: 2px solid silver;
+    border-radius: 5px;
+    /* clear:both;
+    float:left; */
+    padding: 3px;
+}
