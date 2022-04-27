@@ -47,6 +47,7 @@ function Register() {
         <Form
           className={styles.form}
           onSubmit={handleSubmit(async (data) => {
+            data.email = data.email.toLowerCase();
             try {
               const responseData = await sendRequest(
                 "http://193.219.91.103:15411/api/users/register_user",

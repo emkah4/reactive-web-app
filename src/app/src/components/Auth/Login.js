@@ -97,7 +97,7 @@ function Login(props) {
   const onFormSubmitHandler = async (event) => {
     event.preventDefault();
     const body = {
-      email: emailState.value,
+      email: emailState.value.toLowerCase(),
       password: passwordState.value,
     };
 
