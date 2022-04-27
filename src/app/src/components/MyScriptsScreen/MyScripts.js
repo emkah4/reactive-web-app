@@ -1,34 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+// Bootstrap
+import { ListGroup, Badge, Button } from "react-bootstrap";
+
+// Hooks
+import { useHttpClient } from "../../shared/hooks/http-hook";
+
+// Components
+import Sctipt from "./Script";
+
+// Styles
 import styles from "./MyScripts.module.css";
 
-import ScriptLi from "./ScriptLi";
-
-const PROJECTS = [
-  {
-    id: 76,
-    user_id: 6,
-    project_title: "First project ever",
-    project_creation_date: "2022-04-19T05:18:24.142Z",
-    project_last_updated: "2022-04-19T05:18:24.142Z",
-    project_status: "Not done at all",
-  },
-  {
-    id: 75,
-    user_id: 6,
-    project_title: "First project ever",
-    project_creation_date: "2022-04-17T18:31:03.775Z",
-    project_last_updated: "2022-04-17T18:31:03.775Z",
-    project_status: "Not done at all",
-  },
-];
-
 const MyScripts = (props) => {
+  const [loadedProjects, setLoadedProjects] = useState([]);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const access_token = localStorage.getItem("access_token");
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const responseData = await sendRequest(
+          "http://193.219.91.103:15411/api/projects/get_projects",
+          "GET",
+          null,
+          { Authorization: "Bearer " + access_token }
+        );
+        setLoadedProjects(responseData.projects);
+      } catch (err) {}
+    };
+    fetchProjects();
+  }, []);
+
   return (
     <div className={styles.container}>
-      {PROJECTS.map((project) => {
-        <ScriptLi project={project} />;
-      })}
+      <h1>My scripts</h1>
+      {loadedProjects.length === 0 ? (
+        <p>No new projects yet.</p>
+      ) : (
+        <Sctipt projects={loadedProjects} />
+      )}
     </div>
   );
 };
