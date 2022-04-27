@@ -23,9 +23,6 @@ const Header = (props) => {
           {!props.isLoggedIn ? (
             <div>
               <NavLink to="/login">
-                {/* <Button onClick={props.onLogout}>
-              Sign out
-            </Button> */}
                 <Button>Sign In</Button>
               </NavLink>
               <NavLink to="/register">

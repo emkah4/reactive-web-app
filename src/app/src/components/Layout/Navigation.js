@@ -9,35 +9,17 @@ const Navigation = (props) => {
     <nav>
       <ul className={`${style.ul} ${props.className}`}>
         <li>
-          <NavLink to='/home'>
-            Home
-          </NavLink>
+          <NavLink to="/home">Home</NavLink>
         </li>
         <li>
-        <NavLink to='/create_a_script'>
-            Create a script
-            
-          </NavLink>
+          <NavLink to="/create_a_script">Create a script</NavLink>
         </li>
         <li>
-        <NavLink to='my_scripts'>
-            My scripts
-            
-          </NavLink>
+          <NavLink to="my_scripts">My scripts</NavLink>
         </li>
         <li>
-        <NavLink to='about'>
-            About
-            
-          </NavLink>
+          <NavLink to="about">About</NavLink>
         </li>
-
-        {/* {props.navigationList.map((nav) => (
-          <li key={nav.id}>
-            <a href={nav.link}>{nav.title}</a>
-          </li>
-        ))} */}
-
       </ul>
     </nav>
   );

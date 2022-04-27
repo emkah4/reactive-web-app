@@ -18,7 +18,6 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Styles
 import styles from "../Auth/Login.module.css";
-import { Navigate } from "react-router-dom";
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -108,14 +107,15 @@ function Login(props) {
         "POST",
         JSON.stringify(body)
       );
+      console.log(responseData);
       localStorage.setItem("access_token", responseData.access_token);
-      localStorage.setItem("refresh_token", responseData.refresh_token);
+      localStorage.setItem("refresh_token", responseData.refreshToken);
       setUser(responseData);
       navigate("/about");
     } catch (error) {
       console.log(error);
       if (error.code === "ERR_NETWORK") {
-        console.log("Ups, server down");
+        console.log("The servers are down, please check back later");
       }
     }
 
