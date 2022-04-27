@@ -123,7 +123,11 @@ function Login(props) {
 
   return (
     <Card className={styles.login}>
-      <LoginError error={error} onClear={clearError} />
+      {error ? (
+        <LoginError error={error} onClear={clearError} />
+      ) : (
+        <h1 style={{ color: "white" }}>Welcome back!</h1>
+      )}
       <Form className={styles.form} onSubmit={onFormSubmitHandler}>
         <Form.Group className="mb-3 $" controlId="email">
           <Form.FloatingLabel label="Email address">
