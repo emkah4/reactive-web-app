@@ -1,0 +1,14 @@
+.modal {
+    position: fixed;
+}
+
+p.person {
+    font-size: 0.7em;
+    display: inline-block;
+    margin: 2px;
+    border: 2px solid silver;
+    border-radius: 5px;
+    /* clear:both;
+    float:left; */
+    padding: 3px;
+}

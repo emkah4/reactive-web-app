@@ -1,0 +1,24 @@
+.toolbox {
+    width: 100%;
+    grid-column: 3;
+    grid-row: 2 / 3;
+}
+
+.tools_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    justify-items: center;
+    align-items: center;
+    height: 60vh;
+}
+
+.tool_container {
+    width: 5vw;
+    padding: 5px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    margin-top: 10px;
+    height: 20vh;
+}

@@ -4,9 +4,17 @@
 
 html {
   font-family: sans-serif;
-  background: #eee;
+  background: white;
 }
 
 body {
   margin: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.root {
+  height: 100vh;
 }

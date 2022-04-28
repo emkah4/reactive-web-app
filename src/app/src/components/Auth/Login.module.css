@@ -1,0 +1,67 @@
+.login {
+  width: 90%;
+  max-width: 50%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #3d405b;
+  border-radius: 25px;
+}
+
+.form {
+  display: block;
+  align-items: stretch;
+  flex-direction: column;
+  color: white;
+}
+
+.form label,
+.form input {
+  display: block;
+}
+
+.form label {
+  color: black;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.form input {
+  flex: 3;
+  font: inherit;
+  padding: 0.35rem 0.35rem;
+  border-radius: 0;
+  color: #262626;
+}
+
+.form input:focus {
+  outline: none;
+}
+
+.form input[type="checkbox"]:checked {
+  background-color: #69ac8b;
+}
+
+.form label.form-check-label {
+  color: white !important;
+}
+
+.actions {
+  text-align: center;
+}
+
+.small {
+  color: white;
+  font-size: 0.7em;
+  opacity: 0.5;
+}
+
+.checkbox label {
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .control {
+    align-items: center;
+    flex-direction: row;
+  }
+}
