@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-function App() {
-  return <p>Hello world</p>
-=======
 import React, { useEffect, useState, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -80,7 +76,6 @@ function App() {
       </UserContext.Provider>
     </Router>
   );
->>>>>>> dev
 }
 
 export default App;
