@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import styles from './Department.module.css'
-import AddPeoplePopup from './AddPeoplePopup/AddPeoplePopup'
+import React, { useState } from "react";
+import AddPeoplePopup from "./AddPeoplePopup/AddPeoplePopup";
+import ListGroup from "react-bootstrap/ListGroup";
 
 const Departments = (props) => {
-
+  const listOfPeople = props.data.dept_people;
   const [showModal, setShowModal] = useState(false);
 
   const handleModalShow = (event) => {
@@ -18,10 +18,13 @@ const Departments = (props) => {
 
   return (
     <React.Fragment>
-      <div className={styles.container} onClick={handleModalShow}>
-        {props.data.dept_name}
-      </div>
-      
+      <ListGroup.Item key={props.data.dept_id} action onClick={handleModalShow}>
+        <h3>{props.data.dept_name}</h3>
+        {listOfPeople.length === 0 && (
+          <small>No members yet, click to add!</small>
+        )}
+      </ListGroup.Item>
+
       {showModal && (
         <AddPeoplePopup
           show={showModal}
@@ -31,6 +34,6 @@ const Departments = (props) => {
       )}
     </React.Fragment>
   );
-}
+};
 
-export default Departments
+export default Departments;

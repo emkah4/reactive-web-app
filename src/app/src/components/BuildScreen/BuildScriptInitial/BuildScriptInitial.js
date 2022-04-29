@@ -4,16 +4,11 @@ import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputGroup from "react-bootstrap/InputGroup";
 
 // Custom components
 import SliderWithInputFormControl from "../../UI/SliderWithInputFormControl";
-// Styles
-import styles from "./BuildScriptInitial.module.css";
-import AddPeoplePopup from "./Departments/AddPeoplePopup/AddPeoplePopup";
 import Department from "./Departments/Department";
 
 const BuildScriptInitial = (props) => {
@@ -25,27 +20,31 @@ const BuildScriptInitial = (props) => {
   const [newTeam, setNewTeam] = useState("");
   const [listOfDepartments, setListOfDepartments] = useState([]); //object with departments and people
 
-  function onDurationChange(event) {
-    setDurationValue(event.target.value);
-  }
-
   function onFinalDurationChange(event) {
     setDurationFinalvalue(event.target.value);
   }
 
-  function onAddNewTeam(event) {
-    setListOfDepartments((prevListOfDepartments) => {
-      return [
-        ...prevListOfDepartments,
-        {
-          dept_id: "dept" + Math.random().toString(),
-          dept_name: newTeam,
-          dept_people: [],
-        },
-      ];
-    });
+  function onAddNewTeam() {
+    if (!newTeam == "") {
+      setListOfDepartments((prevListOfDepartments) => {
+        return [
+          ...prevListOfDepartments,
+          {
+            dept_id: Math.random().toString(),
+            dept_name: newTeam,
+            dept_people: [],
+          },
+        ];
+      });
 
-    setNewTeam("");
+      setNewTeam("");
+    }
+  }
+
+  function handleEnterSubmit(target) {
+    if (target.charCode == 13) {
+      onAddNewTeam();
+    }
   }
 
   const nextButtonHandler = () => {
@@ -55,7 +54,7 @@ const BuildScriptInitial = (props) => {
   return (
     <React.Fragment>
       <Card border="primary" className="text-center" style={{ width: "86%" }}>
-        <Card.Header as="h2">Initial build screen</Card.Header>
+        <Card.Header as="h2">Setup screen</Card.Header>
         <Card.Body>
           <Card.Title>
             Please fill out these initial settings before proceeding to the
@@ -75,10 +74,12 @@ const BuildScriptInitial = (props) => {
 
             <SliderWithInputFormControl
               durationValue={durationValue}
-              onDurationChange={onDurationChange}
-              onFinalDurationChange={onFinalDurationChange}
+              onDurationChange={(e) => setDurationValue(e.target.value)}
+              onFinalDurationChange={(e) =>
+                setDurationFinalvalue(e.target.value)
+              }
             >
-              In minutes, select the duration of the exercise (slider):
+              In minutes, select the duration of the exercise using the slider.
             </SliderWithInputFormControl>
           </Form>
           <br></br>
@@ -89,26 +90,27 @@ const BuildScriptInitial = (props) => {
                 placeholder="Group's name"
                 value={newTeam}
                 onChange={(e) => setNewTeam(e.target.value)}
+                onKeyPress={handleEnterSubmit}
               />
               <Button
                 variant="outline-success"
-                id="button-addon2"
+                id="button-addNewTeam"
                 onClick={onAddNewTeam}
               >
                 Add a new group
               </Button>
             </InputGroup>
             {listOfDepartments.map((department) => (
-              <ListGroup.Item>
-                <Department data={department}></Department>
-              </ListGroup.Item>
+              <Department
+                key={department.dept_id}
+                data={department}
+              ></Department>
             ))}
           </ListGroup>
 
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            {/* <Button variant="danger">Cancel</Button> */}
-            <Button variant="primary" onClick={nextButtonHandler}>
-              Next
+            <Button variant="success" onClick={nextButtonHandler}>
+              Continue
             </Button>
           </div>
         </Card.Body>

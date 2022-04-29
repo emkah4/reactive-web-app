@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 // Hooks
