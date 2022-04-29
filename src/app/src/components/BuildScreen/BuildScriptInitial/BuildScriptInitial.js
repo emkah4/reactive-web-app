@@ -106,9 +106,10 @@ const BuildScriptInitial = (props) => {
               </Button>
             </InputGroup>
             {listOfDepartments.map((department) => (
-              <ListGroup.Item eventKey={department.dept_id}>
-                <Department data={department}></Department>
-              </ListGroup.Item>
+              <Department
+                key={department.dept_id}
+                data={department}
+              ></Department>
             ))}
           </ListGroup>
 
