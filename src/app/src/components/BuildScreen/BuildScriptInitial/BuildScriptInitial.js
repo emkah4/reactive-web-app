@@ -4,16 +4,11 @@ import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputGroup from "react-bootstrap/InputGroup";
 
 // Custom components
 import SliderWithInputFormControl from "../../UI/SliderWithInputFormControl";
-// Styles
-import styles from "./BuildScriptInitial.module.css";
-import AddPeoplePopup from "./Departments/AddPeoplePopup/AddPeoplePopup";
 import Department from "./Departments/Department";
 
 const BuildScriptInitial = (props) => {
@@ -114,9 +109,8 @@ const BuildScriptInitial = (props) => {
           </ListGroup>
 
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            {/* <Button variant="danger">Cancel</Button> */}
-            <Button variant="primary" onClick={nextButtonHandler}>
-              Next
+            <Button variant="success" onClick={nextButtonHandler}>
+              Continue
             </Button>
           </div>
         </Card.Body>
