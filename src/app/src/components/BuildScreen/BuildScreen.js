@@ -12,9 +12,8 @@ import EventEditPopup from "./Event/EventEditPopup/EventEditPopup";
 import EventEditPopupHeader from "./Event/EventEditPopup/EventEditPopup";
 
 const BuildScreen = (props) => {
-
   const [initialInfoPassed, setInitialInfoPassed] = useState(false);
-  const [initialInfo, setInitialInfo] = useState({})
+  const [initialInfo, setInitialInfo] = useState({});
 
   const EVENT_MOCK = {
     event_type: "spam_sms",
@@ -46,18 +45,24 @@ const BuildScreen = (props) => {
     exercise_title: "test",
     list_of_departments: [
       {
-        dept_id: 'dept0.0749763453453', dept_name: 'Devs', dept_people: ['tadas', 'letas']
+        dept_id: "dept0.0749763453453",
+        dept_name: "Devs",
+        dept_people: ["tadas", "letas"],
       },
       {
-        dept_id: 'dept0.0751134519763', dept_name: 'Managers', dept_people: ['tadas', 'letas']
+        dept_id: "dept0.0751134519763",
+        dept_name: "Managers",
+        dept_people: ["tadas", "letas"],
       },
       {
-        dept_id: 'dept0.074976573219763', dept_name: '1XDXDXDXD', dept_people: ['tadas', 'letas']
-      }
+        dept_id: "dept0.074976573219763",
+        dept_name: "1XDXDXDXD",
+        dept_people: ["tadas", "letas"],
+      },
     ],
-    duration: "240"
-  }
-  
+    duration: "240",
+  };
+
   const passInitialInfo = (
     exerciseTitle,
     listOfDepartments,
@@ -73,18 +78,16 @@ const BuildScreen = (props) => {
     setInitialInfoPassed(true);
   };
 
-  console.log(initialInfo)
-
+  console.log(initialInfo);
 
   return (
     <React.Fragment>
       <div className={styles.container}>
-        {/* {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}          //uncomment later
-        {initialInfoPassed && <BuildScriptMain {...initialInfo} />} */}
-        <BuildScriptMain {...init_mock}/>
+        {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}
+        {initialInfoPassed && <BuildScriptMain {...initialInfo} />}
+        {/* <BuildScriptMain {...init_mock}/> */}
       </div>
     </React.Fragment>
-    
   );
 };
 
