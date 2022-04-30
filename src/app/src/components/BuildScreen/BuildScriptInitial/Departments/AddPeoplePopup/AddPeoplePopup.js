@@ -59,7 +59,7 @@ const AddPeoplePopup = (props) => {
               placeholder="Name"
               value={newMember}
               onChange={(e) => setNewMember(e.target.value)}
-              onKeyPress={handleEnterSubmit}
+              onKeyPressCapture={handleEnterSubmit}
             />
             <Button
               variant="outline-success"

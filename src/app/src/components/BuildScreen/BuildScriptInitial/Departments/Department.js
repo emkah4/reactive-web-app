@@ -7,6 +7,7 @@ const Departments = (props) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalShow = (event) => {
+    event.preventDefault();
     setShowModal(true);
     console.log("Show " + showModal);
   };

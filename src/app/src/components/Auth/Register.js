@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import Form from "react-bootstrap/Form";
+
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 // Hooks
@@ -13,7 +14,6 @@ import { UserContext } from "../../context/UserContext";
 
 import Card from "../UI/Card";
 import Button from "react-bootstrap/Button";
-
 import styles from "./Register.module.css";
 
 function Register() {
