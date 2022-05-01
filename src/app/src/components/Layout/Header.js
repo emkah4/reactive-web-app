@@ -30,13 +30,14 @@ const Header = (props) => {
               </NavLink>
             </div>
           ) : (
-            <NavLink to="/login">
-              {/* <Button onClick={props.onLogout}>
-              Sign out
-            </Button> */}
-              <Button>Profile</Button>
-              <Button onClick={props.onLogout}>Log Out</Button>
-            </NavLink>
+            <div>
+              <NavLink to="/profile">
+                <Button>Profile</Button>
+              </NavLink>
+              <NavLink to="/login">
+                <Button onClick={props.onLogout}>Log Out</Button>
+              </NavLink>
+            </div>
           )}
         </div>
       </div>
