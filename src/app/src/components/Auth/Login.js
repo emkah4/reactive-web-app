@@ -2,6 +2,9 @@
 import React, { useState, useReducer, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Styles
+import styles from "../Auth/Login.module.css";
+
 // Bootstrap
 import Form from "react-bootstrap/Form";
 
@@ -11,13 +14,15 @@ import Button from "../UI/Button/Button";
 import LoginError from "./LoginError";
 
 // Context
-import { UserContext } from "../../context/UserContext";
+import AuthContext from "../../context/UserContext";
 
-// Hooks
-import { useHttpClient } from "../../shared/hooks/http-hook";
+// Axios
+import axios from "../../api/axios";
 
-// Styles
-import styles from "../Auth/Login.module.css";
+// Constants
+const LOGIN_URL = "/users/login_user";
+
+// Reducers ---------------------------------------------------------------
 
 function emailReducer(prevState, action) {
   if (action.type === "USER_INPUT") {
@@ -49,11 +54,17 @@ function passwordReducer(prevState, action) {
   return { value: "", isValid: false };
 }
 
-function Login(props) {
+// Main function ----------------------------------------------------------
+const Login = (props) => {
+  // Setting navigate for navigation to home
   let navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  // States
   const [formIsValid, setFormValid] = useState();
+  const [error, setError] = useState(null);
+
+  // Context for user context
+  const { setAuth } = useContext(AuthContext);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
@@ -68,6 +79,7 @@ function Login(props) {
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
 
+  // Effect to check if inputs are valid
   useEffect(() => {
     const identifier = setTimeout(() => {
       setFormValid(emailIsValid && passwordIsValid);
@@ -79,10 +91,12 @@ function Login(props) {
   }, [emailIsValid, passwordIsValid]);
 
   function emailOnChangeHandler(event) {
+    setError(null);
     dispatchEmail({ value: event.target.value, type: "USER_INPUT" });
   }
 
   function passwordOnChangeHandler(event) {
+    setError(null);
     dispatchPassword({ value: event.target.value, type: "USER_INPUT" });
   }
 
@@ -102,21 +116,21 @@ function Login(props) {
     };
 
     try {
-      const responseData = await sendRequest(
-        "http://193.219.91.103:15411/api/users/login_user",
-        "POST",
-        JSON.stringify(body)
-      );
-      console.log(responseData);
-      localStorage.setItem("access_token", responseData.access_token);
-      localStorage.setItem("refresh_token", responseData.refreshToken);
-      setUser(responseData);
-      navigate("/about");
+      const response = await axios.post(LOGIN_URL, JSON.stringify(body), {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+      });
+      localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("refresh_token", response.data.refreshToken);
+      setAuth(response.data);
       props.onLoggingIn();
+      navigate("/home");
     } catch (error) {
-      console.log(error);
-      if (error.code === "ERR_NETWORK") {
-        console.log("The servers are down, please check back later");
+      if (!error.response) {
+        setError("Server is down.");
+      } else if (error.response.status === 403) {
+        setError(error.response.data.message);
+      } else if (error.response.status === 422) {
+        setError("Wrong inputs, check requirements");
       }
     }
   };
@@ -124,7 +138,7 @@ function Login(props) {
   return (
     <Card className={styles.login}>
       {error ? (
-        <LoginError error={error} onClear={clearError} />
+        <LoginError error={error} />
       ) : (
         <h1 style={{ color: "white" }}>Welcome back!</h1>
       )}
@@ -175,6 +189,6 @@ function Login(props) {
       </Form>
     </Card>
   );
-}
+};
 
 export default Login;

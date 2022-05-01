@@ -10,9 +10,6 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 // Hooks
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
-// Context
-import { UserContext } from "../../context/UserContext";
-
 import Card from "../UI/Card";
 import Button from "react-bootstrap/Button";
 
@@ -35,7 +32,6 @@ function Register() {
   });
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { user, setUser } = useContext(UserContext);
   let navigate = useNavigate();
   const name = watch("f_name");
   const regexEmail =
@@ -54,7 +50,7 @@ function Register() {
                 "POST",
                 JSON.stringify(data)
               );
-              setUser(responseData);
+
               navigate("/about");
             } catch (error) {
               throw error;

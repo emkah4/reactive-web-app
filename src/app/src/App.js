@@ -4,15 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // Styles
 import styles from "./App.module.css";
 
-// Context
-
-import { UserContext } from "./context/UserContext";
-
 // Components
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import Profile from "./components/User/Profile";
 
 // Other
 
@@ -60,20 +57,19 @@ function App() {
 
   return (
     <Router>
-      <UserContext.Provider value={value}>
-        <Header onLogout={logoutHandler} isLoggedIn={isLoggedIn} />
-        <div className={styles.main}>
-          <Routes>
-            <Route path="/create_a_script" element={<BuildScreen />} />
-            <Route path="/my_scripts" element={<MyScripts />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </div>
-        <Footer />
-      </UserContext.Provider>
+      <Header onLogout={logoutHandler} isLoggedIn={isLoggedIn} />
+      <div className={styles.main}>
+        <Routes>
+          <Route path="/create_a_script" element={<BuildScreen />} />
+          <Route path="/my_scripts" element={<MyScripts />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
+      <Footer />
     </Router>
   );
 }

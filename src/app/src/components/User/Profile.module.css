@@ -1,0 +1,27 @@
+.card {
+  width: 80%;
+  margin: 4em auto;
+}
+
+.coffeeLink {
+  color: rgb(245, 108, 67);
+  text-decoration: none;
+  margin-top: 20px;
+}
+.coffeeImage {
+  height: 1em;
+  margin-right: 1em;
+}
+
+.label {
+  font-size: small;
+  margin-bottom: 0.3em;
+}
+
+.span {
+  margin-bottom: 2em !important;
+}
+
+.sub {
+  margin-bottom: 3em !important;
+}
