@@ -1,9 +1,16 @@
 class Project {
-  constructor(id, project_title, project_creation_date, project_status) {
+  constructor(
+    id,
+    project_title,
+    project_creation_date,
+    project_status,
+    project_length
+  ) {
     this.id = id;
     this.project_title = project_title;
     this.project_creation_date = project_creation_date;
     this.project_status = project_status;
+    this.project_length = project_length;
     this.groups = [];
   }
 

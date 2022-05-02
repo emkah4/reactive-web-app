@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 // Styles
 
@@ -11,80 +11,70 @@ import Event from "./Event/Event";
 import EventEditPopup from "./Event/EventEditPopup/EventEditPopup";
 import EventEditPopupHeader from "./Event/EventEditPopup/EventEditPopup";
 
+// Context
+import ProjectContext from "../../context/ProjectContext";
+
+// Axios
+import axios from "../../api/axios";
+
+// Constants
+const GET_PROJECT_URL = "/projects/get_project/";
+
 const BuildScreen = (props) => {
   const [initialInfoPassed, setInitialInfoPassed] = useState(false);
-  const [initialInfo, setInitialInfo] = useState({});
 
-  const EVENT_MOCK = {
-    event_type: "spam_sms",
-    event_title: "Spam SMS",
-    event_color: "rgb(61, 64, 91)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
-  };
+  // Context for project
+  const { project, setProject } = useContext(ProjectContext);
 
-  const init_mock = {
-    exercise_title: "test",
-    list_of_departments: [
-      {
-        dept_id: "dept0.0749763453453",
-        dept_name: "Devs",
-        dept_people: ["tadas", "letas"],
-      },
-      {
-        dept_id: "dept0.0751134519763",
-        dept_name: "Managers",
-        dept_people: ["tadas", "letas"],
-      },
-      {
-        dept_id: "dept0.074976573219763",
-        dept_name: "1XDXDXDXD",
-        dept_people: ["tadas", "letas"],
-      },
-    ],
-    duration: "240",
-  };
-
-  const passInitialInfo = (
-    exerciseTitle,
-    listOfDepartments,
-    durationFinalvalue
-  ) => {
-    setInitialInfo(() => {
-      return {
-        exercise_title: exerciseTitle,
-        list_of_departments: listOfDepartments,
-        duration: durationFinalvalue,
-      };
-    });
+  const projectCreated = () => {
     setInitialInfoPassed(true);
   };
 
-  console.log(initialInfo);
+  const closeProject = () => {
+    localStorage.setItem("loaded_project_id", null);
+    setInitialInfoPassed(false);
+  };
+
+  useEffect(() => {
+    // Getting currently loaded project id
+    let project_id;
+    project_id = localStorage.getItem("loaded_project_id");
+
+    // Checking if any project is loaded
+    if (project_id === "null") {
+      // If no project is loaded setting setInitialInfoPassed to false
+      setInitialInfoPassed(false);
+    } else {
+      if (project_id) {
+        const compiled_url = GET_PROJECT_URL + project_id;
+        const access_token = localStorage.getItem("access_token");
+        const fetchProject = async () => {
+          try {
+            const response = await axios.get(compiled_url, {
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                Authorization: "Bearer " + access_token,
+              },
+            });
+            setProject(response.data.project);
+            console.log(response.data.project);
+            if (project) {
+              setInitialInfoPassed(true);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        fetchProject();
+      }
+    }
+  }, [setInitialInfoPassed]);
 
   return (
     <React.Fragment>
       <div className={styles.container}>
-        {!initialInfoPassed && <BuildScriptInitial onNext={passInitialInfo} />}
-        {initialInfoPassed && <BuildScriptMain {...initialInfo} />}
+        {!initialInfoPassed && <BuildScriptInitial onNext={projectCreated} />}
+        {initialInfoPassed && <BuildScriptMain onClose={closeProject} />}
         {/* <BuildScriptMain {...init_mock}/> */}
       </div>
     </React.Fragment>

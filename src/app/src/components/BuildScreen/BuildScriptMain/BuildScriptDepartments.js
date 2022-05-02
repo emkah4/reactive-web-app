@@ -1,20 +1,26 @@
-import React from 'react'
+import React, { useContext } from "react";
 
-import styles from './BuildScriptDepartments.module.css'
+// Context
+import ProjectContext from "../../../context/ProjectContext";
+
+import styles from "./BuildScriptDepartments.module.css";
 
 const BuildScriptDepartments = (props) => {
-  console.log(props.dept_data);
+  // Context for project
+  const { project, setProject } = useContext(ProjectContext);
   return (
     <div className={styles.departments}>
-      {props.dept_data.map((dept) => (
-        <div className={styles.department} key={dept.dept_id}>{dept.dept_name}<br/> {
-          dept.dept_people.map((person) => (
-            <p className={styles.person}>{person}</p>
-          ))
-        }</div>
+      {project.groups.map((group) => (
+        <div className={styles.department} key={group.group_id}>
+          {group.group_title}
+          <br />{" "}
+          {group.group_members.map((member) => (
+            <p className={styles.person}>{member.member_name}</p>
+          ))}
+        </div>
       ))}
     </div>
   );
 };
 
-export default BuildScriptDepartments
+export default BuildScriptDepartments;

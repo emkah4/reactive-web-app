@@ -16,6 +16,9 @@ import Profile from "./components/User/Profile";
 import { MyScripts, BuildScreen, About, Home } from "./components";
 import { useHttpClient } from "./shared/hooks/http-hook";
 
+// Context
+import { ProjectProvider } from "./context/ProjectContext";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -59,15 +62,18 @@ function App() {
     <Router>
       <Header onLogout={logoutHandler} isLoggedIn={isLoggedIn} />
       <div className={styles.main}>
-        <Routes>
-          <Route path="/create_a_script" element={<BuildScreen />} />
-          <Route path="/my_scripts" element={<MyScripts />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <ProjectProvider>
+          <Routes>
+            <Route path="/create_a_script" element={<BuildScreen />} />
+            <Route path="/my_scripts" element={<MyScripts />} />
+
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </ProjectProvider>
       </div>
       <Footer />
     </Router>

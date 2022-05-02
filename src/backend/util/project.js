@@ -13,8 +13,13 @@ const event_tools = require("./event");
 // Function that inserts new project to database, and initiates insertion of project groups and project groups members. Also returns whole project object with id's from database
 async function addProject(project, user_id) {
   const response = await pool.query(
-    "INSERT INTO projects(user_id, project_title, project_creation_date, project_last_updated, project_status) VALUES ($1, $2, current_timestamp, current_timestamp, $3) RETURNING *",
-    [user_id, project.project_title, project.project_status]
+    "INSERT INTO projects(user_id, project_title, project_creation_date, project_last_updated, project_status, project_length) VALUES ($1, $2, current_timestamp, current_timestamp, $3, $4) RETURNING *",
+    [
+      user_id,
+      project.project_title,
+      project.project_status,
+      project.project_length,
+    ]
   );
 
   await pool.end;
@@ -30,7 +35,8 @@ async function addProject(project, user_id) {
     data.rows[0].id,
     data.rows[0].project_title,
     data.rows[0].project_creation_date,
-    data.rows[0].project_status
+    data.rows[0].project_status,
+    data.rows[0].project_length
   );
 
   let groups_data = await Promise.all(
@@ -103,8 +109,8 @@ async function addProjectGroup(project_id, group, project_data) {
 // Function that inserts project group members into the database and returns object with id's from the database
 async function addGroupMemeber(group_id, member) {
   const response = await pool.query(
-    "INSERT INTO project_group_members(group_id, member_name, member_email, member_phone_number) VALUES ($1, $2, $3, $4) RETURNING *",
-    [group_id, member.name, member.email, member.phone_number]
+    "INSERT INTO project_group_members(group_id, member_name) VALUES ($1, $2) RETURNING *",
+    [group_id, member]
   );
 
   await pool.end;
@@ -159,7 +165,8 @@ async function getProject(project_id) {
     data.id,
     data.project_title,
     data.project_creation_date,
-    data.project_status
+    data.project_status,
+    data.project_length
   );
 
   // Getting groups data

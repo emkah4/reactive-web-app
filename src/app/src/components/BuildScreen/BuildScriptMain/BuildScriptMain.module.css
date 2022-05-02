@@ -1,21 +1,28 @@
+.button_container {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .container {
-    width: 86%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 0.3fr 1.5fr 0.3fr;
-    grid-auto-rows: auto;
-    gap: 1vh;
-    padding: 100px 0;
-  }
+  width: 86%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0.3fr 1.5fr 0.3fr;
+  grid-auto-rows: auto;
+  gap: 1vh;
+  padding: 100px 0;
+}
 
 .title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: #0075FF;
-    font-weight: 600;
-    height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #0075ff;
+  font-weight: 600;
+  height: 4vh;
 }
 
 .structure {
