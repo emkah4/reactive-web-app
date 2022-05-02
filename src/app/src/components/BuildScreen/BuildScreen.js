@@ -30,41 +30,51 @@ const BuildScreen = (props) => {
     setInitialInfoPassed(true);
   };
 
-  useEffect(() => {
-    let project_id;
-    if (!initialInfoPassed) {
-      project_id = localStorage.getItem("loaded_project_id");
-    }
+  const closeProject = () => {
+    localStorage.setItem("loaded_project_id", null);
+    setInitialInfoPassed(false);
+  };
 
-    if (project_id) {
-      const compiled_url = GET_PROJECT_URL + project_id;
-      const access_token = localStorage.getItem("access_token");
-      const fetchProject = async () => {
-        try {
-          const response = await axios.get(compiled_url, {
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              Authorization: "Bearer " + access_token,
-            },
-          });
-          console.log(response);
-          setProject(response.data.project);
-          if (project) {
-            setInitialInfoPassed(true);
+  useEffect(() => {
+    // Getting currently loaded project id
+    let project_id;
+    project_id = localStorage.getItem("loaded_project_id");
+
+    // Checking if any project is loaded
+    if (project_id === "null") {
+      // If no project is loaded setting setInitialInfoPassed to false
+      setInitialInfoPassed(false);
+    } else {
+      if (project_id) {
+        const compiled_url = GET_PROJECT_URL + project_id;
+        const access_token = localStorage.getItem("access_token");
+        const fetchProject = async () => {
+          try {
+            const response = await axios.get(compiled_url, {
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                Authorization: "Bearer " + access_token,
+              },
+            });
+            setProject(response.data.project);
+            console.log(response.data.project);
+            if (project) {
+              setInitialInfoPassed(true);
+            }
+          } catch (error) {
+            console.log(error);
           }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchProject();
+        };
+        fetchProject();
+      }
     }
-  }, []);
+  }, [setInitialInfoPassed]);
 
   return (
     <React.Fragment>
       <div className={styles.container}>
         {!initialInfoPassed && <BuildScriptInitial onNext={projectCreated} />}
-        {initialInfoPassed && <BuildScriptMain />}
+        {initialInfoPassed && <BuildScriptMain onClose={closeProject} />}
         {/* <BuildScriptMain {...init_mock}/> */}
       </div>
     </React.Fragment>

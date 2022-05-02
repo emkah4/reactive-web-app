@@ -23,10 +23,6 @@ const BuildScriptMain = (props) => {
   const elementNo = parseInt(project.project_length) / 10;
   const deptNo = parseInt(project.groups.length);
 
-  const onCloseButtonHandler = () => {
-    localStorage.setItem("loaded_project_id", null);
-  };
-
   return (
     <div className={styles.main_container}>
       <DndProvider backend={HTML5Backend}>
@@ -50,7 +46,7 @@ const BuildScriptMain = (props) => {
         </div>
       </DndProvider>
       <div className={styles.button_container}>
-        <Button onClick={() => onCloseButtonHandler()}>Close Project</Button>
+        <Button onClick={() => props.onClose()}>Close Project</Button>
       </div>
     </div>
   );

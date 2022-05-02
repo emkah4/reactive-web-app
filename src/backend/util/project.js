@@ -165,7 +165,8 @@ async function getProject(project_id) {
     data.id,
     data.project_title,
     data.project_creation_date,
-    data.project_status
+    data.project_status,
+    data.project_length
   );
 
   // Getting groups data
