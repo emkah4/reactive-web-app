@@ -20,7 +20,8 @@ const Script = (props) => {
         >
           <div className="ms-2 me-auto">
             <div className="fw-bold">{project.project_title}</div>
-            {project.project_status}
+            Project status: {project.project_status}
+            <div>Project length: {project.project_length} min</div>
           </div>
 
           <div className={styles.buttons_container}>

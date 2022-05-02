@@ -1,24 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../../api/axios";
 
-//Bootstrap
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import ListGroup from "react-bootstrap/ListGroup";
-import InputGroup from "react-bootstrap/InputGroup";
+// Bootstrap
+import {
+  Modal,
+  Spinner,
+  Overlay,
+  Card,
+  Form,
+  ListGroup,
+  InputGroup,
+  Button,
+} from "react-bootstrap";
+
+// Styles
+import styles from "./BuildScriptInitial.module.css";
 
 // Custom components
 import SliderWithInputFormControl from "../../UI/SliderWithInputFormControl";
 import Department from "./Departments/Department";
 
+// Context
+import ProjectContext from "../../../context/ProjectContext";
+
+// Constanst
+const NEW_PROJECT_URL = "/projects/new_project";
+
 const BuildScriptInitial = (props) => {
   const [exerciseTitle, setExerciseTitle] = useState("");
-
   const [durationValue, setDurationValue] = useState(120);
   const [durationFinalvalue, setDurationFinalvalue] = useState(120);
-
   const [newTeam, setNewTeam] = useState("");
   const [listOfDepartments, setListOfDepartments] = useState([]); //object with departments and people
+  // For loading modal
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  // Context for project
+  const { setProject } = useContext(ProjectContext);
+
+  // Setting navigate for navigation to buildscreen
+  let navigate = useNavigate();
 
   function onFinalDurationChange(event) {
     setDurationFinalvalue(event.target.value);
@@ -30,9 +54,9 @@ const BuildScriptInitial = (props) => {
         return [
           ...prevListOfDepartments,
           {
-            dept_id: Math.random().toString(),
-            dept_name: newTeam,
-            dept_people: [],
+            group_title: newTeam,
+            group_color: "#f5f5f5", // Not needed value, but leave it for some time, untill backend is fixed
+            group_members: [],
           },
         ];
       });
@@ -47,12 +71,88 @@ const BuildScriptInitial = (props) => {
     }
   }
 
-  const nextButtonHandler = () => {
-    props.onNext(exerciseTitle, listOfDepartments, durationFinalvalue);
+  const nextButtonHandler = async () => {
+    const body = {
+      project: {
+        project_title: exerciseTitle || "Untitled",
+        project_length: parseInt(durationFinalvalue),
+        project_status: "Not done at all",
+        groups: [...listOfDepartments],
+      },
+    };
+
+    setLoading(true);
+
+    const access_token = localStorage.getItem("access_token");
+    try {
+      const response = await axios.post(NEW_PROJECT_URL, JSON.stringify(body), {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + access_token,
+        },
+      });
+
+      setTimeout(setLoading(false), 1000);
+      setProject(response.data.project);
+      localStorage.setItem("loaded_project_id", response.data.project.id);
+      props.onNext();
+    } catch (error) {
+      if (!error.response) {
+        console.log("Server down lol");
+      } else if (error.response.status === 403) {
+        console.log("Unauthorized lol");
+      } else if (error.response.status === 422) {
+        console.log("Wrong inpyts lol");
+      }
+
+      setError(error.response.data.message);
+      setIsError(true);
+      setTimeout(setLoading(false), 1000);
+    }
   };
 
   return (
     <React.Fragment>
+      {/* MODAL */}
+      <Modal
+        className={styles.loading_modal}
+        show={loading}
+        backdrop="static"
+        size="sm"
+        centered
+      >
+        <Modal.Body className={styles.body}>
+          <Spinner animation="border" role="status" />
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        className={styles.loading_modal}
+        show={isError}
+        backdrop="static"
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            An Error occured
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className={styles.body}>
+          <p>{error}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              setIsError(false);
+              setError("");
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Card border="primary" className="text-center" style={{ width: "86%" }}>
         <Card.Header as="h2">Setup screen</Card.Header>
         <Card.Body>
@@ -101,10 +201,7 @@ const BuildScriptInitial = (props) => {
               </Button>
             </InputGroup>
             {listOfDepartments.map((department) => (
-              <Department
-                key={department.dept_id}
-                data={department}
-              ></Department>
+              <Department key={Math.random()} data={department}></Department>
             ))}
           </ListGroup>
 

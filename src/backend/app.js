@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 // Importing modules
@@ -14,6 +15,8 @@ const { body } = require("express-validator");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(cors({}));
 
 // Registering /api/users route, for interaction with users
 app.use("/api/users", usersRoutes);
@@ -37,4 +40,4 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occcured!" });
 });
 
-app.listen(3000);
+app.listen(3500);

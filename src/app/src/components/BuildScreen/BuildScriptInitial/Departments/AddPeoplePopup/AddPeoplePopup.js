@@ -10,27 +10,27 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 const AddPeoplePopup = (props) => {
-  const peopleList = props.data.dept_people;
+  const membersList = props.data.group_members;
 
   const [newMember, setNewMember] = useState(""); // NEW MEMBER FROM INPUT
-  const [people, setPeople] = useState(peopleList); // LIST OF ALL PEOPLE
+  const [members, setMembers] = useState(membersList); // LIST OF ALL PEOPLE
   const [newPeople, setNewPeople] = useState([]); // LIST OF NEWLY ADDED PEOPLE
 
   const onAddNewMember = () => {
     if (!newMember == "") {
       setNewMember("");
-      setPeople((prevPeople) => {
-        return [...prevPeople, newMember]; // we set the full list of people for display purposes
+      setMembers((prevMembers) => {
+        return [...prevMembers, newMember]; // we set the full list of people for display purposes
       });
-      setNewPeople((prevPeople) => {
-        return [...prevPeople, newMember]; // we set only the new people added to be pushed via handlePeopleData function
+      setNewPeople((prevMembers) => {
+        return [...prevMembers, newMember]; // we set only the new people added to be pushed via handlePeopleData function
       });
     }
   };
 
   const handlePeopleData = () => {
     newPeople.forEach((element) => {
-      props.data.dept_people.push(element);
+      props.data.group_members.push(element);
     });
   };
 
@@ -47,7 +47,7 @@ const AddPeoplePopup = (props) => {
           <Modal.Title>
             Add members to the{" "}
             <b>
-              <i>{props.data.dept_name}</i>
+              <i>{props.data.group_title}</i>
             </b>{" "}
             team!
           </Modal.Title>
@@ -70,9 +70,9 @@ const AddPeoplePopup = (props) => {
             </Button>
           </InputGroup>
           <div className={styles.people}>
-            {people.map((person) => (
+            {members.map((member) => (
               <p className={styles.person} key={Math.random().toString()}>
-                {person}
+                {member}
               </p>
             ))}
           </div>
