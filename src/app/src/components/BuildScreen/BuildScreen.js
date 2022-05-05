@@ -22,6 +22,7 @@ const GET_PROJECT_URL = "/projects/get_project/";
 
 const BuildScreen = (props) => {
   const [initialInfoPassed, setInitialInfoPassed] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
@@ -73,11 +74,29 @@ const BuildScreen = (props) => {
     }
   }, [setInitialInfoPassed]);
 
+  useEffect(() => {
+    if (!loggedIn) {
+      const sessionToken = localStorage.getItem("isLoggedIn");
+      if (sessionToken === "1") {
+        setLoggedIn(true);
+      }
+    }
+  }, []);
+
   return (
     <React.Fragment>
       <div className={styles.container}>
-        {!initialInfoPassed && <BuildScriptInitial onNext={projectCreated} />}
-        {initialInfoPassed && <BuildScriptMain onClose={closeProject} />}
+        {!loggedIn && (
+          <div>
+            <p>Please log in!</p>
+          </div>
+        )}
+        {!initialInfoPassed && loggedIn && (
+          <BuildScriptInitial onNext={projectCreated} />
+        )}
+        {initialInfoPassed && loggedIn && (
+          <BuildScriptMain onClose={closeProject} />
+        )}
         {/* <BuildScriptMain {...init_mock}/> */}
       </div>
     </React.Fragment>
