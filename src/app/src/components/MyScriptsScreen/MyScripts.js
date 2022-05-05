@@ -5,6 +5,7 @@ import { ListGroup, Badge, Button } from "react-bootstrap";
 
 // Axios
 import axios from "../../api/axios";
+import useAxiosPrivate from "../../shared/hooks/useAxiosPrivate";
 // Hooks
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
@@ -13,15 +14,16 @@ import Sctipt from "./Script";
 
 // Styles
 import styles from "./MyScripts.module.css";
+import { Controller } from "react-hook-form";
 
 const MyScripts = (props) => {
+  const axiosPrivate = useAxiosPrivate();
+  const controller = new AbortController();
   const [loadedProjects, setLoadedProjects] = useState([]);
   const [exportingProject, setExportingProject] = useState(null);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const access_token = localStorage.getItem("access_token");
 
   const exportProject = async (event) => {
-    console.log(event.target.value);
     try {
       // const responseData = await sendRequest(
       //   `http://193.219.91.103:15411/api/projects/get_project/${event.target.value}`,
@@ -30,14 +32,8 @@ const MyScripts = (props) => {
       //   { Authorization: "Bearer " + access_token }
       // );
 
-      const response = await axios.get(
-        `/projects/get_project/${event.target.value}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            Authorization: "Bearer " + access_token,
-          },
-        }
+      const response = await axiosPrivate.get(
+        `/projects/get_project/${event.target.value}`
       );
       setExportingProject(response.data);
     } catch (err) {
@@ -62,21 +58,16 @@ const MyScripts = (props) => {
   }, [exportingProject]);
 
   useEffect(() => {
-    if (localStorage.getItem("isLoggedIn") === "1") {
-      const fetchProjects = async () => {
-        try {
-          const response = await axios.get(`/projects/get_projects`, {
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              Authorization: "Bearer " + access_token,
-            },
-          });
+    const fetchProjects = async () => {
+      try {
+        const response = await axiosPrivate.get(`/projects/get_projects`, {
+          signal: controller.signal,
+        });
 
-          setLoadedProjects(response.data.projects);
-        } catch (err) {}
-      };
-      fetchProjects();
-    }
+        setLoadedProjects(response.data.projects);
+      } catch (err) {}
+    };
+    fetchProjects();
   }, []);
 
   return (

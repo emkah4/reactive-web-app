@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // Styles
@@ -10,17 +10,28 @@ import Footer from "./components/Layout/Footer";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Profile from "./components/User/Profile";
-
-// Other
-
 import { MyScripts, BuildScreen, About, Home } from "./components";
-import { useHttpClient } from "./shared/hooks/http-hook";
+
+// Hooks
+import useRefreshToken from "./shared/hooks/useRefreshToken";
+import useAxiosPrivate from "./shared/hooks/useAxiosPrivate";
 
 // Context
 import { ProjectProvider } from "./context/ProjectContext";
+import AuthContext from "./context/UserContext";
+
+// Axios
 import axios from "./api/axios";
 
+// Constants
+const TOKEN_URL = "/users/token";
+
 function App() {
+  // Context for user context
+  const { setAuth } = useContext(AuthContext);
+  const refresh = useRefreshToken();
+  const axiosPrivate = useAxiosPrivate();
+  const controller = new AbortController();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [user, setUser] = useState(null);
@@ -28,32 +39,38 @@ function App() {
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   function loggedIn() {
-    localStorage.setItem("isLoggedIn", "1");
     setIsLoggedIn(true);
   }
 
   const logoutHandler = async () => {
-    const access_token = localStorage.getItem("access_token");
     try {
-      const response = await axios.delete(`/users/logout_user`, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Authorization: "Bearer " + access_token,
-        },
+      console.log("at least trying");
+      const response = await axiosPrivate.delete(`/users/logout_user`, {
+        signal: controller.signal,
       });
-      localStorage.removeItem("refresh_token");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("isLoggedIn");
+      console.log(response);
       setIsLoggedIn(false);
+      setAuth(null);
+      localStorage.clear();
     } catch (error) {
       throw error;
     }
   };
 
-  useEffect(() => {
-    const sessionToken = localStorage.getItem("isLoggedIn");
-    if (sessionToken === "1") {
-      setIsLoggedIn(true);
+  // This use effect gets fresh accessToken on load. And if it cant, it sets isLoggedIn to false
+  useEffect(async () => {
+    if (!isLoggedIn) {
+      try {
+        const response = await refresh();
+        console.log(`response ==== ${response}`);
+        if (response) {
+          const accessToken = response;
+          setAuth(accessToken);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {}
     }
   }, []);
 

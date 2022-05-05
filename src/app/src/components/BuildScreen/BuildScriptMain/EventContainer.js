@@ -8,6 +8,7 @@ import { PREMADE_EVENTS } from "./PremadeEventData";
 import classes from "./BuildScriptTools.module.css";
 
 import axios from "../../../api/axios";
+import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
 
 // Constants
 const REQUEST_URL = "/events/add_event";
@@ -15,6 +16,8 @@ const REQUEST_URL = "/events/add_event";
 const EventContainer = (props) => {
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
+  // Axios private
+  const axiosPrivate = useAxiosPrivate();
   //react dnd drop
   const [eventDropped, setEventDropped] = useState([]);
   const [{ isOver }, drop] = useDrop(() => ({
@@ -29,7 +32,6 @@ const EventContainer = (props) => {
 
   useEffect(() => {
     if (eventDropped.length !== 0) {
-      const access_token = localStorage.getItem("access_token");
       const body = {
         project_id: project.id,
         event_type: 2,
@@ -41,12 +43,10 @@ const EventContainer = (props) => {
 
       const addProject = async () => {
         try {
-          const response = await axios.post(REQUEST_URL, JSON.stringify(body), {
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              Authorization: "Bearer " + access_token,
-            },
-          });
+          const response = await axiosPrivate.post(
+            REQUEST_URL,
+            JSON.stringify(body)
+          );
         } catch (error) {
           console.log(error);
         }

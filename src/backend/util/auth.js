@@ -16,6 +16,7 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
+      // Sending 403 because either token is wrong or expired
       const error = new HttpError("Wrong or expired token. Forbidden", 403);
       throw error;
     }
@@ -33,7 +34,7 @@ async function checkRefreshToken(refreshToken) {
 
   const data = response.rows;
 
-  if (!data) {
+  if (data.length === 0) {
     return false;
   } else {
     return true;
