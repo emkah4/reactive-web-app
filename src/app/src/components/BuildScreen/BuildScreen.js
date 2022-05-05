@@ -26,10 +26,12 @@ const BuildScreen = (props) => {
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
 
+  // Function for handling setInitialInfoPassed state
   const projectCreated = () => {
     setInitialInfoPassed(true);
   };
 
+  // Function for handling loaded projects
   const closeProject = () => {
     localStorage.setItem("loaded_project_id", null);
     setInitialInfoPassed(false);
@@ -46,6 +48,7 @@ const BuildScreen = (props) => {
       setInitialInfoPassed(false);
     } else {
       if (project_id) {
+        // If there is a project_id in the local storage, lets reload the project
         const compiled_url = GET_PROJECT_URL + project_id;
         const access_token = localStorage.getItem("access_token");
         const fetchProject = async () => {

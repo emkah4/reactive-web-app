@@ -1,18 +1,22 @@
-import React from 'react'
+import React from "react";
 
-import styles from "./BuildScriptTimeline.module.css"
+import styles from "./BuildScriptTimeline.module.css";
 
-const BuildScriptTimeline = (props) => {  
-
-  const sections = props.deptArray[0];
+const BuildScriptTimeline = (props) => {
+  let timeLine = [];
+  for (let i = 0; i < props.time; i = i + 10) {
+    timeLine.push(i);
+  }
 
   return (
     <div className={styles.timeline_container}>
-      {sections.map((x) => (
-        <div className={styles.section}>10min</div>
+      {timeLine.map((time) => (
+        <div className={styles.section} key={time}>
+          {time}min
+        </div>
       ))}
     </div>
   );
-}
+};
 
-export default BuildScriptTimeline
+export default BuildScriptTimeline;

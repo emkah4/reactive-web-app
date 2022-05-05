@@ -15,7 +15,9 @@ const BuildScriptDepartments = (props) => {
           {group.group_title}
           <br />{" "}
           {group.group_members.map((member) => (
-            <p className={styles.person}>{member.member_name}</p>
+            <p key={Math.random()} className={styles.person}>
+              {member.member_name}
+            </p>
           ))}
         </div>
       ))}

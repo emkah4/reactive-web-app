@@ -18,6 +18,7 @@ import { useHttpClient } from "./shared/hooks/http-hook";
 
 // Context
 import { ProjectProvider } from "./context/ProjectContext";
+import axios from "./api/axios";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,12 +37,12 @@ function App() {
   const logoutHandler = async () => {
     const access_token = localStorage.getItem("access_token");
     try {
-      const responseData = await sendRequest(
-        "http://193.219.91.103:15411/api/users/logout_user",
-        "DELETE",
-        "",
-        { Authorization: "Bearer " + access_token }
-      );
+      const response = await axios.delete(`/users/logout_user`, {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + access_token,
+        },
+      });
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("isLoggedIn");

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 // Bootstrap
 import { ListGroup, Badge, Button } from "react-bootstrap";
 
+// Axios
+import axios from "../../api/axios";
 // Hooks
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
@@ -21,13 +23,23 @@ const MyScripts = (props) => {
   const exportProject = async (event) => {
     console.log(event.target.value);
     try {
-      const responseData = await sendRequest(
-        `http://193.219.91.103:15411/api/projects/get_project/${event.target.value}`,
-        "GET",
-        null,
-        { Authorization: "Bearer " + access_token }
+      // const responseData = await sendRequest(
+      //   `http://193.219.91.103:15411/api/projects/get_project/${event.target.value}`,
+      //   "GET",
+      //   null,
+      //   { Authorization: "Bearer " + access_token }
+      // );
+
+      const response = await axios.get(
+        `/projects/get_project/${event.target.value}`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            Authorization: "Bearer " + access_token,
+          },
+        }
       );
-      setExportingProject(responseData);
+      setExportingProject(response.data);
     } catch (err) {
       console.log(err);
     }
@@ -52,13 +64,14 @@ const MyScripts = (props) => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const responseData = await sendRequest(
-          "http://193.219.91.103:15411/api/projects/get_projects",
-          "GET",
-          null,
-          { Authorization: "Bearer " + access_token }
-        );
-        setLoadedProjects(responseData.projects);
+        const response = await axios.get(`/projects/get_projects`, {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            Authorization: "Bearer " + access_token,
+          },
+        });
+
+        setLoadedProjects(response.data.projects);
       } catch (err) {}
     };
     fetchProjects();
