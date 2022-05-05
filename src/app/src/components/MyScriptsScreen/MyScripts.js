@@ -62,26 +62,28 @@ const MyScripts = (props) => {
   }, [exportingProject]);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await axios.get(`/projects/get_projects`, {
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            Authorization: "Bearer " + access_token,
-          },
-        });
+    if (localStorage.getItem("isLoggedIn") === "1") {
+      const fetchProjects = async () => {
+        try {
+          const response = await axios.get(`/projects/get_projects`, {
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              Authorization: "Bearer " + access_token,
+            },
+          });
 
-        setLoadedProjects(response.data.projects);
-      } catch (err) {}
-    };
-    fetchProjects();
+          setLoadedProjects(response.data.projects);
+        } catch (err) {}
+      };
+      fetchProjects();
+    }
   }, []);
 
   return (
     <div className={styles.container}>
       <h1>My scripts</h1>
       {loadedProjects.length === 0 ? (
-        <p>No new projects yet.</p>
+        <p>No new projects yet. Please log in first!</p>
       ) : (
         <Sctipt projects={loadedProjects} export={exportProject} />
       )}

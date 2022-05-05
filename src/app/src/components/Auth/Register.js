@@ -1,19 +1,26 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useForm } from "react-hook-form";
+
+// Bootstrap
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
+import { Alert, Button } from "react-bootstrap";
 
-// Hooks
-import { useHttpClient } from "../../shared/hooks/http-hook";
+// Axios
+import axios from "../../api/axios";
 
+// UI
 import Card from "../UI/Card";
-import Button from "react-bootstrap/Button";
 
+// Styles
 import styles from "./Register.module.css";
 
-function Register() {
+// Constants
+const regexEmail =
+  "/^[a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1}([a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1})*[a-z0-9]@[a-z0-9][-.]{0,1}([a-z][-.]{0,1})*[a-z0-9].[a-z0-9]{1,}([.-]{0,1}[a-z]){0,}[a-z0-9]{0,}$/";
+
+const Register = () => {
   const {
     register,
     handleSubmit,
@@ -28,29 +35,61 @@ function Register() {
       password: "",
     },
   });
-
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   let navigate = useNavigate();
   const name = watch("f_name");
-  const regexEmail =
-    "/^[a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1}([a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1})*[a-z0-9]@[a-z0-9][-.]{0,1}([a-z][-.]{0,1})*[a-z0-9].[a-z0-9]{1,}([.-]{0,1}[a-z]){0,}[a-z0-9]{0,}$/";
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(null);
+
   return (
-    <>
+    <div className={styles.main_container}>
       <h1 className={styles.title}>Welcome to REACTIVE {name}</h1>
+      <Alert
+        key={Math.random()}
+        variant={success ? "success" : error ? "danger" : ""}
+        className={styles.form_allert}
+      >
+        {success
+          ? "Succesfully registered"
+          : error
+          ? "There has been an error"
+          : ""}
+      </Alert>
       <Card className={styles.card}>
         <Form
           className={styles.form}
           onSubmit={handleSubmit(async (data) => {
             data.email = data.email.toLowerCase();
             try {
+<<<<<<< HEAD
               const responseData = await sendRequest(
                 "http://localhost:3500/api/users/register_user",
                 "POST",
                 JSON.stringify(data)
+=======
+              const response = await axios.post(
+                "/users/register_user",
+                JSON.stringify(data),
+                {
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                  },
+                }
+>>>>>>> 083200c81545938a0e6872241c5e7e65cdafad48
               );
 
-              navigate("/about");
+              if (response.status === 200) {
+                register.f_name = "";
+                register.l_name = "";
+                register.email = "";
+                register.password = "";
+                setSuccess(true);
+                setLoading(false);
+              }
+
+              // navigate("/about");
             } catch (error) {
+              setError(true);
               throw error;
             }
           })}
@@ -59,7 +98,7 @@ function Register() {
             <FloatingLabel controlId="floatingFirstname" label="First name">
               <Form.Control
                 type="f_name"
-                placeholder="John"
+                placeholder="First Name"
                 {...register("f_name", {
                   required: "This is a required field",
                 })}
@@ -72,7 +111,7 @@ function Register() {
             <FloatingLabel controlId="floatingLastname" label="Last name">
               <Form.Control
                 type="l_name"
-                placeholder="Wick"
+                placeholder="Last Name"
                 {...register("l_name", {
                   required: "This is a required field",
                 })}
@@ -85,7 +124,7 @@ function Register() {
             <FloatingLabel controlId="floatingEmail" label="Email">
               <Form.Control
                 type="email"
-                placeholder="placeholder@name.com"
+                placeholder="E-mail address"
                 {...register("email", {
                   required: "This is a required field",
                   pattern: { regexEmail },
@@ -99,7 +138,7 @@ function Register() {
             <FloatingLabel controlId="floatingPassword" label="Password">
               <Form.Control
                 type="password"
-                placeholder="supersecretpassword"
+                placeholder="Password"
                 {...register("password", {
                   required: "This is a required field",
                   minLength: {
@@ -119,10 +158,9 @@ function Register() {
             Register
           </Button>
         </Form>
-        <div>{isLoading}</div>
       </Card>
-    </>
+    </div>
   );
-}
+};
 
 export default Register;
