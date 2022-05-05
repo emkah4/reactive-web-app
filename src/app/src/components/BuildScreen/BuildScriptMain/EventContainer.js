@@ -21,6 +21,7 @@ const EventContainer = (props) => {
     accept: "event",
     drop: (item) => {
       addEvent(item.data);
+      console.log(item.data);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -34,7 +35,7 @@ const EventContainer = (props) => {
         project_id: project.id,
         event_type: 2,
         event_time: eventDropped[0].event_data.event_time,
-        event_text: "Sample text",
+        event_text: "null",
         event_groups: [eventDropped[0].event_data.group_id],
       };
       console.log(body);
@@ -47,6 +48,11 @@ const EventContainer = (props) => {
               Authorization: "Bearer " + access_token,
             },
           });
+
+          const id = Object.values(response.data).join()
+          eventDropped[0].event_id = id
+          console.log(eventDropped)
+
         } catch (error) {
           console.log(error);
         }
@@ -74,6 +80,7 @@ const EventContainer = (props) => {
           event_data={event}
           className={classes.tool}
           key={event.ui_id}
+          placedEvent={true}
         ></Event>
       ))}
     </div>

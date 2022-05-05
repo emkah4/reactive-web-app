@@ -21,7 +21,7 @@ const BuildScriptWindow = (props) => {
       events[i].push({
         ui_id: j,
         group_id: project.groups[i].group_id,
-        event_time: j + 1 * 10,
+        event_time: j * 10,
       });
     }
   }

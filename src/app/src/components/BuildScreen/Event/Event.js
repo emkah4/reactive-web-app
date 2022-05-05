@@ -19,6 +19,8 @@ const Event = (props) => {
   // Popup states
   const [show, setShow] = useState(false);
 
+  // console.log(props.event_data.event_id)
+
   const handleClose = () => {
     setShow(false);
     console.log("Close");
@@ -38,9 +40,11 @@ const Event = (props) => {
           <h3>{props.event_data.event_title}</h3>
           <span>{props.event_data.event_time}</span>
         </div>
-        <div className={style.edit}>
-          <EventIcon onClick={handleShow} fill="ffffff" />
-        </div>
+        {props.placedEvent && (
+          <div className={style.edit}>
+            <EventIcon onClick={handleShow} fill="ffffff" />
+          </div>
+        )}
         {show && (
           <EventEditPopup
             title={props.event_data.event_title}
@@ -48,6 +52,7 @@ const Event = (props) => {
             onClose={handleClose}
             length={props.event_data.event_time}
             groups={props.event_data.event_groups}
+            id={props.event_data.event_id}
           />
         )}
         <div className={style.groups}>

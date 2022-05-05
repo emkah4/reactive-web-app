@@ -44,7 +44,7 @@ function Register() {
             data.email = data.email.toLowerCase();
             try {
               const responseData = await sendRequest(
-                "http://193.219.91.103:15411/api/users/register_user",
+                "http://localhost:3500/api/users/register_user",
                 "POST",
                 JSON.stringify(data)
               );
