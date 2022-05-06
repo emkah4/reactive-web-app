@@ -7,21 +7,22 @@ import { Card, Button } from "react-bootstrap";
 import styles from "./Profile.module.css";
 
 // Axios
-import axios from "../../api/axios";
+import useAxiosPrivate from "../../shared/hooks/useAxiosPrivate";
 
+// Context
+import AuthContext from "../../context/UserContext";
 // Constans
 const GET_USER_URL = "/users/get_user";
 
 const Profile = (props) => {
-  const accessToken = localStorage.getItem("access_token");
   const [user, setUser] = useState({});
+  const { auth } = useContext(AuthContext);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(GET_USER_URL, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await axiosPrivate.get(GET_USER_URL);
         setUser(response.data.user[0]);
       } catch (error) {
         console.log(error);
@@ -31,7 +32,7 @@ const Profile = (props) => {
     fetchUser();
   }, []);
 
-  if (!accessToken) {
+  if (auth.accessToken === null) {
     return (
       <Card className={styles.card}>
         <Card.Body>

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 // Importing modules
 const usersRoutes = require("./routes/users-routes");
@@ -15,8 +16,8 @@ const { body } = require("express-validator");
 const app = express();
 
 app.use(bodyParser.json());
-
-app.use(cors({}));
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // Registering /api/users route, for interaction with users
 app.use("/api/users", usersRoutes);

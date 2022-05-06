@@ -64,7 +64,7 @@ const Login = (props) => {
   const [error, setError] = useState(null);
 
   // Context for user context
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
@@ -118,10 +118,11 @@ const Login = (props) => {
     try {
       const response = await axios.post(LOGIN_URL, JSON.stringify(body), {
         headers: { "Content-Type": "application/json; charset=utf-8" },
+        withCredentials: true,
       });
-      localStorage.setItem("access_token", response.data.access_token);
-      localStorage.setItem("refresh_token", response.data.refreshToken);
-      setAuth(response.data);
+      const accessToken = response?.data?.accessToken;
+      setAuth({ accessToken });
+      console.log(`LOGIN : ======  ${auth}`);
       props.onLoggingIn();
       navigate("/home");
     } catch (error) {

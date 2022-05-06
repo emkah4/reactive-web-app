@@ -29,16 +29,10 @@ router.post(
   usersController.loginUser
 );
 
-router.post(
-  "/token",
-  [check("refreshToken").not().isEmpty()],
-  usersController.tokenRefresh
-);
+// Route for token refreshing with refresh tokens from cookies
+router.get("/token", usersController.tokenRefresh);
 
-router.delete(
-  "/logout_user",
-  auth_tools.authenticateToken,
-  usersController.logoutUser
-);
+// Route to login users from the system and delete refresh token from database
+router.delete("/logout_user", usersController.logoutUser);
 
 module.exports = router;

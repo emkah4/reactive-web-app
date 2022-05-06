@@ -61,36 +61,36 @@ const loginUser = async (req, res, next) => {
     { user: user_id },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "60m",
+      expiresIn: "15m",
     }
   );
   const refreshToken = jwt.sign(
     { user: user_id },
-    process.env.REFRESH_TOKEN_SECRET
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: "1d",
+    }
   );
 
   const added_to_db = await auth_tools.put_refresh_token(refreshToken, user_id);
 
   if (added_to_db) {
-    res
-      .status(200)
-      .json({ access_token: accessToken, refreshToken: refreshToken });
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ accessToken: accessToken });
   } else {
     return next(new HttpError("Internal server error.", 500));
   }
 };
 
 const tokenRefresh = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty) {
-    return next(new HttpError("Invalid inputs, check data", 422));
+  // Checking if there is a refresh token in the cookies
+  if (!req.cookies?.jwt) {
+    return next(new HttpError("No token. Unauthorized.", 401));
   }
-
-  // Handling refresh token check
-  const refreshToken = req.body.token;
-  if (!refreshToken) {
-    return next(new HttpError("No tocken provided. Unauthorized", 401));
-  }
+  const refreshToken = req.cookies.jwt;
 
   // Checking if token is in database
   try {
@@ -99,6 +99,7 @@ const tokenRefresh = async (req, res, next) => {
     return next(error);
   }
 
+  // If the refresh token is valid, we issue a new access token
   if (is_in_database) {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) {
@@ -109,7 +110,7 @@ const tokenRefresh = async (req, res, next) => {
         { user: user.user },
         process.env.ACCESS_TOKEN_SECRET,
         {
-          expiresIn: "60m",
+          expiresIn: "15m",
         }
       );
       res.json({ accessToken: accessToken });
@@ -121,20 +122,35 @@ const tokenRefresh = async (req, res, next) => {
 
 // This function is used to logout users, update param in database: is_logged_in to false
 const logoutUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(new HttpError("Invalid inputs, check data", 422));
+  console.log("lol");
+  // First we check if request contains jwt refresh token in cookies
+  const cookies = req.cookies;
+  if (!cookies?.jwt) {
+    return next(new HttpError("No token.", 204));
   }
 
-  const user_id = req.user_id;
+  const refreshToken = cookies.jwt;
 
+  // Next we decode user id from the refresh token
+  let userId;
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      // Sending 403 because either token is wrong or expired
+      return next(new HttpError("Wrong or expired token. Forbidden", 403));
+    } else {
+      userId = user.user;
+    }
+  });
+
+  // Next we delete user refresh token from the database so with this token no further refresh would be possible
   let user_logged_out;
   try {
-    user_logged_out = await user_tools.logOutUser(user_id);
+    user_logged_out = await user_tools.logOutUser(userId);
   } catch (error) {
     return next(error);
   }
-
+  console.log("lol");
+  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
   res.status(200).json({ is_logged_out: user_logged_out });
 };
 

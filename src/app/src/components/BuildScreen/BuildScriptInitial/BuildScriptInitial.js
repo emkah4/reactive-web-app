@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../api/axios";
+import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
 
 // Bootstrap
 import {
@@ -40,6 +41,8 @@ const BuildScriptInitial = (props) => {
 
   // Context for project
   const { setProject } = useContext(ProjectContext);
+
+  const axiosPrivate = useAxiosPrivate();
 
   // Setting navigate for navigation to buildscreen
   let navigate = useNavigate();
@@ -85,12 +88,10 @@ const BuildScriptInitial = (props) => {
 
     const access_token = localStorage.getItem("access_token");
     try {
-      const response = await axios.post(NEW_PROJECT_URL, JSON.stringify(body), {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Authorization: "Bearer " + access_token,
-        },
-      });
+      const response = await axiosPrivate.post(
+        NEW_PROJECT_URL,
+        JSON.stringify(body)
+      );
 
       setTimeout(setLoading(false), 1000);
       setProject(response.data.project);

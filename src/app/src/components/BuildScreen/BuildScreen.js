@@ -6,23 +6,21 @@ import styles from "./BuildScreen.module.css";
 import BuildScriptInitial from "./BuildScriptInitial/BuildScriptInitial";
 import BuildScriptMain from "./BuildScriptMain/BuildScriptMain";
 
-// Components
-import Event from "./Event/Event";
-import EventEditPopup from "./Event/EventEditPopup/EventEditPopup";
-import EventEditPopupHeader from "./Event/EventEditPopup/EventEditPopup";
-
 // Context
 import ProjectContext from "../../context/ProjectContext";
+import AuthContext from "../../context/UserContext";
 
 // Axios
-import axios from "../../api/axios";
+import useAxiosPrivate from "../../shared/hooks/useAxiosPrivate";
 
 // Constants
 const GET_PROJECT_URL = "/projects/get_project/";
 
 const BuildScreen = (props) => {
+  const { auth } = useContext(AuthContext);
   const [initialInfoPassed, setInitialInfoPassed] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
 
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
@@ -51,17 +49,10 @@ const BuildScreen = (props) => {
       if (project_id) {
         // If there is a project_id in the local storage, lets reload the project
         const compiled_url = GET_PROJECT_URL + project_id;
-        const access_token = localStorage.getItem("access_token");
         const fetchProject = async () => {
           try {
-            const response = await axios.get(compiled_url, {
-              headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                Authorization: "Bearer " + access_token,
-              },
-            });
+            const response = await axiosPrivate.get(compiled_url);
             setProject(response.data.project);
-            console.log(response.data.project);
             if (project) {
               setInitialInfoPassed(true);
             }
@@ -75,13 +66,13 @@ const BuildScreen = (props) => {
   }, [setInitialInfoPassed]);
 
   useEffect(() => {
-    if (!loggedIn) {
-      const sessionToken = localStorage.getItem("isLoggedIn");
-      if (sessionToken === "1") {
-        setLoggedIn(true);
-      }
+    if (auth?.accessToken !== undefined) {
+      console.log(auth.accessToken);
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
     }
-  }, []);
+  }, [auth]);
 
   return (
     <React.Fragment>
