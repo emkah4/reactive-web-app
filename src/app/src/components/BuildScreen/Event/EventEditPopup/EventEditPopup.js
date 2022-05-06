@@ -7,8 +7,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import RichTextEditor from "../../RichTextEditor/RichTextEditor"
 
 const EventEditPopup = (props) => {
+  console.log(props.id)
+
   return ReactDOM.createPortal(
     <React.Fragment>
       <Modal show={props.show} onHide={props.onClose} backdrop="static">
@@ -18,8 +21,7 @@ const EventEditPopup = (props) => {
 
         <Modal.Body>
           <Form.Group className="mb-3" controlId="textareaForm">
-            <Form.Label>Enter custom text</Form.Label>
-            <Form.Control as="textarea" rows={5} />
+            <RichTextEditor id={props.id}/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="imageForm">

@@ -38,6 +38,8 @@ function App() {
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   function loggedIn() {
     setIsLoggedIn(true);
   }

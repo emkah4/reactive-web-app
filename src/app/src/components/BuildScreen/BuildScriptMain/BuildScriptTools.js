@@ -10,7 +10,7 @@ const BuildScriptTools = (props) => {
       <div className={styles.tools_container}>
         {PREMADE_EVENTS.map((event_data) => (
           <div className={styles.tool_container} key={event_data.event_id}>
-            <Event event_data={event_data} className={styles.tool}></Event>
+            <Event event_data={event_data} className={styles.tool} dragEnabled={true}></Event>
           </div>
         ))}
       </div>

@@ -61,14 +61,10 @@ const Register = () => {
           onSubmit={handleSubmit(async (data) => {
             data.email = data.email.toLowerCase();
             try {
-              const response = await axios.post(
-                "/users/register_user",
-                JSON.stringify(data),
-                {
-                  headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                  },
-                }
+              const responseData = await sendRequest(
+                "http://localhost:3500/api/users/register_user",
+                "POST",
+                JSON.stringify(data)
               );
 
               if (response.status === 200) {
