@@ -47,6 +47,9 @@ const EventContainer = (props) => {
             REQUEST_URL,
             JSON.stringify(body)
           );
+          const id = Object.values(response.data).join();
+          eventDropped[0].event_id = id;
+          console.log(eventDropped);
         } catch (error) {
           console.log(error);
         }
