@@ -10,18 +10,16 @@ import FormControl from "react-bootstrap/FormControl";
 import RichTextEditor from "../../RichTextEditor/RichTextEditor"
 
 const EventEditPopup = (props) => {
-  console.log(props.id)
-
   return ReactDOM.createPortal(
     <React.Fragment>
       <Modal show={props.show} onHide={props.onClose} backdrop="static">
         <Modal.Header closeButton>
-          <Modal.Title>{props.title}</Modal.Title>
+          <Modal.Title>{props.title} {props.event_id}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form.Group className="mb-3" controlId="textareaForm">
-            <RichTextEditor id={props.id}/>
+            <RichTextEditor id={props.event_id}/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="imageForm">

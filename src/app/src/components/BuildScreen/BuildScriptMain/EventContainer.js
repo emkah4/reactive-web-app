@@ -9,6 +9,7 @@ import classes from "./BuildScriptTools.module.css";
 
 import axios from "../../../api/axios";
 import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
+import EventIDContext from "../../../context/EventIDContext"
 
 // Constants
 const REQUEST_URL = "/events/add_event";
@@ -16,6 +17,8 @@ const REQUEST_URL = "/events/add_event";
 const EventContainer = (props) => {
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
+  // Context for event ID
+  const { eventID, setEventID } = useContext(EventIDContext);
   // Axios private
   const axiosPrivate = useAxiosPrivate();
   //react dnd drop
@@ -30,6 +33,8 @@ const EventContainer = (props) => {
       isOver: !!monitor.isOver(),
     }),
   }));
+
+
 
   useEffect(() => {
     if (eventDropped.length !== 0) {
@@ -48,9 +53,14 @@ const EventContainer = (props) => {
             REQUEST_URL,
             JSON.stringify(body)
           );
-          const id = Object.values(response.data).join();
-          eventDropped[0].event_id = id;
-          console.log(eventDropped);
+          const event_id = Object.values(response.data).join();
+          eventDropped.event_id = event_id;
+          // console.log(id);
+          setEventID((prev) => {
+            return [...prev, event_id]
+          })
+
+          
         } catch (error) {
           console.log(error);
         }
@@ -79,6 +89,7 @@ const EventContainer = (props) => {
           className={classes.tool}
           key={event.ui_id}
           placedEvent={true}
+          event_id={eventDropped.event_id}
         ></Event>
       ))}
     </div>

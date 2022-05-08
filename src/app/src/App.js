@@ -22,6 +22,7 @@ import AuthContext from "./context/UserContext";
 
 // Axios
 import axios from "./api/axios";
+import { EventIDProvider } from "./context/EventIDContext";
 
 // Constants
 const TOKEN_URL = "/users/token";
@@ -37,8 +38,6 @@ function App() {
   const [user, setUser] = useState(null);
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
-
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   function loggedIn() {
     setIsLoggedIn(true);
@@ -81,16 +80,18 @@ function App() {
       <Header onLogout={logoutHandler} isLoggedIn={isLoggedIn} />
       <div className={styles.main}>
         <ProjectProvider>
-          <Routes>
-            <Route path="/create_a_script" element={<BuildScreen />} />
-            <Route path="/my_scripts" element={<MyScripts />} />
+          <EventIDProvider>
+            <Routes>
+              <Route path="/create_a_script" element={<BuildScreen />} />
+              <Route path="/my_scripts" element={<MyScripts />} />
 
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </EventIDProvider>
         </ProjectProvider>
       </div>
       <Footer />

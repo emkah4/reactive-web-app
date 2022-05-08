@@ -9,7 +9,10 @@ import EventIcon from "./EventIcon";
 import EventGroup from "./EventGroups";
 import EventEditPopup from "./EventEditPopup/EventEditPopup";
 
+
 const Event = (props) => {
+
+  // console.log(props.event_data)
 
   //react drag and drop
   const [{isDragging}, drag] = useDrag(() => ({
@@ -18,8 +21,6 @@ const Event = (props) => {
   }))
   // Popup states
   const [show, setShow] = useState(false);
-
-  // console.log(props.event_data.event_id)
 
   const handleClose = () => {
     setShow(false);
@@ -52,7 +53,7 @@ const Event = (props) => {
             onClose={handleClose}
             length={props.event_data.event_time}
             groups={props.event_data.event_groups}
-            id={props.event_data.event_id}
+            event_id={props.event_id}
           />
         )}
         <div className={style.groups}>
