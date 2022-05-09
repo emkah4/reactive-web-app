@@ -94,7 +94,61 @@ async function getEvents(project_id) {
   return events;
 }
 
+async function editEvent(event_data) {
+  if (event_data.property_key === "event_text") {
+    const response = await pool.query(
+      "UPDATE events SET event_text = $1 WHERE id = $2 RETURNING *",
+      [event_data.property_value, event_data.event_id]
+    );
+  } else if (event_data.property_key === "event_time") {
+    const response = await pool.query(
+      "UPDATE events SET event_time = $1 WHERE id = $2 RETURNING *",
+      [event_data.property_value, event_data.event_id]
+    );
+  }
+
+  await pool.end;
+
+  if (!response) {
+    const error = new HttpError(
+      "Could not update event. Something is wrong.",
+      503
+    );
+    throw error;
+  }
+
+  return response;
+}
+
+async function deleteEvent(eventId) {
+  const eventGroupsResponse = await pool.query(
+    "DELETE FROM event_groups WHERE event_id = $1",
+    [eventId]
+  );
+
+  await pool.end;
+  if (!eventGroupsResponse) {
+    const error = new HttpError("Could not delete from event_groups.", 503);
+    throw error;
+  } else {
+    const eventResponse = await pool.query("DELETE FROM events WHERE id = $1", [
+      eventId,
+    ]);
+
+    await pool.end;
+
+    if (!eventResponse) {
+      const error = new HttpError("Could not delete from events.", 503);
+      throw error;
+    } else {
+      return eventResponse;
+    }
+  }
+}
+
 module.exports = {
   addEvent,
   getEvents,
+  editEvent,
+  deleteEvent,
 };
