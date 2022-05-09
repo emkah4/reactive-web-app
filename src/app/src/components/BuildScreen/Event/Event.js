@@ -8,6 +8,7 @@ import style from "./Event.module.css";
 import EventIcon from "./EventIcon";
 import EventGroup from "./EventGroups";
 import EventEditPopup from "./EventEditPopup/EventEditPopup";
+import EventStatus from "./EventStatus";
 
 const Event = (props) => {
   //react drag and drop
@@ -35,13 +36,22 @@ const Event = (props) => {
           <h3>{props.event_data.event_name}</h3>
           <span>{props.event_data.event_time}</span>
         </div>
-
-        <div className={style.edit}>
-          {props.placedEvent && (
-            <EventIcon onClick={handleShow} fill="ffffff" />
-          )}
-        </div>
-
+        {!props.placedEvent && (
+          <div className={style.drag_container}>
+            <div className={style.drag}>Drag me!</div>
+          </div>
+        )}
+        {props.placedEvent && (
+          <div>
+            <div className={style.edit}>
+              <EventIcon onClick={handleShow} fill="ffffff" />
+            </div>
+            <div className={style.status}>
+              {/* <EventGroup groups={props.event_data.event_groups}></EventGroup> */}
+              <EventStatus></EventStatus>
+            </div>
+          </div>
+        )}
         {show && (
           <EventEditPopup
             title={props.event_data.event_name}
@@ -51,12 +61,10 @@ const Event = (props) => {
             event_id={props.event_id}
           />
         )}
-        {/* <div className={style.groups}>
-          <EventGroup groups={props.event_data.event_groups}></EventGroup>
-        </div> */}
       </div>
     </div>
   );
 };
 
 export default Event;
+
