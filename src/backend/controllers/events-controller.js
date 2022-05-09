@@ -53,5 +53,38 @@ const getEvents = async (req, res, next) => {
   res.status(200).json({ events: events });
 };
 
+const editEvent = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid inputs, check data.", 422));
+  }
+
+  let event = req.body;
+  let result;
+
+  try {
+    result = await event_tools.editEvent(event);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Updated successfully." });
+};
+
+const deleteEvent = async (req, res, next) => {
+  let eventId = req.params.eid;
+  let result;
+
+  try {
+    result = await event_tools.deleteEvent(eventId);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Deleted successfully." });
+};
+
 exports.addEvent = addEvent;
 exports.getEvents = getEvents;
+exports.editEvent = editEvent;
+exports.deleteEvent = deleteEvent;

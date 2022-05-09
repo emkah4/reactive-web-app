@@ -31,4 +31,21 @@ router.get(
   eventsController.getEvents
 );
 
+router.patch(
+  "/edit_event",
+  [
+    check("event_id").not().isEmpty(),
+    check("property_key").not().isEmpty(),
+    check("property_value").not().isEmpty(),
+  ],
+  auth_tools.authenticateToken,
+  eventsController.editEvent
+);
+
+router.delete(
+  "/delete_event/:eid",
+  auth_tools.authenticateToken,
+  eventsController.deleteEvent
+);
+
 module.exports = router;
