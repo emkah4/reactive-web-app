@@ -11,6 +11,7 @@ const HttpError = require("../models/http-error");
 const auth_tools = require("../util/auth");
 const event_tools = require("../util/event");
 
+// Controller for adding events to a project
 const addEvent = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -53,6 +54,7 @@ const getEvents = async (req, res, next) => {
   res.status(200).json({ events: events });
 };
 
+// Controller for editing events
 const editEvent = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -71,6 +73,7 @@ const editEvent = async (req, res, next) => {
   res.status(200).json({ message: "Updated successfully." });
 };
 
+// Controller for deleting events from db
 const deleteEvent = async (req, res, next) => {
   let eventId = req.params.eid;
   let result;
@@ -84,7 +87,30 @@ const deleteEvent = async (req, res, next) => {
   res.status(200).json({ message: "Deleted successfully." });
 };
 
+const getEventTypes = async (req, res, next) => {
+  let eventTypes;
+  try {
+    eventTypes = await event_tools.getEventTypes();
+  } catch (error) {
+    return next(error);
+  }
+
+  return res.status(200).json({ eventTypes: eventTypes });
+};
+
+const getEvent = async (req, res, next) => {
+  let eventId = req.params.eid;
+  let event;
+  try {
+    event = await event_tools.getEvent(eventId);
+  } catch (error) {
+    throw next(error);
+  }
+  return res.status(200).json({ event: event });
+};
 exports.addEvent = addEvent;
 exports.getEvents = getEvents;
 exports.editEvent = editEvent;
 exports.deleteEvent = deleteEvent;
+exports.getEventTypes = getEventTypes;
+exports.getEvent = getEvent;

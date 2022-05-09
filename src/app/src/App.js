@@ -88,7 +88,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/register" element={<Register />} />
+              {/* <Route path="/register" element={<Register />} /> */}
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </EventIDProvider>

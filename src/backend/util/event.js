@@ -146,9 +146,46 @@ async function deleteEvent(eventId) {
   }
 }
 
+async function getEventTypes() {
+  const response = await pool.query("SELECT * FROM event_types");
+
+  await pool.end;
+
+  const eventTypes = response.rows;
+
+  if (!eventTypes) {
+    const error = new HttpError(
+      "Could not retrieve any event types from database",
+      500
+    );
+    throw error;
+  }
+
+  return eventTypes;
+}
+
+async function getEvent(eventId) {
+  const response = await pool.query("SELECT * FROM events WHERE id = $1", [
+    eventId,
+  ]);
+
+  await pool.end;
+
+  const event = response.rows[0];
+
+  if (!event) {
+    const error = new HttpError("Could not find the event.", 404);
+    throw error;
+  }
+
+  return event;
+}
+
 module.exports = {
   addEvent,
   getEvents,
   editEvent,
   deleteEvent,
+  getEventTypes,
+  getEvent,
 };
