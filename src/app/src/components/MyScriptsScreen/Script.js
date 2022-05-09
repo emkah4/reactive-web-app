@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // Bootstrap
 import { ListGroup, Badge, Button } from "react-bootstrap";
+
+import { Link } from "react-router-dom";
 
 // Styles
 import styles from "./Script.module.css";
@@ -28,9 +30,16 @@ const Script = (props) => {
             <Badge bg="primary" pill className={styles.badge}>
               {project.project_last_updated.split("T")[0]}
             </Badge>
-            <Button variant="primary" className={styles.button_first}>
-              Edit
-            </Button>
+            <Link to="/create_a_script" className="primary">
+              <Button
+                variant="primary"
+                className={styles.button_first}
+                onClick={props.edit}
+                value={project.id}
+              >
+                Edit
+              </Button>
+            </Link>
             <Button variant="primary" onClick={props.export} value={project.id}>
               Export
             </Button>

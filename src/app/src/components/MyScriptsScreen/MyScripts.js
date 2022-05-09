@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-// Bootstrap
-import { ListGroup, Badge, Button } from "react-bootstrap";
-
 // Axios
-import axios from "../../api/axios";
 import useAxiosPrivate from "../../shared/hooks/useAxiosPrivate";
 // Hooks
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -25,13 +21,6 @@ const MyScripts = (props) => {
 
   const exportProject = async (event) => {
     try {
-      // const responseData = await sendRequest(
-      //   `http://193.219.91.103:15411/api/projects/get_project/${event.target.value}`,
-      //   "GET",
-      //   null,
-      //   { Authorization: "Bearer " + access_token }
-      // );
-
       const response = await axiosPrivate.get(
         `/projects/get_project/${event.target.value}`
       );
@@ -41,8 +30,11 @@ const MyScripts = (props) => {
     }
   };
 
+  const editProject = (event) => {
+    localStorage.setItem("loaded_project_id", event.target.value);
+  };
+
   useEffect(async () => {
-    console.log(`Here ${exportingProject}`);
     if (exportingProject) {
       const fileName = "project";
       const json = JSON.stringify(exportingProject);
@@ -74,9 +66,16 @@ const MyScripts = (props) => {
     <div className={styles.container}>
       <h1>My scripts</h1>
       {loadedProjects.length === 0 ? (
-        <p>No new projects yet. Please log in first!</p>
+        <p>
+          No new projects yet. You either need to log in or create a new
+          project!
+        </p>
       ) : (
-        <Sctipt projects={loadedProjects} export={exportProject} />
+        <Sctipt
+          projects={loadedProjects}
+          export={exportProject}
+          edit={editProject}
+        />
       )}
     </div>
   );
