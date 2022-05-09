@@ -9,7 +9,7 @@ import classes from "./BuildScriptTools.module.css";
 
 import axios from "../../../api/axios";
 import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
-import EventIDContext from "../../../context/EventIDContext"
+import EventIDContext from "../../../context/EventIDContext";
 
 // Constants
 const REQUEST_URL = "/events/add_event";
@@ -27,25 +27,21 @@ const EventContainer = (props) => {
     accept: "event",
     drop: (item) => {
       addEvent(item.data);
-      console.log(item.data);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
 
-
-
   useEffect(() => {
     if (eventDropped.length !== 0) {
       const body = {
         project_id: project.id,
-        event_type: 2,
+        event_type: eventDropped[0].id,
         event_time: eventDropped[0].event_data.event_time,
         event_text: "null",
         event_groups: [eventDropped[0].event_data.group_id],
       };
-      console.log(body);
 
       const addProject = async () => {
         try {
@@ -55,20 +51,15 @@ const EventContainer = (props) => {
           );
           const event_id = Object.values(response.data).join();
           eventDropped.event_id = event_id;
-          // console.log(id);
           setEventID((prev) => {
-            return [...prev, event_id]
-          })
-
-          
+            return [...prev, event_id];
+          });
         } catch (error) {
           console.log(error);
         }
       };
       addProject();
     }
-
-    console.log(eventDropped);
   }, [eventDropped]);
 
   const addEvent = (data) => {

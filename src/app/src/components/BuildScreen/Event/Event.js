@@ -9,26 +9,20 @@ import EventIcon from "./EventIcon";
 import EventGroup from "./EventGroups";
 import EventEditPopup from "./EventEditPopup/EventEditPopup";
 
-
 const Event = (props) => {
-
-  // console.log(props.event_data)
-
   //react drag and drop
-  const [{isDragging}, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: "event",
-    item: {data: props.event_data},
-  }))
+    item: { data: props.event_data },
+  }));
   // Popup states
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
-    console.log("Close");
   };
   const handleShow = (event) => {
     setShow(true);
-    console.log("Show");
   };
 
   return (
@@ -38,27 +32,28 @@ const Event = (props) => {
         style={{ background: props.event_data.event_color }}
       >
         <div className={style.text_container}>
-          <h3>{props.event_data.event_title}</h3>
+          <h3>{props.event_data.event_name}</h3>
           <span>{props.event_data.event_time}</span>
         </div>
-        {props.placedEvent && (
-          <div className={style.edit}>
+
+        <div className={style.edit}>
+          {props.placedEvent && (
             <EventIcon onClick={handleShow} fill="ffffff" />
-          </div>
-        )}
+          )}
+        </div>
+
         {show && (
           <EventEditPopup
-            title={props.event_data.event_title}
+            title={props.event_data.event_name}
             show={show}
             onClose={handleClose}
             length={props.event_data.event_time}
-            groups={props.event_data.event_groups}
             event_id={props.event_id}
           />
         )}
-        <div className={style.groups}>
+        {/* <div className={style.groups}>
           <EventGroup groups={props.event_data.event_groups}></EventGroup>
-        </div>
+        </div> */}
       </div>
     </div>
   );

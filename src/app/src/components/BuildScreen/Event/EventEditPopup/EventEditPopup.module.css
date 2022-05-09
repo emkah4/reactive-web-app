@@ -1,3 +1,14 @@
 .modal {
   position: fixed;
 }
+
+.loadingBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10em;
+}
+
+.loadingBody .spinner-border {
+  padding: 5em;
+}

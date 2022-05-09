@@ -48,4 +48,16 @@ router.delete(
   eventsController.deleteEvent
 );
 
+router.get(
+  "/get_event_types",
+  auth_tools.authenticateToken,
+  eventsController.getEventTypes
+);
+
+router.get(
+  "/get_event/:eid",
+  auth_tools.authenticateToken,
+  eventsController.getEvent
+);
+
 module.exports = router;
