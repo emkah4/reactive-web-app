@@ -1,158 +1,32 @@
 export const PREMADE_EVENTS = [
   {
     event_id: 1,
-    event_type: "custom",
-    event_title: "Custom event",
-    event_color: "rgb(61, 64, 91)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Spam Email",
+    event_color: "rgb(51, 51, 204)",
   },
   {
     event_id: 2,
-    event_type: "spam_email",
-    event_title: "Spam e-mail",
-    event_color: "rgb(255, 146, 85)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Spam SMS",
+    event_color: "rgb(204, 51, 255)",  
   },
   {
     event_id: 3,
-    event_type: "spam_sms",
-    event_title: "Spam SMS",
-    event_color: "rgb(255, 146, 85)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Spam Notification",
+    event_color: "rgb(153, 255, 51)",
   },
   {
     event_id: 4,
-    event_type: "notification",
-    event_title: "Notification",
-    event_color: "rgb(164, 222, 69)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Work Email",
+    event_color: "rgb(102, 51, 255)",
   },
   {
     event_id: 5,
-    event_type: "unchecked_info",
-    event_title: "Unchecked information",
-    event_color: "rgb(61, 64, 91)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Slack message",
+    event_color: "rgb(255, 204, 51)",
   },
   {
     event_id: 6,
-    event_type: "alert",
-    event_title: "Alert",
-    event_color: "rgb(255, 45, 0)",
-    event_groups: [
-      {
-        id: "g1",
-        group_name: "Managers",
-        group_color: "#f5a911",
-        is_included: false,
-      },
-      {
-        id: "g2",
-        group_name: "Developers",
-        group_color: "#e60ba4",
-        is_included: true,
-      },
-      {
-        id: "g3",
-        group_name: "Managers",
-        group_color: "#1fe61c",
-        is_included: true,
-      },
-    ],
+    event_name: "Work Announcment",
+    event_color: "rgb(255, 102, 51)"
   },
 ];

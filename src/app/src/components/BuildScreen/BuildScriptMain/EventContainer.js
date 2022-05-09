@@ -13,16 +13,19 @@ import EventIDContext from "../../../context/EventIDContext";
 
 // Constants
 const REQUEST_URL = "/events/add_event";
+const GET_EVENT_TYPES_URL = "/events/get_event_types";
 
 const EventContainer = (props) => {
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
   // Context for event ID
   const { eventID, setEventID } = useContext(EventIDContext);
+
   // Axios private
   const axiosPrivate = useAxiosPrivate();
   //react dnd drop
   const [eventDropped, setEventDropped] = useState([]);
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "event",
     drop: (item) => {
@@ -62,6 +65,33 @@ const EventContainer = (props) => {
     }
   }, [eventDropped]);
 
+  let found = false;
+  let id;
+  let data;
+
+  console.log(props.premadeEvents);
+
+  if (props.eventsInProject) {
+    console.log(project.events);
+    project.events.forEach((event) => {
+      if (
+        props.event.group_id == event.groups &&
+        props.event.event_time == event.event_time
+      ) {
+        found = true;
+        id = event.id;
+        console.log(event.event_type);
+        console.log(PREMADE_EVENTS[0].event_id);
+        PREMADE_EVENTS.forEach((premadeEvent) => {
+          if (event.event_type == premadeEvent.event_id) {
+            console.log("FOUND");
+            data = premadeEvent;
+          }
+        });
+      }
+    });
+  }
+
   const addEvent = (data) => {
     data.event_data = props.event;
     setEventDropped([data]);
@@ -74,6 +104,14 @@ const EventContainer = (props) => {
       style={{ border: isOver && "3px solid rgb(61,64,91)" }}
       key={Math.random()}
     >
+      {found && (
+        <Event
+          event_data={data}
+          className={classes.tool}
+          placedEvent={true}
+          event_id={id}
+        ></Event>
+      )}
       {eventDropped.map((event) => (
         <Event
           event_data={event}
