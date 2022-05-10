@@ -130,7 +130,7 @@ async function addGroupMemeber(group_id, member) {
 
 async function getProjects(user_id) {
   const response = await pool.query(
-    "SELECT * FROM projects WHERE user_id = $1",
+    "SELECT * FROM projects WHERE user_id = $1 ORDER BY id DESC",
     [user_id]
   );
 

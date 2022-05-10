@@ -19,10 +19,8 @@ const BuildScriptTools = (props) => {
     const fetchPremadeEvents = async () => {
       try {
         const response = await axiosPrivate.get(GET_EVENT_TYPES_URL);
-        console.log(response);
         if (response?.data?.eventTypes.length > 0) {
           setPremadeEvents(response.data.eventTypes);
-          console.log(response.data.eventTypes);
         }
       } catch (error) {
         console.log(error);

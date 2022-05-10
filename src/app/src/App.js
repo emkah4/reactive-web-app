@@ -45,11 +45,9 @@ function App() {
 
   const logoutHandler = async () => {
     try {
-      console.log("at least trying");
       const response = await axiosPrivate.delete(`/users/logout_user`, {
         signal: controller.signal,
       });
-      console.log(response);
       setIsLoggedIn(false);
       setAuth(null);
       localStorage.clear();
@@ -63,7 +61,6 @@ function App() {
     if (!isLoggedIn) {
       try {
         const response = await refresh();
-        console.log(`response ==== ${response}`);
         if (response) {
           const accessToken = response;
           setAuth(accessToken);
@@ -82,13 +79,16 @@ function App() {
         <ProjectProvider>
           <EventIDProvider>
             <Routes>
-              <Route path="/create_a_script" element={<BuildScreen />} />
+              <Route
+                path="/create_a_script"
+                element={<BuildScreen isLoggedIn={isLoggedIn} />}
+              />
               <Route path="/my_scripts" element={<MyScripts />} />
 
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
               <Route path="/home" element={<Home />} />
-              {/* <Route path="/register" element={<Register />} /> */}
+              <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </EventIDProvider>

@@ -67,27 +67,27 @@ const BuildScreen = (props) => {
 
   useEffect(() => {
     if (auth?.accessToken !== undefined) {
-      console.log(auth.accessToken);
       setLoggedIn(true);
     } else {
       setLoggedIn(false);
     }
   }, [auth]);
 
+  if (!props.isLoggedIn) {
+    return (
+      <div className={styles.container}>
+        <div>
+          <p>Please log in!</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
       <div className={styles.container}>
-        {!loggedIn && (
-          <div>
-            <p>Please log in!</p>
-          </div>
-        )}
-        {!initialInfoPassed && loggedIn && (
-          <BuildScriptInitial onNext={projectCreated} />
-        )}
-        {initialInfoPassed && loggedIn && (
-          <BuildScriptMain onClose={closeProject} />
-        )}
+        {!initialInfoPassed && <BuildScriptInitial onNext={projectCreated} />}
+        {initialInfoPassed && <BuildScriptMain onClose={closeProject} />}
         {/* <BuildScriptMain {...init_mock}/> */}
       </div>
     </React.Fragment>

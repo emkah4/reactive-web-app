@@ -48,7 +48,7 @@ const Event = (props) => {
             </div>
             <div className={style.status}>
               {/* <EventGroup groups={props.event_data.event_groups}></EventGroup> */}
-              <EventStatus></EventStatus>
+              <EventStatus isEdited={props.isEdited}></EventStatus>
             </div>
           </div>
         )}
@@ -67,4 +67,3 @@ const Event = (props) => {
 };
 
 export default Event;
-
