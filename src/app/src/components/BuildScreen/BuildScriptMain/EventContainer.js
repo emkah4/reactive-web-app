@@ -68,24 +68,23 @@ const EventContainer = (props) => {
   let found = false;
   let id;
   let data;
+  let edited = false;
 
-  console.log(props.premadeEvents);
-
-  if (props.eventsInProject) {
-    console.log(project.events);
-    project.events.forEach((event) => {
+  if (project?.events) {
+    project?.events.forEach((event) => {
       if (
         props.event.group_id == event.groups &&
         props.event.event_time == event.event_time
       ) {
         found = true;
         id = event.id;
-        console.log(event.event_type);
-        console.log(PREMADE_EVENTS[0].event_id);
         PREMADE_EVENTS.forEach((premadeEvent) => {
           if (event.event_type == premadeEvent.event_id) {
-            console.log("FOUND");
             data = premadeEvent;
+          }
+          // Checking if event was edited before
+          if (event.event_text !== "null") {
+            edited = true;
           }
         });
       }
@@ -109,6 +108,7 @@ const EventContainer = (props) => {
           event_data={data}
           className={classes.tool}
           placedEvent={true}
+          isEdited={edited}
           event_id={id}
         ></Event>
       )}

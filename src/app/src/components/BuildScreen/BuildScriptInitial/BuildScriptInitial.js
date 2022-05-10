@@ -106,7 +106,7 @@ const BuildScriptInitial = (props) => {
         console.log("Wrong inpyts lol");
       }
 
-      setError(error.response.data.message);
+      setError(error?.response?.data?.message);
       setIsError(true);
       setTimeout(setLoading(false), 1000);
     }

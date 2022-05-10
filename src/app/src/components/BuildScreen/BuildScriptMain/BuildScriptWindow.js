@@ -16,7 +16,6 @@ import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
 const GET_EVENT_TYPES_URL = "/events/get_event_types";
 
 const BuildScriptWindow = (props) => {
-
   // Context for project
   const { project, setProject } = useContext(ProjectContext);
 
@@ -24,15 +23,13 @@ const BuildScriptWindow = (props) => {
   const axiosPrivate = useAxiosPrivate();
   const [premadeEvents, setPremadeEvents] = useState(null);
 
-
-  useEffect(() => {  // not loading need to fix (for now data is coming from front-end)
+  useEffect(() => {
+    // not loading need to fix (for now data is coming from front-end)
     const fetchPremadeEvents = async () => {
       try {
         const response = await axiosPrivate.get(GET_EVENT_TYPES_URL);
-        console.log(response);
         if (response?.data?.eventTypes.length > 0) {
           setPremadeEvents(response.data.eventTypes);
-          console.log(response.data.eventTypes);
         }
       } catch (error) {
         console.log(error);
@@ -41,7 +38,6 @@ const BuildScriptWindow = (props) => {
     fetchPremadeEvents();
   }, []);
 
-  
   let events = [];
   for (let i = 0; i < props.numberOfDepartments; i++) {
     events[i] = [];
@@ -54,11 +50,12 @@ const BuildScriptWindow = (props) => {
     }
   }
 
-  if (project.events.length === 0) {
-    console.log("NO EVENTS IN PROJECT")
+  if (project?.events?.length === 0) {
     return (
       <div className={styles.window}>
-        <BuildScriptTimeline time={project.project_length}></BuildScriptTimeline>
+        <BuildScriptTimeline
+          time={project.project_length}
+        ></BuildScriptTimeline>
         <div className={styles.table}>
           {project.groups.reverse().map((group, index) => (
             <div className={styles.row} key={Math.random()}>
@@ -73,16 +70,21 @@ const BuildScriptWindow = (props) => {
       </div>
     );
   } else {
-    console.log("EVENTS IN PROJECT")
     return (
       <div className={styles.window}>
-        <BuildScriptTimeline time={project.project_length}></BuildScriptTimeline>
+        <BuildScriptTimeline
+          time={project.project_length}
+        ></BuildScriptTimeline>
         <div className={styles.table}>
           {project.groups.reverse().map((group, index) => (
             <div className={styles.row} key={group.group_id}>
               {events[index].map((event) => (
                 <div className={styles.event_container} key={Math.random()}>
-                  <EventContainer event={event} eventsInProject={true} premadeEvents={premadeEvents}></EventContainer>
+                  <EventContainer
+                    event={event}
+                    eventsInProject={true}
+                    premadeEvents={premadeEvents}
+                  ></EventContainer>
                 </div>
               ))}
             </div>
