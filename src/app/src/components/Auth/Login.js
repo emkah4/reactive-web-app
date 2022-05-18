@@ -122,7 +122,6 @@ const Login = (props) => {
       });
       const accessToken = response?.data?.accessToken;
       setAuth({ accessToken });
-      console.log(`LOGIN : ======  ${auth}`);
       props.onLoggingIn();
       navigate("/home");
     } catch (error) {
