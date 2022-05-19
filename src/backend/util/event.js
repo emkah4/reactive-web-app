@@ -181,6 +181,42 @@ async function getEvent(eventId) {
   return event;
 }
 
+async function fileUpload(files, event_id) {
+  ("INSERT INTO event_groups(event_id, group_id) VALUES ($1, $2) RETURNING *");
+
+  let uploadsResponse = await Promise.all(
+    files.map(async (file) => {
+      let response_data;
+      try {
+        response_data = await singleFileUpload(file, event_id);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+
+      return response_data;
+    })
+  );
+
+  return true;
+}
+
+async function singleFileUpload(file, event_id) {
+  const response = await pool.query(
+    "INSERT INTO event_files(event_id, filename, filetype) VALUES ($1, $2, $3) RETURNING *",
+    [event_id, file.filename, file.mimetype]
+  );
+
+  const data = response.rows;
+
+  if (data.length === 0) {
+    const error = new HttpError("Could not insert into database.", 500);
+    throw error;
+  }
+
+  return data.rows;
+}
+
 module.exports = {
   addEvent,
   getEvents,
@@ -188,4 +224,5 @@ module.exports = {
   deleteEvent,
   getEventTypes,
   getEvent,
+  fileUpload,
 };

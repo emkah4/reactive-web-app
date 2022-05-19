@@ -11,7 +11,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import RichTextEditor from "../../RichTextEditor/RichTextEditor";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 
 // Axios Private
 import useAxiosPrivate from "../../../../shared/hooks/useAxiosPrivate";
@@ -19,12 +19,21 @@ import useAxiosPrivate from "../../../../shared/hooks/useAxiosPrivate";
 // Constants
 const EDIT_EVENT_URL = "/events/edit_event";
 const GET_EVENT_DATA_URL = "/events/get_event/";
+const FILE_UPLOAD_URL = "/events/file_upload";
+const ALLOWED_DATA_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "application/x-sh",
+  "text/plain",
+];
 
 const EventEditPopup = (props) => {
   // Axios private
   const axiosPrivate = useAxiosPrivate();
   // Data about inputs
   const [eventData, setEventData] = useState({});
+  const [eventFile, setEventFile] = useState(null);
+  const [eventFileError, setEventFileError] = useState(null);
   const [dataPresent, setDataPresent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fetchedEventContent, setFetchedEventContent] = useState(null);
@@ -67,6 +76,21 @@ const EventEditPopup = (props) => {
       JSON.stringify(eventData)
     );
     const data = await response.data;
+    if (data?.id !== null && eventFile !== null) {
+      let formData = new FormData();
+      formData.append("eventFile", eventFile);
+      formData.append("event_id", props.event_id);
+      const fileUploadResponse = await axiosPrivate.post(
+        FILE_UPLOAD_URL,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      const soutData = await fileUploadResponse;
+      console.log(soutData);
+    }
     const timeout = setTimeout(() => {
       setLoading(false);
       props.onClose();
@@ -74,6 +98,22 @@ const EventEditPopup = (props) => {
     clearTimeout(timeout);
     props.onClose();
   };
+
+  const handleFileUpload = (event) => {
+    setEventFileError(null);
+    if (event.target.files[0].size > 3000000) {
+      event.target.value = "";
+      setEventFileError("File is larger than 3mb. Please upload small file");
+    } else if (!ALLOWED_DATA_TYPES.includes(event.target.files[0].type)) {
+      setEventFileError(
+        "This file type is not allowed. Allowed file types: .jpeg, .png, .sh, .txt"
+      );
+      event.target.value = "";
+    } else {
+      setEventFile(event.target.files[0]);
+    }
+  };
+
   return ReactDOM.createPortal(
     <React.Fragment>
       <Modal show={props.show} onHide={props.onClose} backdrop="static">
@@ -97,31 +137,22 @@ const EventEditPopup = (props) => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="imageForm" disabled>
-              <Form.Label>Attatch an image</Form.Label>
-              <Form.Control type="file" disabled />
+            {eventFileError !== null ? (
+              <Alert
+                key={Math.random()}
+                variant="danger"
+                // className={styles.form_allert}
+              >
+                {eventFileError}
+              </Alert>
+            ) : (
+              ""
+            )}
+
+            <Form.Group className="mb-3" controlId="imageForm">
+              <Form.Label>Attatch a file</Form.Label>
+              <Form.Control type="file" onChange={handleFileUpload} />
             </Form.Group>
-
-            {/* <Form.Group className="mb-3" controlId="groupSelectForm">
-            <Form.Label>Select groups participating</Form.Label>
-            {props.groups.map((group) => (
-              <Form key={group.id}>
-                <Form.Check
-                  label={`${group.group_name}`}
-                  type="switch"
-                  id={group.group_id}
-                />
-              </Form>
-            ))}
-          </Form.Group> */}
-
-            {/* <Form.Label>Set length of the task</Form.Label>
-          <InputGroup className="mb-3" controlId="lengthInput">
-            <FormControl />
-            <InputGroup.Text>hours</InputGroup.Text>
-            <FormControl />
-            <InputGroup.Text>minutes</InputGroup.Text>
-          </InputGroup> */}
           </Modal.Body>
         )}
 

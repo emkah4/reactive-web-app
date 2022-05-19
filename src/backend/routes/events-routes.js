@@ -3,6 +3,9 @@ const { check } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 // Importing modules
 const HttpError = require("../models/http-error");
 
@@ -23,6 +26,14 @@ router.post(
   ],
   auth_tools.authenticateToken,
   eventsController.addEvent
+);
+
+router.post(
+  "/file_upload",
+  [check("event_id").not().isEmpty()],
+  auth_tools.authenticateToken,
+  upload.array("eventFile"),
+  eventsController.fileUpload
 );
 
 router.get(
