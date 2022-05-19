@@ -7,6 +7,9 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Alert, Button } from "react-bootstrap";
 
+// Context
+import AuthContext from "../../context/UserContext";
+
 // Axios
 import axios from "../../api/axios";
 
@@ -21,7 +24,7 @@ const regexEmail =
   "/^[a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1}([a-z0-9][-_.+!#$%&'*/=?^`{|]{0,1})*[a-z0-9]@[a-z0-9][-.]{0,1}([a-z][-.]{0,1})*[a-z0-9].[a-z0-9]{1,}([.-]{0,1}[a-z]){0,}[a-z0-9]{0,}$/";
 const REGISTER_URL = "/users/register_user";
 
-const Register = () => {
+const Register = (props) => {
   const {
     register,
     handleSubmit,
@@ -40,7 +43,11 @@ const Register = () => {
   const name = watch("f_name");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(null);
+
+  // Context for user context
+  const { auth, setAuth } = useContext(AuthContext);
 
   return (
     <div className={styles.main_container}>
@@ -50,11 +57,7 @@ const Register = () => {
         variant={success ? "success" : error ? "danger" : ""}
         className={styles.form_allert}
       >
-        {success
-          ? "Succesfully registered"
-          : error
-          ? "There has been an error"
-          : ""}
+        {success ? "Succesfully registered" : error ? errorMessage : ""}
       </Alert>
       <Card className={styles.card}>
         <Form
@@ -62,25 +65,22 @@ const Register = () => {
           onSubmit={handleSubmit(async (data) => {
             data.email = data.email.toLowerCase();
             try {
-              console.log(JSON.stringify(data));
               const response = await axios.post(
                 REGISTER_URL,
-                JSON.stringify(data)
+                JSON.stringify(data),
+                { withCredentials: true }
               );
-              console.log(response);
-
               if (response.status === 200) {
-                register.f_name = "";
-                register.l_name = "";
-                register.email = "";
-                register.password = "";
+                const accessToken = response?.data?.accessToken;
+                setAuth({ accessToken });
+                props.onLoggingIn();
                 setSuccess(true);
                 setLoading(false);
               }
-
-              navigate("/about");
+              navigate("/home");
             } catch (error) {
               setError(true);
+              setErrorMessage(error.response.data.message);
               throw error;
             }
           })}

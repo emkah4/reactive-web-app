@@ -37,7 +37,23 @@ const registerUser = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(200).json({ user: user });
+  let tokens;
+
+  try {
+    tokens = await getAuthToken(user);
+  } catch (error) {
+    return next(error);
+  }
+
+  if (tokens !== null) {
+    res.cookie("jwt", tokens.refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ accessToken: tokens.accessToken });
+  } else {
+    res.status(200).json({ message: "Register but not logged in" });
+  }
 };
 
 // This function is used to log in users into the system
@@ -85,6 +101,37 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+// Internal function for getting access and refresh tokens
+const getAuthToken = async (user_id) => {
+  const accessToken = jwt.sign(
+    { user: user_id },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "15m",
+    }
+  );
+  const refreshToken = jwt.sign(
+    { user: user_id },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
+
+  const added_to_db = await auth_tools.put_refresh_token(refreshToken, user_id);
+
+  if (added_to_db) {
+    return {
+      accessToken,
+      refreshToken,
+    };
+  } else {
+    return next(
+      new HttpError("Could not add refresh token to the database.", 500)
+    );
+  }
+};
+
 const tokenRefresh = async (req, res, next) => {
   // Checking if there is a refresh token in the cookies
   if (!req.cookies?.jwt) {
@@ -105,7 +152,6 @@ const tokenRefresh = async (req, res, next) => {
       if (err) {
         return next(new HttpError("Wrong token. Forbidden.", 403));
       }
-      console.log(user.user);
       const accessToken = jwt.sign(
         { user: user.user },
         process.env.ACCESS_TOKEN_SECRET,
@@ -122,7 +168,6 @@ const tokenRefresh = async (req, res, next) => {
 
 // This function is used to logout users, update param in database: is_logged_in to false
 const logoutUser = async (req, res, next) => {
-  console.log("lol");
   // First we check if request contains jwt refresh token in cookies
   const cookies = req.cookies;
   if (!cookies?.jwt) {
@@ -149,7 +194,6 @@ const logoutUser = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
-  console.log("lol");
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
   res.status(200).json({ is_logged_out: user_logged_out });
 };

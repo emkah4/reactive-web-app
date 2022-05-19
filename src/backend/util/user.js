@@ -3,7 +3,12 @@ const HttpError = require("../models/http-error");
 const { Pool, Client } = require("pg");
 const pool = new Pool();
 const auth_tools = require("./auth");
+const bcrypt = require("bcrypt");
 
+// Constants
+const saltRounds = 10;
+
+// Function to get a user from database by user id -------------------------------------------------------------
 async function getUserFromDb(user_id) {
   const response = await pool.query("SELECT * FROM users WHERE id = $1", [
     user_id,
@@ -20,24 +25,53 @@ async function getUserFromDb(user_id) {
   return data.rows;
 }
 
+// Function to add a user to database --------------------------------------------------------------------------
 async function addUserToDb(f_name, l_name, email, password) {
-  const response = await pool.query(
-    "INSERT INTO users(f_name, l_name, email, password) VALUES($1, $2, $3, $4) RETURNING *",
-    [f_name, l_name, email, password]
+  // Getting all users with provided email address from database
+  const checkIfEmailIsTaken = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
   );
 
   await pool.end;
 
-  const data = response.rows;
+  const rowCount = checkIfEmailIsTaken.rowCount;
+
+  // Checking if there was anything returned
+  if (rowCount !== 0) {
+    // If was -> returning 409, indicating that user with this email address already exists
+    const error = new HttpError("User with this email already exists!", 409);
+    throw error;
+  }
+
+  // Hashing the password using function getHashedPassword (it is below)
+  const hashedPassword = await getHashedPassword(password);
+
+  if (hashedPassword === null) {
+    const error = new HttpError("Could not hash the password.", 503);
+    throw error;
+  }
+
+  // If previous check is ok, adding a new user to the database
+  const addToDbResponse = await pool.query(
+    "INSERT INTO users(f_name, l_name, email, password) VALUES($1, $2, $3, $4) RETURNING *",
+    [f_name, l_name, email, hashedPassword]
+  );
+
+  await pool.end;
+
+  const data = addToDbResponse.rows;
 
   if (!data) {
     const error = new HttpError("Could not register user to a database", 503);
     throw error;
   }
 
-  return data;
+  // If everything is all right -> returning newly created user id
+  return data[0].id;
 }
 
+// Function to login and auth user with db ---------------------------------------------------------------------
 async function logInUser(email, password) {
   // Getting user by email
   const data = await pool.query("SELECT * FROM users WHERE email = $1", [
@@ -54,7 +88,8 @@ async function logInUser(email, password) {
   }
 
   // Checking if passwords match
-  if (user.password !== password) {
+  const passwordsMatched = await comparePasswords(password, user.password);
+  if (!passwordsMatched) {
     const error = new HttpError("Wrong password. Forbidden.", 403);
     throw error;
   }
@@ -65,6 +100,7 @@ async function logInUser(email, password) {
   return user_id;
 }
 
+// Function to logout a user -----------------------------------------------------------------------------------
 async function logOutUser(user_id) {
   let is_logged_out;
   try {
@@ -73,6 +109,33 @@ async function logOutUser(user_id) {
     throw error;
   }
   return is_logged_out;
+}
+
+// Function for hashing password -------------------------------------------------------------------------------
+async function getHashedPassword(plainPassword) {
+  try {
+    // Generating a salt
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    // Hashing the password
+    return await bcrypt.hash(plainPassword, salt);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return null;
+}
+
+async function comparePasswords(plainPassword, hashedPassword) {
+  try {
+    // Compare password
+    return await bcrypt.compare(plainPassword, hashedPassword);
+  } catch (error) {
+    console.log(error);
+  }
+
+  // Return false if error
+  return false;
 }
 
 module.exports = {
