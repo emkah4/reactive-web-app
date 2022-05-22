@@ -28,6 +28,8 @@ app.use("/api/projects", projectsRoutes);
 // Registering /api/events route, for interaction with events
 app.use("/api/events", eventsRoutes);
 
+app.use("/uploads", express.static("uploads"));
+
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
   throw error;

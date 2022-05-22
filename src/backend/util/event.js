@@ -76,7 +76,7 @@ async function addEventGroup(event_id, group_id) {
 
 async function getEvents(project_id) {
   const response = await pool.query(
-    "SELECT e.id, e.event_time, e.event_text, string_agg(eg.group_id::TEXT, ',') AS groups, e.event_type FROM events AS e INNER JOIN event_types AS et ON e.event_type = et.id INNER JOIN event_groups as eg ON e.id = eg.event_id INNER JOIN project_groups as pg ON eg.group_id = pg.id WHERE e.project_id = $1 GROUP BY e.id;",
+    "SELECT e.id, e.event_time, e.event_text, string_agg(eg.group_id::TEXT, ',') AS groups, e.event_type, string_agg(ef.filename::TEXT, ',') as filename, string_agg(ef.filetype::TEXT, ',') as filetype FROM events AS e INNER JOIN event_types AS et ON e.event_type = et.id INNER JOIN event_groups as eg ON e.id = eg.event_id INNER JOIN project_groups as pg ON eg.group_id = pg.id LEFT JOIN event_files as ef ON e.id = ef.event_id WHERE e.project_id = $1 GROUP BY e.id;",
     [project_id]
   );
 
@@ -165,9 +165,10 @@ async function getEventTypes() {
 }
 
 async function getEvent(eventId) {
-  const response = await pool.query("SELECT * FROM events WHERE id = $1", [
-    eventId,
-  ]);
+  const response = await pool.query(
+    "SELECT e.*, ef.filetype, ef.filename FROM events AS e LEFT JOIN event_files AS ef ON e.id = ef.event_id WHERE e.id = $1",
+    [eventId]
+  );
 
   await pool.end;
 

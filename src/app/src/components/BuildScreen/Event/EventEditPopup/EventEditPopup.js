@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
+// Axios
+import { axiosDownload } from "../../../../api/axios";
+
 // Styles
 import styles from "./EventEditPopup.module.css";
 
@@ -37,6 +40,7 @@ const EventEditPopup = (props) => {
   const [dataPresent, setDataPresent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fetchedEventContent, setFetchedEventContent] = useState(null);
+  const [fetchedFile, setFetchedFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +49,10 @@ const EventEditPopup = (props) => {
         const response = await axiosPrivate.get(compiled_url);
         if (response) {
           setFetchedEventContent(response.data.event.event_text);
+          console.log(response);
+          if (response.data.event?.filename) {
+            setFetchedFile(response.data.event);
+          }
           setLoading(false);
         }
       } catch (error) {
@@ -114,6 +122,41 @@ const EventEditPopup = (props) => {
     }
   };
 
+  const handleUploadDownload = async () => {
+    if (fetchedFile) {
+      let finalFileName;
+      switch (fetchedFile.filetype) {
+        case "image/png":
+          finalFileName = "uploadedFile.png";
+          break;
+        case "image/jpeg":
+          finalFileName = "uploadedFile.jpeg";
+          break;
+        case "application/x-sh":
+          finalFileName = "uploadedFile.sh";
+          break;
+        case "text/plain":
+          finalFileName = "uploadedFile.txt";
+          break;
+        default:
+          finalFileName = "uploadedFile";
+          break;
+      }
+      const response = await axiosDownload.get(`/${fetchedFile.filename}`, {
+        responseType: "blob",
+      });
+
+      console.log(response);
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", finalFileName); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    }
+  };
+
   return ReactDOM.createPortal(
     <React.Fragment>
       <Modal show={props.show} onHide={props.onClose} backdrop="static">
@@ -149,10 +192,22 @@ const EventEditPopup = (props) => {
               ""
             )}
 
-            <Form.Group className="mb-3" controlId="imageForm">
-              <Form.Label>Attatch a file</Form.Label>
-              <Form.Control type="file" onChange={handleFileUpload} />
-            </Form.Group>
+            {fetchedFile !== null ? (
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleUploadDownload();
+                }}
+              >
+                Download uploaded file
+              </a>
+            ) : (
+              <Form.Group className="mb-3" controlId="imageForm">
+                <Form.Label>Attatch a file</Form.Label>
+                <Form.Control type="file" onChange={handleFileUpload} />
+              </Form.Group>
+            )}
           </Modal.Body>
         )}
 
