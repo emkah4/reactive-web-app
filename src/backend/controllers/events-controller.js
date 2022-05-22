@@ -1,5 +1,9 @@
 const { validationResult } = require("express-validator");
 
+// For file upload
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 // For handling access tokens
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -29,6 +33,21 @@ const addEvent = async (req, res, next) => {
   }
 
   res.status(201).json({ event_id: event_id });
+};
+
+// Function that handles file uploads for event
+const fileUpload = async (req, res, next) => {
+  console.log(req.files); // info about file
+  console.log(req.body.event_id); // event id
+
+  let uploads;
+  try {
+    uploads = await event_tools.fileUpload(req.files, req.body.event_id);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Successfully uploaded files" });
 };
 
 const getEvents = async (req, res, next) => {
@@ -109,6 +128,7 @@ const getEvent = async (req, res, next) => {
   return res.status(200).json({ event: event });
 };
 exports.addEvent = addEvent;
+exports.fileUpload = fileUpload;
 exports.getEvents = getEvents;
 exports.editEvent = editEvent;
 exports.deleteEvent = deleteEvent;
