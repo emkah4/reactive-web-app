@@ -37,13 +37,14 @@ const Register = (props) => {
       l_name: "",
       email: "",
       password: "",
+      confirm_password: "",
     },
   });
   let navigate = useNavigate();
   const name = watch("f_name");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(false);
   const [success, setSuccess] = useState(null);
 
   // Context for user context
@@ -144,7 +145,24 @@ const Register = (props) => {
               />
               <p>{errors.password?.message}</p>
             </FloatingLabel>
+            <FloatingLabel
+              controlId="floatingPassword2"
+              label="Repeat Password"
+            >
+              <Form.Control
+                type="password"
+                placeholder="Repeat Password"
+                {...register("confirm_password", {
+                  required: "This is a required field",
+                  validate: (value) =>
+                    watch("password") === value ||
+                    "The passwords do not match!",
+                })}
+              />
+              <p>{errors.confirm_password?.message}</p>
+            </FloatingLabel>
           </Form.Group>
+
           <Button className={styles.button} type="submit">
             Register
           </Button>
