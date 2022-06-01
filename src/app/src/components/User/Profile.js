@@ -36,9 +36,7 @@ const Profile = (props) => {
     return (
       <Card className={styles.card}>
         <Card.Body>
-          <Card.Title>
-            Sorry, you are not yet logged in. Please, consider it :))
-          </Card.Title>
+          <Card.Title>Sorry, you are not yet logged in.</Card.Title>
         </Card.Body>
       </Card>
     );

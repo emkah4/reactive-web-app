@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 // Styles
 import style from "./Navigation.module.css";
 
+// Returns a list of accessible pages by a user.
 const Navigation = (props) => {
   return (
     <nav>
-      <ul className={`${style.ul} ${props.className}`}>
-        <li>
-          <NavLink to="/home">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/create_a_script">Create a script</NavLink>
-        </li>
-        <li>
-          <NavLink to="my_scripts">My scripts</NavLink>
-        </li>
-        <li>
-          <NavLink to="about">About</NavLink>
-        </li>
-      </ul>
+      {props.isLoggedIn ? (
+        <ul className={`${style.ul} ${props.className}`}>
+          <li>
+            <NavLink to="/home">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/create_a_script">Create a script</NavLink>
+          </li>
+          <li>
+            <NavLink to="my_scripts">My scripts</NavLink>
+          </li>
+          <li>
+            <NavLink to="about">About</NavLink>
+          </li>
+        </ul>
+      ) : (
+        <ul className={`${style.ul} ${props.className}`}>
+          <li>
+            <NavLink to="/home">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="about">About</NavLink>
+          </li>
+        </ul>
+      )}
     </nav>
   );
 };

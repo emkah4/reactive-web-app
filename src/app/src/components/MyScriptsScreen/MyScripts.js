@@ -2,22 +2,18 @@ import React, { useEffect, useState } from "react";
 
 // Axios
 import useAxiosPrivate from "../../shared/hooks/useAxiosPrivate";
-// Hooks
-import { useHttpClient } from "../../shared/hooks/http-hook";
 
 // Components
 import Sctipt from "./Script";
 
 // Styles
 import styles from "./MyScripts.module.css";
-import { Controller } from "react-hook-form";
 
 const MyScripts = (props) => {
   const axiosPrivate = useAxiosPrivate();
   const controller = new AbortController();
   const [loadedProjects, setLoadedProjects] = useState([]);
   const [exportingProject, setExportingProject] = useState(null);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const exportProject = async (event) => {
     try {
@@ -32,6 +28,12 @@ const MyScripts = (props) => {
 
   const editProject = (event) => {
     localStorage.setItem("loaded_project_id", event.target.value);
+    window.open("/create_a_script", "_self");
+  };
+
+  //@TODO
+  const deleteProject = (event) => {
+    // Implement a delete project call to the backend
   };
 
   useEffect(async () => {
@@ -75,6 +77,7 @@ const MyScripts = (props) => {
           projects={loadedProjects}
           export={exportProject}
           edit={editProject}
+          delete={deleteProject}
         />
       )}
     </div>
