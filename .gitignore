@@ -1,0 +1,11 @@
+src/backend/node_modules/*
+src/backend/node_modules/.package-lock.json
+src/backend/node_modules/.bin/mime
+src/backend/node_modules/mime/CHANGELOG.md
+src/backend/node_modules/mime/cli.js
+src/backend/node_modules/mime/LICENSE
+src/backend/node_modules/mime/mime.js
+src/backend/node_modules/mime/package.json
+src/backend/node_modules/mime/README.md
+src/backend/node_modules/mime/src/build.js
+src/backend/node_modules/mime/src/test.js
