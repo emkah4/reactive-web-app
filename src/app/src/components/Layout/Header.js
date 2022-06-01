@@ -17,7 +17,7 @@ const Header = (props) => {
       </NavLink>
       <div className={style.container}>
         <div className={style.navigation}>
-          <Navigation className={style.ul} />
+          <Navigation className={style.ul} isLoggedIn={props.isLoggedIn} />
         </div>
         <div>
           {!props.isLoggedIn ? (
