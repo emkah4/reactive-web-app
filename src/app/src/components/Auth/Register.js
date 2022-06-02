@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import NavigationLogoColor from "../Layout/LayoutAssets/NavigationLogoColor";
 
 // Bootstrap
 import Form from "react-bootstrap/Form";
@@ -52,7 +53,7 @@ const Register = (props) => {
 
   return (
     <div className={styles.main_container}>
-      <h1 className={styles.title}>Welcome to REACTIVE {name}</h1>
+      <div className={styles.title}>Welcome to <div className={styles.logo_container}><NavigationLogoColor /></div>, {name}!</div>
       <Alert
         key={Math.random()}
         variant={success ? "success" : error ? "danger" : ""}

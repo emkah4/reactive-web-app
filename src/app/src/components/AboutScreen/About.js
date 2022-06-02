@@ -1,4 +1,7 @@
 import React, { useContext } from "react";
+import NavigationLogoColor from "../Layout/LayoutAssets/NavigationLogoColor";
+import Button from "../UI/Button/Button";
+import { NavLink } from "react-router-dom";
 
 import styles from "./About.module.css";
 
@@ -9,13 +12,22 @@ const About = () => {
   const { user, setUser } = useContext(AuthContext);
   return (
     <div className={styles.container}>
-      <h1>ABOUT US</h1>
-      <p>
-        The Reactive team is just 3 guys with a big dream of not failing PBL and
-        becoming the masters of problem solving. Watch us try hard, fail harder
-        and after long hours - win the hardest. Out on Netflix on 15th of June.
-      </p>
-    </div>
+            <div className={styles.left}>
+                <div className={styles.welcome}>
+                  <div className={styles.top_text}>So what is <div className={styles.logo_container}><NavigationLogoColor /></div>?</div>
+                  <div className={styles.bottom_text}>Simply put, Reactive let's you create table top exercise scripts to be used in your company/organization</div>
+                </div>
+                <div>
+                    <NavLink to="/home">
+                        <Button className='home'>Create a script</Button>
+                    </NavLink>
+                    <NavLink to="/about">
+                        <Button className='home'>About</Button>
+                    </NavLink>
+                </div>
+            </div>
+            <div className={styles.right}></div>
+        </div>
   );
 };
 

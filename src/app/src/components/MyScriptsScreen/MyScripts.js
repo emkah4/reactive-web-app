@@ -66,10 +66,10 @@ const MyScripts = (props) => {
 
   return (
     <div className={styles.container}>
-      <h1>My scripts</h1>
+      <h1 className={styles.header}>My scripts</h1>
       {loadedProjects.length === 0 ? (
-        <p>
-          No new projects yet. You either need to log in or create a new
+        <p className={styles.bottom_text}>
+          No projects found. Log in or create a new
           project!
         </p>
       ) : (

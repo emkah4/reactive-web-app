@@ -11,7 +11,7 @@ const Navigation = (props) => {
       {props.isLoggedIn ? (
         <ul className={`${style.ul} ${props.className}`}>
           <li>
-            <NavLink to="/home">Home</NavLink>
+            <NavLink className={style.navlink} to="/home">Home</NavLink>
           </li>
           <li>
             <NavLink to="/create_a_script">Create a script</NavLink>

@@ -11,4 +11,22 @@ ul.ul {
 .ul li a {
   text-decoration: none;
   color: white;
+  position: relative;
+}
+
+.ul li a:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #FFF;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.ul li a:hover:before {
+  visibility: visible;
+  width: 100%;
 }

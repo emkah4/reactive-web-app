@@ -1,18 +1,31 @@
 import React from "react";
 
+import NavigationLogoColor from "../Layout/LayoutAssets/NavigationLogoColor";
+import Button from "../UI/Button/Button";
+import { NavLink } from "react-router-dom";
+
+
+
 import styles from './Home.module.css'
 
 const Home = () => {
     return (
         <div className={styles.container}>
-            <h1>REACTIVE HOME</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type
-                specimen book. It has survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-                of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+            <div className={styles.left}>
+                <div className={styles.welcome}>
+                    <div className={styles.top_text}>Welcome to <div className={styles.logo_container}><NavigationLogoColor /></div>!</div>
+                    <div className={styles.bottom_text}>the most interactive table top script exercise creation tool money can't buy</div>
+                </div>
+                <div>
+                    <NavLink to="/home">
+                        <Button className='home'>Create a script</Button>
+                    </NavLink>
+                    <NavLink to="/about">
+                        <Button className='home'>About</Button>
+                    </NavLink>
+                </div>
+            </div>
+            <div className={styles.right}></div>
         </div>
     )
 }
