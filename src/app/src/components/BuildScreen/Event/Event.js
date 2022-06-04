@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useDrag } from "react-dnd";
+
+// Axios
+import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
 
 // Styles
 import style from "./Event.module.css";
 
 // Components
 import EventIcon from "./EventIcon";
+import DeleteEventIcon from "./DeleteEventIcon";
 import EventGroup from "./EventGroups";
 import EventEditPopup from "./EventEditPopup/EventEditPopup";
 import EventStatus from "./EventStatus";
+
+// Context
+import ProjectContext from "../../../context/ProjectContext";
 
 const Event = (props) => {
   //react drag and drop
@@ -18,18 +25,50 @@ const Event = (props) => {
   }));
   // Popup states
   const [show, setShow] = useState(false);
+  // Axios
+  const axiosPrivate = useAxiosPrivate();
+  // Context for project
+  const { project, setProject } = useContext(ProjectContext);
+
+  const [edited, setEdited] = useState(false);
 
   const handleClose = () => {
     setShow(false);
+    setEdited(true);
+    props.handleEdit();
   };
   const handleShow = (event) => {
     setShow(true);
   };
 
+  if (props.placedEvent === false) {
+    return (
+      <div className={style.container} ref={drag}>
+        <div
+          className={`${
+            props.placedEvent ? style.event : style.event_predefined
+          }`}
+          style={{ background: props.event_data.event_color }}
+        >
+          <div className={style.text_container}>
+            <h3>{props.event_data.event_name}</h3>
+            <span>{props.event_data.event_time}</span>
+          </div>
+
+          <div className={style.drag_container}>
+            <div className={style.drag}>Drag me!</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={style.container} ref={drag}>
+    <div className={style.container}>
       <div
-        className={style.event}
+        className={`${
+          props.placedEvent ? style.event : style.event_predefined
+        }`}
         style={{ background: props.event_data.event_color }}
       >
         <div className={style.text_container}>
@@ -44,11 +83,16 @@ const Event = (props) => {
         {props.placedEvent && (
           <div>
             <div className={style.edit}>
-              <EventIcon onClick={handleShow} fill="ffffff" />
-            </div>
-            <div className={style.status}>
-              {/* <EventGroup groups={props.event_data.event_groups}></EventGroup> */}
-              <EventStatus isEdited={props.isEdited}></EventStatus>
+              <EventIcon
+                onClick={handleShow}
+                fill={`${
+                  props.isEdited === true
+                    ? "7a7a7a"
+                    : edited === true
+                    ? "7a7a7a"
+                    : "ffffff"
+                }`}
+              />
             </div>
           </div>
         )}
@@ -60,6 +104,17 @@ const Event = (props) => {
             length={props.event_data.event_time}
             event_id={props.event_id}
           />
+        )}
+        {props.placedEvent && (
+          <div className={style.edit}>
+            <DeleteEventIcon
+              fill="ffffff"
+              onClick={(e) => {
+                e.preventDefault();
+                props.handleEventDelete(props.event_id);
+              }}
+            />
+          </div>
         )}
       </div>
     </div>

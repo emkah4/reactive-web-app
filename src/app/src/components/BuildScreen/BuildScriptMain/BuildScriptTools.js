@@ -44,6 +44,7 @@ const BuildScriptTools = (props) => {
               className={styles.tool}
               dragEnabled={true}
               placedEvent={false}
+              handleEventDelete={props.handleEventDelete}
             ></Event>
           </div>
         ))}
