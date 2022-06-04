@@ -71,4 +71,10 @@ router.get(
   eventsController.getEvent
 );
 
+router.delete(
+  "/delete_event/:eid",
+  auth_tools.authenticateToken,
+  eventsController.deleteEvent
+);
+
 module.exports = router;

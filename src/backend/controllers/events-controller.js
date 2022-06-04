@@ -32,7 +32,7 @@ const addEvent = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ event_id: event_id });
+  res.status(201).json({ event: event_id });
 };
 
 // Function that handles file uploads for event
@@ -127,6 +127,7 @@ const getEvent = async (req, res, next) => {
   }
   return res.status(200).json({ event: event });
 };
+
 exports.addEvent = addEvent;
 exports.fileUpload = fileUpload;
 exports.getEvents = getEvents;
