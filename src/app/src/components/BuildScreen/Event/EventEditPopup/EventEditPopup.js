@@ -97,14 +97,11 @@ const EventEditPopup = (props) => {
       );
 
       const soutData = await fileUploadResponse;
-      console.log(soutData);
     }
     const timeout = setTimeout(() => {
       setLoading(false);
       props.onClose();
-    }, 3000);
-    clearTimeout(timeout);
-    props.onClose();
+    }, 500);
   };
 
   const handleFileUpload = (event) => {
@@ -122,6 +119,7 @@ const EventEditPopup = (props) => {
     }
   };
 
+  // Function for downloading file
   const handleUploadDownload = async () => {
     if (fetchedFile) {
       let finalFileName;

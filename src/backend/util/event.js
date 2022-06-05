@@ -48,7 +48,21 @@ async function addEvent(event) {
     throw error;
   }
 
-  return data.rows[0].id;
+  const gettingReadyEvent = await pool.query(
+    "SELECT e.id, e.event_time, e.event_text, string_agg(eg.group_id::TEXT, ',') AS groups, e.event_type, string_agg(ef.filename::TEXT, ',') as filename, string_agg(ef.filetype::TEXT, ',') as filetype FROM events AS e INNER JOIN event_types AS et ON e.event_type = et.id INNER JOIN event_groups as eg ON e.id = eg.event_id INNER JOIN project_groups as pg ON eg.group_id = pg.id LEFT JOIN event_files as ef ON e.id = ef.event_id WHERE e.id = $1 GROUP BY e.id",
+    [data.rows[0].id]
+  );
+
+  await pool.end;
+
+  const eventData = gettingReadyEvent.rows[0];
+
+  if (!eventData) {
+    const error = new HttpError("Could not get data from database.", 503);
+    throw error;
+  }
+
+  return eventData;
 }
 
 // Function adding event groups pairs to database (when creating or updating events)
@@ -131,6 +145,14 @@ async function deleteEvent(eventId) {
     const error = new HttpError("Could not delete from event_groups.", 503);
     throw error;
   } else {
+    // Deleting file references from database
+    const filesResponse = await pool.query(
+      "DELETE FROM event_files WHERE event_id = $1",
+      [eventId]
+    );
+
+    await pool.end;
+
     const eventResponse = await pool.query("DELETE FROM events WHERE id = $1", [
       eventId,
     ]);

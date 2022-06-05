@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useDrop } from "react-dnd";
 // Context
-import ProjectContext from "../../../context/ProjectContext";
 import styles from "./EventContainer.module.css";
 import Event from "../Event/Event";
 import { PREMADE_EVENTS } from "./PremadeEventData";
 import classes from "./BuildScriptTools.module.css";
 
-import axios from "../../../api/axios";
 import useAxiosPrivate from "../../../shared/hooks/useAxiosPrivate";
 import EventIDContext from "../../../context/EventIDContext";
+import ProjectContext from "../../../context/ProjectContext";
 
 // Constants
 const REQUEST_URL = "/events/add_event";
@@ -26,6 +25,8 @@ const EventContainer = (props) => {
   //react dnd drop
   const [eventDropped, setEventDropped] = useState([]);
 
+  // For edited
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "event",
     drop: (item) => {
@@ -36,6 +37,7 @@ const EventContainer = (props) => {
     }),
   }));
 
+  // This use effect is adding events to the database when they are dropped onto timeline
   useEffect(() => {
     if (eventDropped.length !== 0) {
       const body = {
@@ -52,11 +54,16 @@ const EventContainer = (props) => {
             REQUEST_URL,
             JSON.stringify(body)
           );
-          const event_id = Object.values(response.data).join();
+          const event_id = response.data.event.id;
           eventDropped.event_id = event_id;
           setEventID((prev) => {
             return [...prev, event_id];
           });
+
+          const added_event = response.data.event;
+          let prev_project = project;
+          prev_project.events = [...prev_project.events, added_event];
+          setProject(prev_project);
         } catch (error) {
           console.log(error);
         }
@@ -91,6 +98,10 @@ const EventContainer = (props) => {
     });
   }
 
+  const handleEdit = () => {
+    edited = true;
+  };
+
   const addEvent = (data) => {
     data.event_data = props.event;
     setEventDropped([data]);
@@ -110,17 +121,25 @@ const EventContainer = (props) => {
           placedEvent={true}
           isEdited={edited}
           event_id={id}
+          key={Math.random()}
+          handleEventDelete={props.handleEventDelete}
+          handleEdit={handleEdit}
+          dragEnabled={false}
         ></Event>
       )}
-      {eventDropped.map((event) => (
-        <Event
-          event_data={event}
-          className={classes.tool}
-          key={event.ui_id}
-          placedEvent={true}
-          event_id={eventDropped.event_id}
-        ></Event>
-      ))}
+      {!found &&
+        eventDropped.map((event) => (
+          <Event
+            event_data={event}
+            className={classes.tool}
+            key={event.ui_id}
+            placedEvent={true}
+            event_id={eventDropped.event_id}
+            handleEventDelete={props.handleEventDelete}
+            handleEdit={handleEdit}
+            dragEnabled={false}
+          ></Event>
+        ))}
     </div>
   );
 };

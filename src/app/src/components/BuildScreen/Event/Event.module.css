@@ -7,20 +7,32 @@
   align-items: center;
 }
 
+.event_predefined {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 .text_container {
   width: 90%;
   margin-top: 10px;
   text-align: center;
 }
 
-.event h3 {
-  font-size: 0.8rem;
+.event h3,
+.event_predefined h3 {
+  font-size: 0.7rem;
   color: white;
   word-break: break-word;
   margin-bottom: 0;
 }
 
-.event span {
+.event span,
+.event_predefined span {
   color: white;
   font-size: 0.5em;
 }
@@ -41,10 +53,6 @@
   fill: black;
 }
 
-.status {
-  margin-bottom: 10px;
-}
-
 /* 
     Not for always
 */
@@ -56,13 +64,8 @@
 
 .drag {
   text-align: center;
-  font-size: .8rem;
-  color: white
-}
-
-.drag_container {
-  padding: 40px 0;
-  margin-bottom: 30px;
+  font-size: 0.6rem;
+  color: white;
 }
 
 .drag_container:hover .drag {
