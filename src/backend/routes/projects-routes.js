@@ -32,4 +32,12 @@ router.get(
   projectsController.getProject
 );
 
+// Sharing the project
+router.post(
+  "/share_project",
+  [check("project_id").not().isEmpty(), check("recipient_email").isEmail()],
+  auth_tools.authenticateToken,
+  projectsController.shareProject
+);
+
 module.exports = router;

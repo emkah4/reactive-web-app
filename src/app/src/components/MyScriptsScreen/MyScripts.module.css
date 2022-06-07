@@ -4,18 +4,39 @@
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    font-size: 50px;
-    margin-bottom: 15px;
-    color: #383838;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  font-size: 50px;
+  margin-bottom: 15px;
+  color: #383838;
 }
 
 .bottom_text {
   margin-top: 20px;
-    font-size: 1.5em;
-    font-weight: 300;
+  font-size: 1.5em;
+  font-weight: 300;
+}
+
+.modal_body {
+  height: 500px;
+}
+
+.sharing_form {
+  width: 90%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.form_allert {
+  width: 90%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+.form_title {
+  width: 90%;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }

@@ -61,6 +61,25 @@ const getProject = async (req, res, next) => {
   res.status(200).json({ project: project });
 };
 
+const shareProject = async (req, res, next) => {
+  const user_id = req.user_id;
+  let sharing_data = req.body;
+
+  let response;
+  try {
+    response = await project_tools.shareProject(
+      user_id,
+      sharing_data.recipient_email,
+      sharing_data.project_id
+    );
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Succesfully shared the project" });
+};
+
 exports.newProject = newProject;
 exports.getProjects = getProjects;
 exports.getProject = getProject;
+exports.shareProject = shareProject;
