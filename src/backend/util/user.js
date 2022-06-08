@@ -26,7 +26,14 @@ async function getUserFromDb(user_id) {
 }
 
 // Function to add a user to database --------------------------------------------------------------------------
-async function addUserToDb(f_name, l_name, email, password) {
+async function addUserToDb(
+  f_name,
+  l_name,
+  email,
+  password,
+  security_question_id,
+  security_answer
+) {
   // Getting all users with provided email address from database
   const checkIfEmailIsTaken = await pool.query(
     "SELECT * FROM users WHERE email = $1",
@@ -54,8 +61,15 @@ async function addUserToDb(f_name, l_name, email, password) {
 
   // If previous check is ok, adding a new user to the database
   const addToDbResponse = await pool.query(
-    "INSERT INTO users(f_name, l_name, email, password) VALUES($1, $2, $3, $4) RETURNING *",
-    [f_name, l_name, email, hashedPassword]
+    "INSERT INTO users(f_name, l_name, email, password, security_question_id, security_answer) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+    [
+      f_name,
+      l_name,
+      email,
+      hashedPassword,
+      security_question_id,
+      security_answer,
+    ]
   );
 
   await pool.end;

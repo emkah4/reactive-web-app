@@ -18,6 +18,8 @@ router.post(
     check("l_name").not().isEmpty(),
     check("email").isEmail(),
     check("password").isLength({ min: 5 }),
+    check("security_question_id").not().isEmpty(),
+    check("security_answer").not().isEmpty(),
   ],
   usersController.registerUser
 );

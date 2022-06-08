@@ -28,11 +28,25 @@ const registerUser = async (req, res, next) => {
     return next(new HttpError("Invalid inputs, check data", 422));
   }
 
-  let { f_name, l_name, email, password } = req.body;
+  let {
+    f_name,
+    l_name,
+    email,
+    password,
+    security_question_id,
+    security_answer,
+  } = req.body;
 
   let user;
   try {
-    user = await user_tools.addUserToDb(f_name, l_name, email, password);
+    user = await user_tools.addUserToDb(
+      f_name,
+      l_name,
+      email,
+      password,
+      security_question_id,
+      security_answer
+    );
   } catch (error) {
     return next(error);
   }
