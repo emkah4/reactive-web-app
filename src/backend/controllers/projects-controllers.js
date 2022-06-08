@@ -79,7 +79,21 @@ const shareProject = async (req, res, next) => {
   res.status(200).json({ message: "Succesfully shared the project" });
 };
 
+const getSharedProjects = async (req, res, next) => {
+  const user_id = req.user_id;
+
+  if (user_id === null) {
+    const error = new HttpError("No user id given. Wrong token.", 404);
+    return next(error);
+  }
+
+  let projects = await project_tools.getSharedProjects(user_id);
+
+  res.status(200).json({ projects: projects });
+};
+
 exports.newProject = newProject;
 exports.getProjects = getProjects;
 exports.getProject = getProject;
 exports.shareProject = shareProject;
+exports.getSharedProjects = getSharedProjects;

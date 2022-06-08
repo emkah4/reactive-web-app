@@ -40,4 +40,11 @@ router.post(
   projectsController.shareProject
 );
 
+// This endpoint will return list of shared projects
+router.get(
+  "/get_shared_projects",
+  auth_tools.authenticateToken,
+  projectsController.getSharedProjects
+);
+
 module.exports = router;
