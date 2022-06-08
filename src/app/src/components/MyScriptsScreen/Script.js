@@ -59,6 +59,13 @@ const Script = (props) => {
                 <Dropdown.Item
                   as="button"
                   value={project.id}
+                  onClick={props.share}
+                >
+                  Share
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as="button"
+                  value={project.id}
                   onClick={props.delete}
                 >
                   Delete

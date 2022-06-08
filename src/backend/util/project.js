@@ -239,8 +239,44 @@ async function getGroupMembers(group_id) {
   }
 }
 
+async function shareProject(donor_id, recipient_email, project_id) {
+  const recipient_cleaned_email = recipient_email.trim();
+  const recipient_response = await pool.query(
+    "SELECT id FROM users WHERE email = $1",
+    [recipient_cleaned_email]
+  );
+
+  await pool.end;
+
+  let recipient_id;
+  if (recipient_response.rows.length > 1) {
+    const error = new HttpError("Multiple users with thiis email.", 404);
+    throw error;
+  } else if (recipient_response.rows.length === 0) {
+    const error = new HttpError("No user found.", 404);
+    throw error;
+  } else {
+    recipient_id = recipient_response.rows[0].id;
+  }
+
+  if (donor_id === recipient_id) {
+    const error = new HttpError("You cannot share project with yourself.", 400);
+    throw error;
+  }
+
+  const project_share_response = await pool.query(
+    "INSERT INTO shared_projects(project_id, donor_id, recipient_id) VALUES ($1, $2, $3) RETURNING *",
+    [project_id, donor_id, recipient_id]
+  );
+
+  await pool.end;
+
+  return true;
+}
+
 module.exports = {
   addProject,
   getProjects,
   getProject,
+  shareProject,
 };
