@@ -274,9 +274,50 @@ async function shareProject(donor_id, recipient_email, project_id) {
   return true;
 }
 
+async function getSharedProjects(user_id) {
+  let projects = [];
+  let shared_projects_user_ids = [];
+
+  const ids_response = await pool.query(
+    "SELECT project_id FROM shared_projects WHERE recipient_id = $1",
+    [user_id]
+  );
+
+  await pool.end;
+
+  shared_projects_user_ids = ids_response.rows;
+
+  if (shared_projects_user_ids.length === 0) {
+    return projects;
+  }
+
+  projects = await Promise.all(
+    shared_projects_user_ids.map(async (id) => {
+      let project_data;
+      let response;
+
+      try {
+        response = await pool.query("SELECT * FROM projects WHERE id = $1", [
+          id.project_id,
+        ]);
+      } catch (error) {
+        return next(error);
+      }
+
+      await pool.end;
+
+      project_data = response.rows[0];
+
+      return await project_data;
+    })
+  );
+  return projects;
+}
+
 module.exports = {
   addProject,
   getProjects,
   getProject,
   shareProject,
+  getSharedProjects,
 };
