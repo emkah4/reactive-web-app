@@ -1,12 +1,23 @@
+section.greeting {
+    display: flex;
+    margin-bottom: 120px;
+}
+
 .container {
     width: 80%;
-    margin: 4em auto;
+    margin: 8em auto;
     display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .left {
     width: 50%;
     color: #383838;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-right: 100px;
 }
 
 .left div.top_text {
@@ -22,12 +33,28 @@
     margin-top: 20px;
     font-size: 1.5em;
     font-weight: 300;
+    margin-bottom: 1.3em;
 }
 
 .right {
     width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .logo_container {
     margin: 0 15px;
+}
+
+img {
+    width: 100%;
+    filter: drop-shadow(5px 5px 10px #000);
+    margin-bottom: 20px;
+}
+
+figcaption {
+    font-size: 1.3em;
+    font-weight: 300;
 }

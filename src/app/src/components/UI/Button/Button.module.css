@@ -34,5 +34,13 @@ button[disabled] {
 }
 
 .button.home {
-  background-color: black;
+  background-color: #fcfcfc;
+  border: 1px solid #3d405b;
+  color: #3d405b;
+  font-size: 17px;
+}
+
+.button.home:hover {
+  background-color: #3d405b;
+  color: #fcfcfc;
 }
