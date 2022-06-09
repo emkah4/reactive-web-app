@@ -54,10 +54,6 @@ const Register = (props) => {
   // Context for user context
   const { auth, setAuth } = useContext(AuthContext);
 
-  const handleTabChange = () => {
-    setKey((prevKey) => prevKey + 1);
-  };
-
   return (
     <div className={styles.main_container}>
       <div className={styles.title}>
