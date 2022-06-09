@@ -212,8 +212,25 @@ const logoutUser = async (req, res, next) => {
   res.status(200).json({ is_logged_out: user_logged_out });
 };
 
+const forgotPassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid inputs, check data", 422));
+  }
+
+  let { email } = req.body;
+  try {
+    id = await user_tools.getSecurityQuestionID(email);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({ security_question_id: id });
+};
+
 exports.getUser = getUser;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;
 exports.tokenRefresh = tokenRefresh;
 exports.logoutUser = logoutUser;
+exports.forgotPassword = forgotPassword;

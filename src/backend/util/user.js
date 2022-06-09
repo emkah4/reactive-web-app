@@ -152,9 +152,19 @@ async function comparePasswords(plainPassword, hashedPassword) {
   return false;
 }
 
+// Function that returns the security question id
+async function getSecurityQuestionID(email) {
+  const id = await pool.query(
+    "SELECT security_question_id FROM users WHERE email = $1",
+    [email]
+  );
+  return id.rows[0].security_question_id;
+}
+
 module.exports = {
   getUserFromDb,
   addUserToDb,
   logInUser,
   logOutUser,
+  getSecurityQuestionID,
 };
