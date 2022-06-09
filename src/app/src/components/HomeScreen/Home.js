@@ -22,10 +22,10 @@ const Home = (props) => {
                     <div>
                         {!props.isLoggedIn ? (
                             <NavLink to="/login">
-                                <Button className='home'>Create a script</Button>
+                                <Button className='home'>Log in</Button>
                             </NavLink>
                         ) : (
-                            <NavLink to="/home">
+                            <NavLink to="/create_a_script">
                                 <Button className='home'>Create a script</Button>
                             </NavLink>
                         )}

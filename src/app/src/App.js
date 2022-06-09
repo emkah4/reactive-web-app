@@ -87,7 +87,7 @@ function App() {
 
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login onLoggingIn={loggedIn} />} />
-              <Route path="/home" element={<Home />} isLoggedIn={isLoggedIn} />
+              <Route path="/home" element={<Home isLoggedIn={isLoggedIn} />} />
               <Route
                 path="/register"
                 element={<Register onLoggingIn={loggedIn} />}

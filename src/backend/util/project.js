@@ -277,6 +277,7 @@ async function shareProject(donor_id, recipient_email, project_id) {
 async function getSharedProjects(user_id) {
   let projects = [];
   let shared_projects_user_ids = [];
+  let email_by_id;
 
   const ids_response = await pool.query(
     "SELECT project_id FROM shared_projects WHERE recipient_id = $1",
@@ -298,8 +299,17 @@ async function getSharedProjects(user_id) {
 
       try {
         response = await pool.query("SELECT * FROM projects WHERE id = $1", [
-          id.project_id,
+          id.project_id
         ]);
+
+        let donor = response.rows[0].user_id
+      
+        const email_response = await pool.query("SELECT email FROM users WHERE id = $1", [
+          donor,
+        ]);
+        await pool.end;
+      
+        email_by_id = email_response.rows[0].email;
       } catch (error) {
         return next(error);
       }
@@ -307,6 +317,7 @@ async function getSharedProjects(user_id) {
       await pool.end;
 
       project_data = response.rows[0];
+      project_data.email = email_by_id;
 
       return await project_data;
     })

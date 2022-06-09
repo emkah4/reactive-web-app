@@ -17,7 +17,7 @@ const Navigation = (props) => {
             <NavLink to="/create_a_script">Create a script</NavLink>
           </li>
           <li>
-            <NavLink to="my_scripts">My scripts</NavLink>
+            <NavLink to="my_scripts">Scripts</NavLink>
           </li>
           <li>
             <NavLink to="about">About</NavLink>
