@@ -28,8 +28,8 @@ const Script = (props) => {
         >
           <div className="ms-2 me-auto">
             <div className="fw-bold">{project.project_title}</div>
-            Project status: {project.project_status}
-            <div>Project length: {project.project_length} min</div>
+            <div>Exercise length: {project.project_length} min</div>
+            {project.email && <div>Shared by: {project.email}</div>}
           </div>
 
           <div className={styles.buttons_container}>
@@ -42,34 +42,56 @@ const Script = (props) => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Header>Manage project</Dropdown.Header>
-                <Dropdown.Item
-                  as="button"
-                  value={project.id}
-                  onClick={props.edit}
-                >
-                  Edit
-                </Dropdown.Item>
-                <Dropdown.Item
-                  as="button"
-                  onClick={props.export}
-                  value={project.id}
-                >
-                  Export
-                </Dropdown.Item>
-                <Dropdown.Item
-                  as="button"
-                  value={project.id}
-                  onClick={props.share}
-                >
-                  Share
-                </Dropdown.Item>
-                <Dropdown.Item
-                  as="button"
-                  value={project.id}
-                  onClick={props.delete}
-                >
-                  Delete
-                </Dropdown.Item>
+                {project.email ? (
+                  <div>
+                    <Dropdown.Item
+                      as="button"
+                      value={project.id}
+                      onClick={props.edit}
+                    >
+                      Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      onClick={props.export}
+                      value={project.id}
+                    >
+                      Export
+                    </Dropdown.Item>
+                  </div>
+                ) : (
+                  <div>
+                    <Dropdown.Item
+                      as="button"
+                      value={project.id}
+                      onClick={props.edit}
+                    >
+                      Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      onClick={props.export}
+                      value={project.id}
+                    >
+                      Export
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      value={project.id}
+                      onClick={props.share}
+                    >
+                      Share
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      value={project.id}
+                      onClick={props.delete}
+                    >
+                      Delete
+                    </Dropdown.Item>
+                  </div>
+                )
+                }
               </Dropdown.Menu>
             </Dropdown>
           </div>
