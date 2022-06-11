@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 import styles from "../Auth/Login.module.css";
 
 // Bootstrap
-import Form from "react-bootstrap/Form";
+import { Form, Button } from "react-bootstrap";
 
 // Team Reactive
 import Card from "../UI/Card";
-import Button from "../UI/Button/Button";
+import PasswordResetModal from "./PasswordResetModal";
+// import Button from "../UI/Button/Button";
 import LoginError from "./LoginError";
 
 // Context
@@ -62,6 +63,13 @@ const Login = (props) => {
   // States
   const [formIsValid, setFormValid] = useState();
   const [error, setError] = useState(null);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = (e) => {
+    setShow(false);
+  };
+  const handleShow = () => setShow(true);
 
   // Context for user context
   const { auth, setAuth } = useContext(AuthContext);
@@ -136,58 +144,59 @@ const Login = (props) => {
   };
 
   return (
-    <Card className={styles.login}>
-      {error ? (
-        <LoginError error={error} />
-      ) : (
-        <h1 style={{ color: "white" }}>Welcome back!</h1>
-      )}
-      <Form className={styles.form} onSubmit={onFormSubmitHandler}>
-        <Form.Group className="mb-3 $" controlId="email">
-          <Form.FloatingLabel label="Email address">
-            <Form.Control
-              required
-              value={emailState.value}
-              onChange={emailOnChangeHandler}
-              onBlur={checkEmailValidity}
-              type="email"
-              placeholder="Enter email"
-            />
-          </Form.FloatingLabel>
-          <Form.Text className={styles.small}>
-            Your email information will not be shared.
-          </Form.Text>
-        </Form.Group>
+    <>
+      <Card className={styles.login}>
+        {error ? (
+          <LoginError error={error} />
+        ) : (
+          <h1 style={{ color: "white" }}>Welcome back!</h1>
+        )}
+        <Form className={styles.form} onSubmit={onFormSubmitHandler}>
+          <Form.Group className="mb-3 $" controlId="email">
+            <Form.FloatingLabel label="Email address">
+              <Form.Control
+                required
+                value={emailState.value}
+                onChange={emailOnChangeHandler}
+                onBlur={checkEmailValidity}
+                type="email"
+                placeholder="Enter email"
+              />
+            </Form.FloatingLabel>
+          </Form.Group>
 
-        <Form.Group className={`mb-3 ${styles.form}`} controlId="password">
-          <Form.FloatingLabel label="Enter password">
-            <Form.Control
-              required
-              value={passwordState.value}
-              onChange={passwordOnChangeHandler}
-              onBlur={checkPasswordValidity}
-              type="password"
-              placeholder="Password"
-            />
-          </Form.FloatingLabel>
+          <Form.Group className={`mb-3 ${styles.form}`} controlId="password">
+            <Form.FloatingLabel label="Enter password">
+              <Form.Control
+                required
+                value={passwordState.value}
+                onChange={passwordOnChangeHandler}
+                onBlur={checkPasswordValidity}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.FloatingLabel>
 
-          <Form.Text className={styles.small}>
-            Your password must be 6-20 characters long, may contain letters and
-            numbers, and must not contain spaces, special characters, or emojis.
-          </Form.Text>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check
-            className={styles.checkbox}
-            type="checkbox"
-            label="Remember me"
-          />
-        </Form.Group>
-        <Button type="submit" disabled={!formIsValid}>
-          Login
-        </Button>
-      </Form>
-    </Card>
+            <Button
+              className="mt-2"
+              variant="link"
+              style={{ color: "white" }}
+              onClick={handleShow}
+            >
+              Forgot your password?
+            </Button>
+          </Form.Group>
+
+          <Button type="submit" disabled={!formIsValid}>
+            Login
+          </Button>
+        </Form>
+      </Card>
+      <PasswordResetModal
+        show={show}
+        handleClose={handleClose}
+      ></PasswordResetModal>
+    </>
   );
 };
 

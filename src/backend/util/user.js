@@ -26,7 +26,14 @@ async function getUserFromDb(user_id) {
 }
 
 // Function to add a user to database --------------------------------------------------------------------------
-async function addUserToDb(f_name, l_name, email, password) {
+async function addUserToDb(
+  f_name,
+  l_name,
+  email,
+  password,
+  security_question_id,
+  security_answer
+) {
   // Getting all users with provided email address from database
   const checkIfEmailIsTaken = await pool.query(
     "SELECT * FROM users WHERE email = $1",
@@ -54,8 +61,15 @@ async function addUserToDb(f_name, l_name, email, password) {
 
   // If previous check is ok, adding a new user to the database
   const addToDbResponse = await pool.query(
-    "INSERT INTO users(f_name, l_name, email, password) VALUES($1, $2, $3, $4) RETURNING *",
-    [f_name, l_name, email, hashedPassword]
+    "INSERT INTO users(f_name, l_name, email, password, security_question_id, security_answer) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+    [
+      f_name,
+      l_name,
+      email,
+      hashedPassword,
+      security_question_id,
+      security_answer,
+    ]
   );
 
   await pool.end;
@@ -138,9 +152,51 @@ async function comparePasswords(plainPassword, hashedPassword) {
   return false;
 }
 
+// Function that returns the security question id
+async function getSecurityQuestionData(email) {
+  // Getting all users with provided email address from database
+  const checkIfUserExists = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+
+  await pool.end;
+
+  const rowCount = checkIfUserExists.rowCount;
+
+  // Checking if there was anything returned
+  if (rowCount == 0) {
+    // If was -> returning 409, indicating that user with this email address already exists
+    const error = new HttpError("User with this email does not exist!", 409);
+    throw error;
+  } else {
+    const security_data = await pool.query(
+      "SELECT security_question_id FROM users WHERE email = $1",
+      [email]
+    );
+
+    return security_data;
+  }
+}
+
+async function compareSecurityAnswers(email, submitted_answer) {
+  const security_answer = await pool.query(
+    "SELECT security_answer FROM users WHERE email = $1",
+    [email]
+  );
+  if (
+    security_answer.rows[0].security_answer.toLowerCase() ==
+    submitted_answer.toLowerCase()
+  ) {
+    return true;
+  } else return false;
+}
+
 module.exports = {
   getUserFromDb,
   addUserToDb,
   logInUser,
   logOutUser,
+  getSecurityQuestionData,
+  compareSecurityAnswers,
 };

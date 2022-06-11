@@ -28,11 +28,25 @@ const registerUser = async (req, res, next) => {
     return next(new HttpError("Invalid inputs, check data", 422));
   }
 
-  let { f_name, l_name, email, password } = req.body;
+  let {
+    f_name,
+    l_name,
+    email,
+    password,
+    security_question_id,
+    security_answer,
+  } = req.body;
 
   let user;
   try {
-    user = await user_tools.addUserToDb(f_name, l_name, email, password);
+    user = await user_tools.addUserToDb(
+      f_name,
+      l_name,
+      email,
+      password,
+      security_question_id,
+      security_answer
+    );
   } catch (error) {
     return next(error);
   }
@@ -198,8 +212,54 @@ const logoutUser = async (req, res, next) => {
   res.status(200).json({ is_logged_out: user_logged_out });
 };
 
+const forgotPassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid inputs, check data", 422));
+  }
+
+  let { email } = req.body;
+  try {
+    security_data = await user_tools.getSecurityQuestionData(email);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({
+    security_question_id: security_data.rows[0].security_question_id,
+  });
+};
+
+const confirmAnswer = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid inputs, check data", 422));
+  }
+
+  let { email, security_answer } = req.body;
+
+  try {
+    comparison_result = await user_tools.compareSecurityAnswers(
+      email,
+      security_answer
+    );
+
+    if (comparison_result != false) {
+      res.status(200).json({
+        result: comparison_result,
+      });
+    } else {
+      return next(new HttpError("Provided answer is wrong", 406));
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 exports.getUser = getUser;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;
 exports.tokenRefresh = tokenRefresh;
 exports.logoutUser = logoutUser;
+exports.forgotPassword = forgotPassword;
+exports.confirmAnswer = confirmAnswer;
