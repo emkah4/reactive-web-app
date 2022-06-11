@@ -230,9 +230,32 @@ const forgotPassword = async (req, res, next) => {
   });
 };
 
+const confirmAnswer = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid inputs, check data", 422));
+  }
+
+  let { email, security_answer } = req.body;
+
+  try {
+    comparison_result = await user_tools.compareSecurityAnswers(
+      email,
+      security_answer
+    );
+  } catch (error) {
+    return next(error);
+  }
+
+  res.status(200).json({
+    result: comparison_result,
+  });
+};
+
 exports.getUser = getUser;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;
 exports.tokenRefresh = tokenRefresh;
 exports.logoutUser = logoutUser;
 exports.forgotPassword = forgotPassword;
+exports.confirmAnswer = confirmAnswer;

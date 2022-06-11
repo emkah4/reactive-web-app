@@ -162,10 +162,24 @@ async function getSecurityQuestionData(email) {
   return security_data;
 }
 
+async function compareSecurityAnswers(email, submitted_answer) {
+  const security_answer = await pool.query(
+    "SELECT security_answer FROM users WHERE email = $1",
+    [email]
+  );
+  if (
+    security_answer.rows[0].security_answer.toLowerCase() ==
+    submitted_answer.toLowerCase()
+  ) {
+    return true;
+  } else return false;
+}
+
 module.exports = {
   getUserFromDb,
   addUserToDb,
   logInUser,
   logOutUser,
   getSecurityQuestionData,
+  compareSecurityAnswers,
 };

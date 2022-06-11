@@ -44,4 +44,10 @@ router.post(
   usersController.forgotPassword
 );
 
+router.post(
+  "/confirmAnswer",
+  [check("email").isEmail(), check("security_answer").not().isEmpty()],
+  usersController.confirmAnswer
+);
+
 module.exports = router;
