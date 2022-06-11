@@ -57,16 +57,6 @@ const Profile = (props) => {
         <Card.Subtitle className={`mb-2 ${styles.span}`}>
           {user.email}
         </Card.Subtitle>
-        <Card.Link className={styles.coffeeLink} href="#">
-          <Button>
-            <img
-              className={styles.coffeeImage}
-              src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"
-              alt="Buy me a coffee"
-            />
-            <span className="coffeeButtonText">Buy us a coffee</span>
-          </Button>
-        </Card.Link>
       </Card.Body>
     </Card>
   );

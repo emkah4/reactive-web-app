@@ -8,12 +8,10 @@ const Departments = (props) => {
 
   const handleModalShow = (event) => {
     setShowModal(true);
-    console.log("Show " + showModal);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
-    console.log("Close");
   };
 
   return (

@@ -1,5 +1,5 @@
 .button_container {
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -13,6 +13,7 @@
   grid-auto-rows: auto;
   gap: 1vh;
   padding: 100px 0;
+  padding-bottom: 20px;
 }
 
 .title {

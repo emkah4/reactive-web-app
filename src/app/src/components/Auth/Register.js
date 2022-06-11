@@ -107,7 +107,6 @@ const Register = (props) => {
               <Form.Group className="mb-3" controlId="formGroupFname">
                 <FloatingLabel controlId="floatingFirstname" label="First name">
                   <Form.Control
-                    id="f_name"
                     type="text"
                     placeholder="First Name"
                     {...register("f_name", {
@@ -120,7 +119,6 @@ const Register = (props) => {
               <Form.Group className="mb-3" controlId="formGroupLname">
                 <FloatingLabel controlId="floatingLastname" label="Last name">
                   <Form.Control
-                    id="l_name"
                     type="text"
                     placeholder="Last Name"
                     {...register("l_name", {
@@ -146,7 +144,6 @@ const Register = (props) => {
                 <FloatingLabel controlId="floatingEmail" label="Email">
                   <Form.Control
                     type="email"
-                    id="email"
                     placeholder="E-mail address"
                     {...register("email", {
                       required: "This is a required field",
@@ -161,7 +158,6 @@ const Register = (props) => {
                 <FloatingLabel controlId="floatingPassword" label="Password">
                   <Form.Control
                     type="password"
-                    id="password"
                     placeholder="Password"
                     {...register("password", {
                       required: "This is a required field",
@@ -184,7 +180,6 @@ const Register = (props) => {
                 >
                   <Form.Control
                     type="password"
-                    id="password2"
                     placeholder="Repeat Password"
                     {...register("confirm_password", {
                       required: "This is a required field",
@@ -231,7 +226,6 @@ const Register = (props) => {
                 >
                   <Form.Control
                     type="textarea"
-                    id="secAnswer"
                     placeholder="Answer"
                     {...register("security_answer", {
                       required: "This is a required field",

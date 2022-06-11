@@ -46,7 +46,9 @@ const BuildScriptMain = (props) => {
         </div>
       </DndProvider>
       <div className={styles.button_container}>
-        <Button onClick={() => props.onClose()}>Close Project</Button>
+        <Button variant="success" onClick={() => props.onClose()}>
+          Save and close project
+        </Button>
       </div>
     </div>
   );

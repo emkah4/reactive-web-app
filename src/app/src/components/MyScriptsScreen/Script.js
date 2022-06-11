@@ -1,15 +1,7 @@
 import React from "react";
 
 // Bootstrap
-import {
-  ListGroup,
-  Badge,
-  Button,
-  DropdownButton,
-  Dropdown,
-} from "react-bootstrap";
-
-import { Link } from "react-router-dom";
+import { ListGroup, Badge, Dropdown } from "react-bootstrap";
 
 // Styles
 import styles from "./Script.module.css";
@@ -90,8 +82,7 @@ const Script = (props) => {
                       Delete
                     </Dropdown.Item>
                   </div>
-                )
-                }
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </div>
