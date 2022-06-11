@@ -75,8 +75,6 @@ const Register = (props) => {
         <Form
           className={styles.form}
           onSubmit={handleSubmit(async (data) => {
-            console.log(data.security_answer);
-            console.log(data.security_question_id);
             data.email = data.email.toLowerCase();
             try {
               const response = await axios.post(

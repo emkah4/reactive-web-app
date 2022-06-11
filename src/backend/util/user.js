@@ -154,12 +154,29 @@ async function comparePasswords(plainPassword, hashedPassword) {
 
 // Function that returns the security question id
 async function getSecurityQuestionData(email) {
-  const security_data = await pool.query(
-    "SELECT security_question_id FROM users WHERE email = $1",
+  // Getting all users with provided email address from database
+  const checkIfUserExists = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
     [email]
   );
 
-  return security_data;
+  await pool.end;
+
+  const rowCount = checkIfUserExists.rowCount;
+
+  // Checking if there was anything returned
+  if (rowCount == 0) {
+    // If was -> returning 409, indicating that user with this email address already exists
+    const error = new HttpError("User with this email does not exist!", 409);
+    throw error;
+  } else {
+    const security_data = await pool.query(
+      "SELECT security_question_id FROM users WHERE email = $1",
+      [email]
+    );
+
+    return security_data;
+  }
 }
 
 async function compareSecurityAnswers(email, submitted_answer) {

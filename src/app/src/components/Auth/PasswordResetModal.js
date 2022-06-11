@@ -5,6 +5,7 @@ import axios from "../../api/axios";
 
 const PasswordResetModal = (props) => {
   const FORGOT_PASSWORD_URL = "/users/forgotPassword";
+  const CONFIRM_ANSWER_URL = "/users/confirmAnswer";
 
   const [showQuestion, setShowQuestion] = useState(false);
   const [error, setError] = useState(false);
@@ -33,21 +34,31 @@ const PasswordResetModal = (props) => {
     setSecQuestion(securityQuestions[questionID]);
   };
 
+  const onCloseComponent = () => {
+    setShowQuestion(false);
+    props.handleClose();
+    reset({
+      security_answer: "",
+      email: "",
+    });
+  };
+
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm({
     reValidateMode: "onChange",
     defaultValues: {
       email: "",
       security_answer: "",
+      password: "",
     },
   });
   return (
     <>
-      <Offcanvas show={props.show} onHide={props.handleClose}>
+      <Offcanvas show={props.show} onHide={onCloseComponent}>
         {error ? <Alert variant="danger">{errorMessage}</Alert> : <></>}
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Forgot your password?</Offcanvas.Title>
@@ -57,7 +68,21 @@ const PasswordResetModal = (props) => {
           {showQuestion ? (
             <Form
               onSubmit={handleSubmit(async (data) => {
+                data.email = data.email.toLowerCase();
                 data.security_answer = data.security_answer.toLowerCase();
+                try {
+                  const response = await axios.post(
+                    CONFIRM_ANSWER_URL,
+                    JSON.stringify(data)
+                  );
+                  if (response.status === 200) {
+                    console.log("Good");
+                    handleCloseError();
+                  }
+                } catch (error) {
+                  handleSetError(error.response.data.message);
+                  throw error;
+                }
               })}
             >
               <Form.Group className="mb-3" controlId="fomrSecQuestion">
@@ -75,7 +100,42 @@ const PasswordResetModal = (props) => {
                   />
                   <p>{errors.email?.message}</p>
                 </FloatingLabel>
+
+                <FloatingLabel
+                  controlId="floatingNewPassword"
+                  label="New password"
+                >
+                  <Form.Control
+                    type="password"
+                    placeholder="New Password"
+                    {...register("password", {
+                      required: "This is a required field",
+
+                      minLength: {
+                        value: 7,
+                        message: "The minimum length of a password is 7",
+                      },
+                      maxLength: {
+                        value: 16,
+                        message: "The maximum length of a password is 16",
+                      },
+                    })}
+                  />
+                  <p>{errors.new_password?.message}</p>
+                </FloatingLabel>
               </Form.Group>
+              <Button type="submit">Check answer</Button>
+              <Button
+                onClick={() => {
+                  reset({
+                    security_answer: "",
+                    email: "",
+                  });
+                  onCloseComponent();
+                }}
+              >
+                Cancel
+              </Button>
             </Form>
           ) : (
             <Form
@@ -91,12 +151,10 @@ const PasswordResetModal = (props) => {
                     console.log(security_id);
                     handleCloseError();
                     handleShowQuestion(security_id);
-                    // SET STATE TO FOUND AND DISPLAY QUESTION
-                    // SET LOGIC FOR WHEN NO SECURITY QUESTION IS PROVIDED
                   }
                 } catch (error) {
                   console.log(error.message);
-                  handleSetError(error.message);
+                  handleSetError(error.response.data.message);
                   throw error;
                 }
               })}

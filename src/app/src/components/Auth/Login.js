@@ -66,7 +66,9 @@ const Login = (props) => {
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = (e) => {
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   // Context for user context

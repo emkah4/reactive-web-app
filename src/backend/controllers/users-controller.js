@@ -243,13 +243,17 @@ const confirmAnswer = async (req, res, next) => {
       email,
       security_answer
     );
+
+    if (comparison_result != false) {
+      res.status(200).json({
+        result: comparison_result,
+      });
+    } else {
+      return next(new HttpError("Provided answer is wrong", 406));
+    }
   } catch (error) {
     return next(error);
   }
-
-  res.status(200).json({
-    result: comparison_result,
-  });
 };
 
 exports.getUser = getUser;
