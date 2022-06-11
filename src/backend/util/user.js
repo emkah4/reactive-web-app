@@ -155,7 +155,7 @@ async function comparePasswords(plainPassword, hashedPassword) {
 // Function that returns the security question id
 async function getSecurityQuestionData(email) {
   const security_data = await pool.query(
-    "SELECT security_question_id, security_answer FROM users WHERE email = $1",
+    "SELECT security_question_id FROM users WHERE email = $1",
     [email]
   );
 

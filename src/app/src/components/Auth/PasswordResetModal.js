@@ -9,6 +9,7 @@ const PasswordResetModal = (props) => {
   const [showQuestion, setShowQuestion] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   const securityQuestions = [
     "",
     "What was the first exam you failed?",
@@ -41,7 +42,6 @@ const PasswordResetModal = (props) => {
     reValidateMode: "onChange",
     defaultValues: {
       email: "",
-      security_question_id: "",
       security_answer: "",
     },
   });
@@ -55,25 +55,39 @@ const PasswordResetModal = (props) => {
 
         <Offcanvas.Body>
           {showQuestion ? (
-            <Form>
+            <Form
+              onSubmit={handleSubmit(async (data) => {
+                data.security_answer = data.security_answer.toLowerCase();
+              })}
+            >
               <Form.Group className="mb-3" controlId="fomrSecQuestion">
                 <Form.Label>{secQuestion}</Form.Label>
-                <Form.Control type="text" placeholder="" />
-                <Form.Text className="text-muted"></Form.Text>
+                <FloatingLabel
+                  controlId="floatingAnswer"
+                  label="Enter your answer here"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Answer"
+                    {...register("security_answer", {
+                      required: "This is a required field",
+                    })}
+                  />
+                  <p>{errors.email?.message}</p>
+                </FloatingLabel>
               </Form.Group>
             </Form>
           ) : (
             <Form
               onSubmit={handleSubmit(async (data) => {
                 data.email = data.email.toLowerCase();
-                console.log(data.email);
                 try {
                   const response = await axios.post(
                     FORGOT_PASSWORD_URL,
                     JSON.stringify(data)
                   );
                   if (response.status === 200) {
-                    const security_id = response?.data?.security_question_id;
+                    let security_id = response?.data?.security_question_id;
                     console.log(security_id);
                     handleCloseError();
                     handleShowQuestion(security_id);

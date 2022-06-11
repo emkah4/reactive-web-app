@@ -227,7 +227,6 @@ const forgotPassword = async (req, res, next) => {
 
   res.status(200).json({
     security_question_id: security_data.rows[0].security_question_id,
-    security_answer: security_data.rows[0].security_answer,
   });
 };
 
