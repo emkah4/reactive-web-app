@@ -52,59 +52,59 @@ const PasswordResetModal = (props) => {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Forgot your password?</Offcanvas.Title>
         </Offcanvas.Header>
-        {showQuestion ? (
-          <Form>
-            <Form.Group className="mb-3" controlId="fomrSecQuestion">
-              <Form.Label>{secQuestion}</Form.Label>
-              <Form.Control type="text" placeholder="" />
-              <Form.Text className="text-muted"></Form.Text>
-            </Form.Group>
-          </Form>
-        ) : (
-          <Form
-            onSubmit={handleSubmit(async (data) => {
-              data.email = data.email.toLowerCase();
-              console.log(data.email);
-              try {
-                const response = await axios.post(
-                  FORGOT_PASSWORD_URL,
-                  JSON.stringify(data)
-                );
-                if (response.status === 200) {
-                  const security_id = response?.data?.security_question_id;
-                  console.log(security_id);
-                  handleCloseError();
-                  handleShowQuestion(security_id);
-                  // SET STATE TO FOUND AND DISPLAY QUESTION
-                  // SET LOGIC FOR WHEN NO SECURITY QUESTION IS PROVIDED
-                }
-              } catch (error) {
-                console.log(error.message);
-                handleSetError(error.message);
-                throw error;
-              }
-            })}
-          >
-            <Form.Group className="mb-3" controlId="formGroupEmail">
-              <FloatingLabel
-                controlId="floatingEmail"
-                label="Enter your email here"
-              >
-                <Form.Control
-                  type="email"
-                  placeholder="E-mail address"
-                  {...register("email", {
-                    required: "This is a required field",
-                  })}
-                />
-                <p>{errors.email?.message}</p>
-              </FloatingLabel>
-            </Form.Group>
-            <Button type="submit">Request a password reset</Button>
-          </Form>
-        )}
 
-        <Offcanvas.Body as="h4">
+        <Offcanvas.Body>
+          {showQuestion ? (
+            <Form>
+              <Form.Group className="mb-3" controlId="fomrSecQuestion">
+                <Form.Label>{secQuestion}</Form.Label>
+                <Form.Control type="text" placeholder="" />
+                <Form.Text className="text-muted"></Form.Text>
+              </Form.Group>
+            </Form>
+          ) : (
+            <Form
+              onSubmit={handleSubmit(async (data) => {
+                data.email = data.email.toLowerCase();
+                console.log(data.email);
+                try {
+                  const response = await axios.post(
+                    FORGOT_PASSWORD_URL,
+                    JSON.stringify(data)
+                  );
+                  if (response.status === 200) {
+                    const security_id = response?.data?.security_question_id;
+                    console.log(security_id);
+                    handleCloseError();
+                    handleShowQuestion(security_id);
+                    // SET STATE TO FOUND AND DISPLAY QUESTION
+                    // SET LOGIC FOR WHEN NO SECURITY QUESTION IS PROVIDED
+                  }
+                } catch (error) {
+                  console.log(error.message);
+                  handleSetError(error.message);
+                  throw error;
+                }
+              })}
+            >
+              <Form.Group className="mb-3" controlId="formGroupEmail">
+                <FloatingLabel
+                  controlId="floatingEmail"
+                  label="Enter your email here"
+                >
+                  <Form.Control
+                    type="email"
+                    placeholder="E-mail address"
+                    {...register("email", {
+                      required: "This is a required field",
+                    })}
+                  />
+                  <p>{errors.email?.message}</p>
+                </FloatingLabel>
+              </Form.Group>
+              <Button type="submit">Request a password reset</Button>
+            </Form>
+          )}
           Don't worry, you can reset your password by providing your email and
           answer the security question!
         </Offcanvas.Body>

@@ -220,12 +220,15 @@ const forgotPassword = async (req, res, next) => {
 
   let { email } = req.body;
   try {
-    id = await user_tools.getSecurityQuestionID(email);
+    security_data = await user_tools.getSecurityQuestionData(email);
   } catch (error) {
     return next(error);
   }
 
-  res.status(200).json({ security_question_id: id });
+  res.status(200).json({
+    security_question_id: security_data.rows[0].security_question_id,
+    security_answer: security_data.rows[0].security_answer,
+  });
 };
 
 exports.getUser = getUser;
