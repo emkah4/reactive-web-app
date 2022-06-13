@@ -127,6 +127,7 @@ const PasswordResetModal = (props) => {
               </Form.Group>
               <Button type="submit">Check answer</Button>
               <Button
+                style={{ marginLeft: 10 }}
                 onClick={() => {
                   reset({
                     security_answer: "",
