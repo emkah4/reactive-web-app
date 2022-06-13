@@ -243,16 +243,15 @@ const Register = (props) => {
                   password.
                 </Form.Text>
               </Form.Group>
+              <Button
+                className={styles.button}
+                type="submit"
+                disabled={key == 3 ? false : true}
+              >
+                Register
+              </Button>
             </Tab>
           </Tabs>
-
-          <Button
-            className={styles.button}
-            type="submit"
-            disabled={key == 3 ? false : true}
-          >
-            Register
-          </Button>
         </Form>
       </Card>
     </div>

@@ -78,6 +78,7 @@ const PasswordResetModal = (props) => {
                   if (response.status === 200) {
                     console.log("Good");
                     handleCloseError();
+                    window.location.reload(false);
                   }
                 } catch (error) {
                   handleSetError(error.response.data.message);
@@ -121,7 +122,7 @@ const PasswordResetModal = (props) => {
                       },
                     })}
                   />
-                  <p>{errors.new_password?.message}</p>
+                  <p>{errors.password?.message}</p>
                 </FloatingLabel>
               </Form.Group>
               <Button type="submit">Check answer</Button>

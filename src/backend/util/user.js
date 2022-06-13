@@ -194,7 +194,6 @@ async function compareSecurityAnswers(email, submitted_answer) {
 
 async function changePassword(email, plainPassword) {
   const newHashedPassword = await getHashedPassword(plainPassword);
-  console.log(newHashedPassword);
 
   if (newHashedPassword === null) {
     const error = new HttpError("Could not hash the password.", 503);
