@@ -17,7 +17,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: ["http://localhost:3000", "http://193.219.91.103:10510"] }));
 
 // Registering /api/users route, for interaction with users
 app.use("/api/users", usersRoutes);
