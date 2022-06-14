@@ -68,9 +68,7 @@ const MyScripts = (props) => {
         `/projects/get_project/${event.target.value}`
       );
       setExportingProject(response.data);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const editProject = (event) => {
@@ -103,7 +101,6 @@ const MyScripts = (props) => {
     }
   }, [exportingProject]);
 
-
   // Get users projects
   useEffect(() => {
     const fetchProjects = async () => {
@@ -122,12 +119,14 @@ const MyScripts = (props) => {
   useEffect(() => {
     const fetchSharedProjects = async () => {
       try {
-        const response = await axiosPrivate.get(`/projects/get_shared_projects`, {
-          signal: controller.signal,
-        });
+        const response = await axiosPrivate.get(
+          `/projects/get_shared_projects`,
+          {
+            signal: controller.signal,
+          }
+        );
 
         setSharedProjects(response.data.projects);
-        console.log(response.data.projects)
       } catch (err) {}
     };
     fetchSharedProjects();
@@ -172,8 +171,6 @@ const MyScripts = (props) => {
     setShareError(null);
   };
   const handleShow = () => setIsSharing(true);
-
-
 
   return (
     <div className={styles.container}>
@@ -249,7 +246,7 @@ const MyScripts = (props) => {
           delete={deleteProject}
         />
       )}
-      {sharedProjects.length !== 0 &&
+      {sharedProjects.length !== 0 && (
         <div>
           <h1 className={styles.header}>Shared scripts</h1>
           <Sctipt
@@ -258,7 +255,7 @@ const MyScripts = (props) => {
             edit={editProject}
           />
         </div>
-      }
+      )}
     </div>
   );
 };

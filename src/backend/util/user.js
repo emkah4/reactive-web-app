@@ -192,6 +192,23 @@ async function compareSecurityAnswers(email, submitted_answer) {
   } else return false;
 }
 
+async function changePassword(email, plainPassword) {
+  const newHashedPassword = await getHashedPassword(plainPassword);
+
+  if (newHashedPassword === null) {
+    const error = new HttpError("Could not hash the password.", 503);
+    return error;
+  } else {
+    const temp_name = await pool.query(
+      "UPDATE users SET password = $2 WHERE email = $1",
+      [email, newHashedPassword]
+    );
+    pool.end;
+
+    return true;
+  }
+}
+
 module.exports = {
   getUserFromDb,
   addUserToDb,
@@ -199,4 +216,5 @@ module.exports = {
   logOutUser,
   getSecurityQuestionData,
   compareSecurityAnswers,
+  changePassword,
 };

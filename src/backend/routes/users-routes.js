@@ -46,7 +46,11 @@ router.post(
 
 router.post(
   "/confirmAnswer",
-  [check("email").isEmail(), check("security_answer").not().isEmpty()],
+  [
+    check("email").isEmail(),
+    check("security_answer").not().isEmpty(),
+    check("password").isLength({ min: 5 }),
+  ],
   usersController.confirmAnswer
 );
 

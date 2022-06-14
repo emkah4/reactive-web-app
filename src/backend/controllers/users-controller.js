@@ -236,7 +236,7 @@ const confirmAnswer = async (req, res, next) => {
     return next(new HttpError("Invalid inputs, check data", 422));
   }
 
-  let { email, security_answer } = req.body;
+  let { email, security_answer, password } = req.body;
 
   try {
     comparison_result = await user_tools.compareSecurityAnswers(
@@ -245,9 +245,15 @@ const confirmAnswer = async (req, res, next) => {
     );
 
     if (comparison_result != false) {
-      res.status(200).json({
-        result: comparison_result,
-      });
+      const password_change = await user_tools.changePassword(email, password);
+      console.log(password_change);
+      if (password_change) {
+        res.status(200).json({
+          result: comparison_result,
+        });
+      } else {
+        return next(new HttpError("Could not change password", 400));
+      }
     } else {
       return next(new HttpError("Provided answer is wrong", 406));
     }

@@ -64,9 +64,7 @@ const EventContainer = (props) => {
           let prev_project = project;
           prev_project.events = [...prev_project.events, added_event];
           setProject(prev_project);
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       };
       addProject();
     }
